@@ -1,25 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>vexury - Game Developer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-  <div class="container">
-    <header>
-      <nav>
-        <a href="/" class="active">Home</a>
-        <a href="/projects/" class="">Projects</a>
-      </nav>
-    </header>
-    
-    <main>
-      
+---
+layout: base.html
+title: vexury - Game Developer
+---
+
 <div class="about-box">
   <h2>👋 vexury</h2>
   <p>Game developer interested in procedural generation, gameplay systems, and indie games. Currently working on [your current project].</p>
@@ -32,14 +15,14 @@
 
 <div id="posts-tab" class="tab-content active">
   <ul class="post-list">
-    
+    {% for post in collections.posts | reverse %}
     <li>
-      <a href="/posts/first-post/">
-        <h3>My First Post</h3>
-        <span class="post-date">February 10, 2026</span>
+      <a href="{{ post.url }}">
+        <h3>{{ post.data.title }}</h3>
+        <span class="post-date">{{ post.data.date | date: "%B %d, %Y" }}</span>
       </a>
     </li>
-    
+    {% endfor %}
   </ul>
 </div>
 
@@ -82,11 +65,3 @@ function switchTab(tabName) {
   event.target.classList.add('active');
 }
 </script>
-    </main>
-    
-    <footer>
-      <p>vexury © 2026</p>
-    </footer>
-  </div>
-</body>
-</html>
