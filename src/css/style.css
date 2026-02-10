@@ -191,7 +191,9 @@ footer {
   transition: border-color 0.2s, transform 0.2s;
 }
 
-.post-list a:hover {
+.post-list a:hover,
+.project-card:hover,
+.timeline-item:hover {
   border-color: var(--accent);
   transform: translateY(-2px);
 }
@@ -217,6 +219,7 @@ footer {
 
 .project-card {
   padding: 1.5rem;
+  transition: border-color 0.2s, transform 0.2s;
   display: flex;
   flex-direction: column;
 }
@@ -348,6 +351,7 @@ footer {
 
 .timeline-item {
   padding: 1.25rem;
+  transition: border-color 0.2s, transform 0.2s;
 }
 
 .timeline-item h3 {
