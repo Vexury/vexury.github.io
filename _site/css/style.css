@@ -8,9 +8,9 @@
   --text: #2d2d2d;
   --text-muted: #6b7280;
   --border: #e5e7eb;
-  --bg: #fafafa;
-  --card-bg: #ffffff;
-  --accent: #3b82f6;
+  --bg: #faf9f8;
+  --card-bg: #fffdf7;
+  --accent: #FFA833;
 }
 
 body {
@@ -104,13 +104,17 @@ p {
 }
 
 a {
-  color: var(--accent);
-  text-decoration: none;
-  transition: opacity 0.2s;
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 5px;
+  transition: color 0.2s, background 0.2s;
 }
 
 a:hover {
-  opacity: 0.8;
+  color: #ffffff;
+  background: var(--text);
+  text-decoration: none;
 }
 
 hr {
@@ -154,6 +158,19 @@ pre code {
   border: none;
 }
 
+/* Shared box style */
+.about-box,
+.info-box,
+.project-card,
+.timeline-item,
+.post-list a,
+footer {
+  background: var(--card-bg);
+  border: 2.5px solid var(--border);
+  border-radius: 6px;
+  border-color: #888888;
+}
+
 /* Post List - Each post in a box */
 .post-list {
   list-style: none;
@@ -169,9 +186,6 @@ pre code {
 
 .post-list a {
   display: block;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
   padding: 1.25rem;
   text-decoration: none;
   transition: border-color 0.2s, transform 0.2s;
@@ -202,9 +216,6 @@ pre code {
 }
 
 .project-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -236,9 +247,6 @@ pre code {
 
 /* Footer */
 footer {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
   padding: 1.5rem;
   text-align: center;
   color: var(--text-muted);
@@ -251,9 +259,7 @@ footer {
     padding: 1rem 0.5rem;
   }
 
-  header,
   footer {
-    border-radius: 8px;
     padding: 1.25rem;
   }
 
@@ -266,18 +272,27 @@ footer {
   }
 }
 
+/* Info box */
+.info-box {
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.info-box p {
+  margin: 0;
+}
+
 /* About box */
 .about-box {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
 .about-box h2 {
   margin-top: 0;
-  font-size: 1.5rem;
+  font-size: 1.0rem;
 }
 
 .about-box p {
@@ -332,9 +347,6 @@ footer {
 }
 
 .timeline-item {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
   padding: 1.25rem;
 }
 

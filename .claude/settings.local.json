@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(findstr:*)",
+      "Bash(ls:*)",
+      "Bash(npx @11ty/eleventy:*)"
+    ]
+  }
+}

@@ -5,6 +5,9 @@ module.exports = function(eleventyConfig) {
   // Copy any images or assets
   eleventyConfig.addPassthroughCopy("src/images");
 
+  // Copy files (resume, etc.)
+  eleventyConfig.addPassthroughCopy("src/files");
+
   // Add date filter
   eleventyConfig.addFilter("date", function(date, format) {
     const d = new Date(date);
