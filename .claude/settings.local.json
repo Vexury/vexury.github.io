@@ -3,7 +3,8 @@
     "allow": [
       "Bash(findstr:*)",
       "Bash(ls:*)",
-      "Bash(npx @11ty/eleventy:*)"
+      "Bash(npx @11ty/eleventy:*)",
+      "Bash(dir:*)"
     ]
   }
 }

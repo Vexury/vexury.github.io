@@ -20,6 +20,11 @@ title: Projects
   {% endfor %}
 </div>
 
+<div class="lightbox" id="lightbox">
+  <img id="lightbox-img">
+  <video id="lightbox-video" controls autoplay loop></video>
+</div>
+
 <script>
 document.querySelectorAll('.project-card').forEach(card => {
   const slideshow = card.querySelector('.slideshow');
@@ -75,5 +80,44 @@ document.querySelectorAll('.project-card').forEach(card => {
     slides[0].classList.add('active');
     dots[0].classList.add('active');
   });
+});
+
+const lightbox = document.getElementById('lightbox');
+const lbImg = document.getElementById('lightbox-img');
+const lbVideo = document.getElementById('lightbox-video');
+
+document.querySelectorAll('.slideshow').forEach(ss => {
+  ss.style.cursor = 'pointer';
+  ss.addEventListener('click', (e) => {
+    if (e.target.classList.contains('dot')) return;
+    const active = ss.querySelector('img.active, video.active');
+    if (!active) return;
+    if (active.tagName === 'VIDEO') {
+      lbImg.style.display = 'none';
+      lbVideo.style.display = 'block';
+      lbVideo.src = active.src;
+    } else {
+      lbVideo.style.display = 'none';
+      lbImg.style.display = 'block';
+      lbImg.src = active.src;
+    }
+    lightbox.classList.add('active');
+  });
+});
+
+lightbox.addEventListener('click', (e) => {
+  if (e.target === lightbox) {
+    lightbox.classList.remove('active');
+    lbVideo.pause();
+    lbVideo.removeAttribute('src');
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+    lightbox.classList.remove('active');
+    lbVideo.pause();
+    lbVideo.removeAttribute('src');
+  }
 });
 </script>
