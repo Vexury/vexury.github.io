@@ -20,21 +20,130 @@
     
     <main>
       <h1>🕹️ Global Game Jam 2026</h1>
-<p>I went to the Global Game Jam 2026 in Freiburg, Germany (at Pädagogische Hochschule Freiburg). This was my first-ever Game Jam for me and the experience has been unforgettable for me.
+<p>Links: <a href="https://globalgamejam.org/games/2026/quak-3-5">Game Page</a> · <a href="https://play.unity.com/en/games/3063178a-f9ae-42c1-afab-a970aa7c209a/quack-3">Playable Web-Build</a></p>
+<p>I went to the <a href="https://globalgamejam.org/jam-sites/2026/ggj-goes-land-sudbaden">Global Game Jam 2026 in Freiburg, Germany (at Pädagogische Hochschule Freiburg)</a>. This was my first-ever Game Jam for me and the experience has been unforgettable for me.
 I teamed up beforehand with a colleague of mine (also a programmer) and a fried of his (a really talented artist).
+We had already aggreed on using Unity for the Game Jam because I can bring a lot of experience and thus we could focus on actually making the game instead of learning how to use the engine.
 The team at PH Freiburg did an amazing job organizing the event, making sure we have enough pizza to eat, a place to sleep and enough working space.
 We brought the full setup: laptops, monitors, keyboards, gamepads, crafting stuff and sleeping bags.</p>
 <p>The topic (<b>Mask</b>) got announced at 5 PM on friday which meant we spent the entire evening brainstorming ideas for gameplay loops, art, style, concepts, etc.
 Fortunately, we were able to passionately aggree on a fast-paced FPS shooter (we were just going to somehow make it related to masks later, but we had some ideas).
 Our artist immediately started drawing some stuff: a brain-monster, a fist and a gun from the players perspective.
-When i saw that I was amazed at how cool it looks and i was ready to go all-in on the idea. Have a look at this incredible artwork:</p>
+When i saw that I was amazed at how cool it looks and i was ready to go all-in on the idea. Have a look at this incredible artwork:
+<br></p>
 <div style="text-align: center">
     <img src="/images/Quack_004.jpg" alt="Alt text" style="max-width:80%">
-  </div>
-<p>I immediately started programming a 3D character controller (move, look, jump, sprint) with a first-person camera.
-With this, we could already walk around and test thigns right away when we added them to the game.</p>
-<p><b>... more to write here ...</b></p>
-
+</div>
+<br>
+I immediately started programming a 3D character controller (move, look, jump, sprint) with a first-person camera. 
+With this, we could already walk around and test things right away when we added them to the game.
+Our artist managed to digitalize his drawings and I made one quad for each hand that moves with the FPS camera to achieve the desired view:
+<br>
+<br>
+<div style="text-align: center">
+    <img src="/images/Quack_006.png" alt="Alt text" style="max-width:80%">
+<p>(then I just alpha-clipped the texture on the quad to get the final version)</p>
+</div>
+<br>
+Meanwhile, the other programmer managed to put the drawings of the first enemies on quads that react to the player. The first enemy was a goose:
+<br><br>
+<div style="text-align: center">
+    <video autoplay loop muted playsinline style="max-width:60%">
+        <source src="/images/Quack_001.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+<p>We just animated a sprite-flip to make it look like it is moving! 🦆
+Later, we added a simple world-space canvas that contains an image as an HP bar.</p>
+</div>
+<br>
+We worked late into the night and finally got a few hours of sleep right next to our setups, just to wake up and start working again right away. 
+We spent the entire saturday implementing our initial ideas and added new ones on the fly out of pure hype. 
+Around afternoon, we had a working health system, interactables, a first arena and some UI. 
+Our game was still compeltely silent and we felt the urge to add a soundtrack and some SFX to make the game come alive.
+<p>Is was important for us to make the game as hand-crafted as possible and so we started recording a large amount of sounds that we might or might not need for the game
+(we basically talked, screamed, whispered into a phone microphone and made all sorts of interesting sounds using random objects around us).
+After some editing, we had some sounds ready to use:</p>
+<div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap">
+    <div style="text-align: center">
+        <p>Gunshot SFX</p>
+        <audio controls><source src="/images/gun.wav" type="audio/wav"></audio>
+    </div>
+    <div style="text-align: center">
+        <p>Grunt SFX</p>
+        <audio controls><source src="/images/grunt.wav" type="audio/wav"></audio>
+    </div>
+</div>
+<br>
+<div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap">
+    <div style="text-align: center">
+        <p>Quack SFX</p>
+        <audio controls><source src="/images/quack.wav" type="audio/wav"></audio>
+    </div>
+    <div style="text-align: center">
+        <p>Click SFX</p>
+        <audio controls><source src="/images/click.wav" type="audio/wav"></audio>
+    </div>
+</div>
+<br>
+<div style="text-align: center">
+    ... and many more ...
+</div>
+<br>
+We were also extremely lucky to meet a very talented sound engineer who helped us to create a soundtrack for the game and for the menu after taking just a few looks at our game in progress:
+<br><br>
+<div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap">
+    <div style="text-align: center">
+        <p>Game Soundtrack</p>
+        <audio controls><source src="/images/GameMusic.mp3" type="audio/mpeg"></audio>
+    </div>
+    <div style="text-align: center">
+        <p>Menu Soundtrack</p>
+        <audio controls><source src="/images/MainMenuMusic.mp3" type="audio/mpeg"></audio>
+    </div>
+</div>
+<br>
+<p>We spent the rest of the saturday adding some UI, adding more enemies (a flying skull and a boss), refining their movement and building an arena from some quickly crafted building blocks in Blender:
+<br></p>
+<div style="text-align: center">
+    <img src="/images/Blender_001.png" alt="Alt text" style="max-width:80%">
+<p>These are all the building blocks. The .blend file import in Unity was super helpful, you can entirely avoid exporting/importing FBX and just put the blend file into the Unity project. Changing a model in Blender then immediately updates them everywhere in the Unity scene.</p>
+</div>
+<div style="text-align: center">
+    <img src="/images/Arena_001.png" alt="Alt text" style="max-width:80%">
+<p>The main arena level (bottom-left) and a boss room (top-right).</p>
+</div>
+<br>
+<p>At this point, we had to think about how we want to finalize our game into a presentable form. That means, the game should be playable for a few minutes showcasing all the gameplay elements
+and implemented features. We thought of a simple sequence:</p>
+<p>spawn -&gt; defeat enemies -&gt; collect their drops (mask fragements) -&gt; unlock extra powers -&gt; reach and defeat boss</p>
+<p>We made it so that you need to defeat enough of the geese to collect their respective mask, granting an upgraded jump. Without that jump, you could not make it over the gap between the main arena and the boss room:</p>
+<div style="text-align: center">
+    <img src="/images/Gap_001.png" alt="Alt text" style="max-width:80%">
+</div>
+<br>
+<p>With that done, we were quite satisfied already but that did not stop us from staying up all night refining what we already had and adding details and nice-to-haves:</p>
+<ul>
+<li>pause screen</li>
+<li>main menu</li>
+<li>scene transition with fading</li>
+<li>different footsteps SFX for sand and stone floors</li>
+<li>visual effects for gunshots and bullet impact</li>
+<li>(high)lighting of enemy drops</li>
+<li>a custom HP bar for the boss fight and a special boss attack raining down laser projectiles from the sky</li>
+</ul>
+<div style="display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap">
+    <video autoplay loop muted playsinline style="max-width:33%">
+        <source src="/images/GunVFX_001.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <img src="/images/Drops_001.png" alt="" style="max-width:30%">
+    <img src="/images/Boss_001.png" alt="" style="max-width:30%">
+</div>
+<br>
+Even though we did not sleep, we needed every last minute of sunday to prepare our game for presentation (we might have got a bit lost in details and tiny new ideas that were not really necessary but it was just fun to do).
+The presentation session was amazing. It was truly impressive to see how many different ideas, genres, storys and styles were developed by all teams in such a short time. You can find most of the games from our Jam [here](https://globalgamejam.org/group/31363/games).
+I am really grateful for all the amazing participants and the organizers who made all of this possible. This was definitely not my last Global Game Jam!
+(You can find relevant links to the Game Jam Site and to a Web-Build of the game at the top of this post.)
     </main>
     
     <footer>
