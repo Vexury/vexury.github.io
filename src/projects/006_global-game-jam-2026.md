@@ -3,6 +3,11 @@ permalink: false
 tags: projects
 title: Global Game Jam 2026
 emoji: "\U0001F579\uFE0F"
+images:
+  - /images/Quack_004.jpg
+  - /images/Quack_001.png
+  - /images/Quack_002.png
+  - /images/Quack_003.png
 description: A fast-paced shooter with classic FPS elements. Survive in the arena and defeat enemies to collect masks that grant you power. Find the final boss and defeat him to win. Our team of two programmers and one artist developed this game within 48 hours with very little sleep and enough pizza 🍕 to stay alive.
 links:
   - label: GGJ Website

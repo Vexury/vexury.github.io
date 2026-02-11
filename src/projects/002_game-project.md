@@ -1,7 +1,7 @@
 ---
 permalink: false
 tags: projects
-title: 2D Platformer Controller
+title: VFX Experiments
 emoji: "\U0001F3AE"
-description: 
+description:
 ---

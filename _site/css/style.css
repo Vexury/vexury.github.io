@@ -29,8 +29,8 @@ body {
 
 /* Header and Navigation */
 header {
-  margin-bottom: 3rem;
-  padding: 2rem 0;
+  margin-bottom: 1.0rem;
+  padding: 1rem 0;
 }
 
 header nav {
@@ -209,6 +209,13 @@ footer {
   font-size: 0.85rem;
 }
 
+.post-summary {
+  display: block;
+  color: var(--text);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
 /* Project Cards - Grid layout */
 .project-grid {
   display: grid;
@@ -240,6 +247,52 @@ footer {
   object-fit: cover;
   border-radius: 6px;
   margin-bottom: 1rem;
+}
+
+.slideshow {
+  position: relative;
+  height: 200px;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.slideshow img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  margin-bottom: 0;
+  border-radius: 0;
+  transition: opacity 0.4s;
+}
+
+.slideshow img.active {
+  opacity: 1;
+}
+
+.slideshow-dots {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transition: background 0.3s;
+}
+
+.dot.active {
+  background: #ffffff;
 }
 
 @media (max-width: 768px) {
@@ -295,10 +348,11 @@ footer {
 
 .about-box h2 {
   margin-top: 0;
-  font-size: 1.0rem;
+  font-size: 1.1rem;
 }
 
 .about-box p {
+  font-size: 1.0rem;
   color: var(--text-muted);
 }
 
@@ -362,6 +416,7 @@ footer {
 .timeline-item .role {
   color: var(--text);
   font-weight: 500;
+  font-size: 1.1rem;
   margin-bottom: 0.25rem;
 }
 
@@ -372,7 +427,7 @@ footer {
 }
 
 .timeline-item p {
-  color: var(--text-muted);
+  color: var(--text);
   font-size: 0.9rem;
   margin-bottom: 0;
 }

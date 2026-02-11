@@ -13,44 +13,88 @@
   <div class="container">
     <header>
       <nav>
-        <a href="/" class="">Home</a>
-        <a href="/projects/" class="active">Projects</a>
+        <a href="/" class="">/ Home</a>
+        <a href="/projects/" class="active">/ Projects</a>
       </nav>
     </header>
     
     <main>
       <div class="project-grid">
   <div class="project-card">
-    <h3>🎮 2D Horror Story-Adventure</h3>
-    <p></p>
-    <p></p>
+<p><div class="slideshow">
+<img src="/images/Quack_004.jpg" alt="Global Game Jam 2026" class="active"><img src="/images/Quack_001.png" alt="Global Game Jam 2026" ><img src="/images/Quack_002.png" alt="Global Game Jam 2026" ><img src="/images/Quack_003.png" alt="Global Game Jam 2026" >
+<div class="slideshow-dots"><span class="dot active"></span><span class="dot "></span><span class="dot "></span><span class="dot "></span></div>
+</div></p>
+<p><h3>🕹️ Global Game Jam 2026</h3>
+<p>A fast-paced shooter with classic FPS elements. Survive in the arena and defeat enemies to collect masks that grant you power. Find the final boss and defeat him to win. Our team of two programmers and one artist developed this game within 48 hours with very little sleep and enough pizza 🍕 to stay alive.</p></p>
+<p><p><a href="https://globalgamejam.org/jam-sites/2026/ggj-goes-land-sudbaden">GGJ Website</a> · <a href="https://globalgamejam.org/games/2026/quak-3-5">Game Page</a> · <a href="https://play.unity.com/en/games/3063178a-f9ae-42c1-afab-a970aa7c209a/quack-3">Playable Web-Build</a></p></p>
   </div>
   <div class="project-card">
-    <h3>🕹️ Global Game Jam 2026</h3>
-    <p>A fast-paced shooter with classic FPS elements. Survive in the arena and defeat enemies to collect masks that grant you power. Find the final boss and defeat him to win. Our team of two programmers and one artist developed this game within 48 hours with very little sleep and enough pizza 🍕 to stay alive.</p>
-    <p><a href="https://globalgamejam.org/jam-sites/2026/ggj-goes-land-sudbaden">GGJ Website</a> · <a href="https://globalgamejam.org/games/2026/quak-3-5">Game Page</a> · <a href="https://play.unity.com/en/games/3063178a-f9ae-42c1-afab-a970aa7c209a/quack-3">Playable Web-Build</a></p>
+<p><h3>🎮 Multiplayer Tank Game</h3>
+<p></p></p>
+<p><p></p></p>
   </div>
   <div class="project-card">
-    <h3>🎮 2D Platformer Controller</h3>
-    <p></p>
-    <p></p>
+<p><h3>🎮 Cozy Beekeeping Simulator</h3>
+<p></p></p>
+<p><p></p></p>
   </div>
   <div class="project-card">
-    <h3>🎮 VFX Experiments</h3>
-    <p></p>
-    <p></p>
+<p><div class="slideshow">
+<img src="/images/Platformer_001.jpg" alt="2D Platformer" class="active"><img src="/images/Platformer_002.jpg" alt="2D Platformer" ><img src="/images/Platformer_003.jpg" alt="2D Platformer" ><img src="/images/Platformer_004.jpg" alt="2D Platformer" ><img src="/images/Platformer_005.jpg" alt="2D Platformer" >
+<div class="slideshow-dots"><span class="dot active"></span><span class="dot "></span><span class="dot "></span><span class="dot "></span><span class="dot "></span></div>
+</div></p>
+<p><h3>🎮 2D Platformer</h3>
+<p>You find yoruself stripped of your magical powers in a gloomy cavern. You must find magical runes to restore your magic and overcome the dangers of the environment.</p>
+<p><strong>Focus:</strong> Smooth 2D platformer controller with Coyote Time and input buffering, dash and double jump mechanics, level design</p>
+<p></p></p>
   </div>
   <div class="project-card">
-    <h3>🎮 Multiplayer Tank Game</h3>
-    <p></p>
-    <p></p>
+<p><h3>🎮 VFX Experiments</h3>
+<p></p></p>
+<p><p></p></p>
   </div>
   <div class="project-card">
-    <h3>🎮 Cozy Beekeeping Simulator</h3>
-    <p></p>
-    <p></p>
+<p><div class="slideshow">
+<img src="/images/Sanatorium_001.jpg" alt="2D Horror Story-Adventure" class="active"><img src="/images/Sanatorium_002.jpg" alt="2D Horror Story-Adventure" ><img src="/images/Sanatorium_003.jpg" alt="2D Horror Story-Adventure" ><img src="/images/Sanatorium_004.jpg" alt="2D Horror Story-Adventure" ><img src="/images/Sanatorium_005.jpg" alt="2D Horror Story-Adventure" >
+<div class="slideshow-dots"><span class="dot active"></span><span class="dot "></span><span class="dot "></span><span class="dot "></span><span class="dot "></span></div>
+</div></p>
+<p><h3>🎮 2D Horror Story-Adventure</h3>
+<p>You wake up alone in a Sanatorium not remembering what happened before. You make your way through the hallways, encountering horrors and puzzles you must uncover to exit this place.</p>
+<p><strong>Focus:</strong> Dialogue system, storytelling, sprite collisions, level design</p>
+<p></p></p>
   </div>
 </div>
+<script>
+document.querySelectorAll('.project-card').forEach(card => {
+  const slideshow = card.querySelector('.slideshow');
+  if (!slideshow) return;
+  const imgs = slideshow.querySelectorAll('img');
+  const dots = slideshow.querySelectorAll('.dot');
+  if (imgs.length < 2) return;
+  let index = 0;
+  let interval;
+  function advance() {
+    imgs[index].classList.remove('active');
+    dots[index].classList.remove('active');
+    index = (index + 1) % imgs.length;
+    imgs[index].classList.add('active');
+    dots[index].classList.add('active');
+  }
+  card.addEventListener('mouseenter', () => {
+    advance();
+    interval = setInterval(advance, 1000);
+  });
+  card.addEventListener('mouseleave', () => {
+    clearInterval(interval);
+    imgs[index].classList.remove('active');
+    dots[index].classList.remove('active');
+    index = 0;
+    imgs[0].classList.add('active');
+    dots[0].classList.add('active');
+  });
+});
+</script>
     </main>
     
     <footer>

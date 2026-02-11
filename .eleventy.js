@@ -8,6 +8,20 @@ module.exports = function(eleventyConfig) {
   // Copy files (resume, etc.)
   eleventyConfig.addPassthroughCopy("src/files");
 
+  // Projects collection sorted by filename (descending)
+  eleventyConfig.addCollection("projects", function(collectionApi) {
+    return collectionApi.getFilteredByTag("projects").sort((a, b) => {
+      return b.inputPath.localeCompare(a.inputPath);
+    });
+  });
+
+  // Posts collection sorted by filename (descending)
+  eleventyConfig.addCollection("posts", function(collectionApi) {
+    return collectionApi.getFilteredByTag("posts").sort((a, b) => {
+      return b.inputPath.localeCompare(a.inputPath);
+    });
+  });
+
   // Add date filter
   eleventyConfig.addFilter("date", function(date, format) {
     const d = new Date(date);

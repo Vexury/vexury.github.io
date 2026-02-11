@@ -1,6 +1,6 @@
 ---
-title: About this site
-date: 2026-02-10
+title: 📖 About this site
+date: 2026-01-10
 ---
 
 # {{ title }}
