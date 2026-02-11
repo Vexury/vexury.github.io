@@ -1,7 +1,7 @@
 ---
 permalink: false
 tags: projects
-title: 2D Horror Story-Adventure
+title: 2D Horror Story-driven Adventure
 emoji: "\U0001F3AE"
 images: 
   - /images/Sanatorium_001.jpg

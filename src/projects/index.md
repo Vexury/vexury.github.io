@@ -8,7 +8,7 @@ title: Projects
   <div class="project-card">
     {% if project.data.images %}
     <div class="slideshow">
-      {% for img in project.data.images %}<img src="{{ img }}" alt="{{ project.data.title }}" {% if forloop.first %}class="active"{% endif %}>{% endfor %}
+      {% for img in project.data.images %}{% if img contains '.mp4' or img contains '.webm' %}<video src="{{ img }}" muted playsinline {% if forloop.first %}class="active"{% endif %}></video>{% else %}<img src="{{ img }}" alt="{{ project.data.title }}" {% if forloop.first %}class="active"{% endif %}>{% endif %}{% endfor %}
       <div class="slideshow-dots">{% for img in project.data.images %}<span class="dot {% if forloop.first %}active{% endif %}"></span>{% endfor %}</div>
     </div>
     {% elsif project.data.image %}<img src="{{ project.data.image }}" alt="{{ project.data.title }}">{% endif %}
@@ -24,28 +24,55 @@ title: Projects
 document.querySelectorAll('.project-card').forEach(card => {
   const slideshow = card.querySelector('.slideshow');
   if (!slideshow) return;
-  const imgs = slideshow.querySelectorAll('img');
+  const slides = slideshow.querySelectorAll('img, video');
   const dots = slideshow.querySelectorAll('.dot');
-  if (imgs.length < 2) return;
+  if (slides.length < 2) return;
   let index = 0;
-  let interval;
-  function advance() {
-    imgs[index].classList.remove('active');
+  let timeout;
+  let hovering = false;
+  function showSlide(i) {
+    const prev = slides[index];
+    prev.classList.remove('active');
+    if (prev.tagName === 'VIDEO') { prev.pause(); prev.removeEventListener('ended', advance); }
     dots[index].classList.remove('active');
-    index = (index + 1) % imgs.length;
-    imgs[index].classList.add('active');
+    index = i;
+    const curr = slides[index];
+    curr.classList.add('active');
     dots[index].classList.add('active');
+    if (curr.tagName === 'VIDEO') {
+      curr.currentTime = 0;
+      curr.play();
+      curr.addEventListener('ended', advance, { once: true });
+    } else if (hovering) {
+      timeout = setTimeout(advance, 1000);
+    }
   }
+  function advance() {
+    clearTimeout(timeout);
+    showSlide((index + 1) % slides.length);
+  }
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', (e) => {
+      e.stopPropagation();
+      clearTimeout(timeout);
+      const curr = slides[index];
+      if (curr.tagName === 'VIDEO') curr.removeEventListener('ended', advance);
+      showSlide(i);
+    });
+  });
   card.addEventListener('mouseenter', () => {
+    hovering = true;
     advance();
-    interval = setInterval(advance, 1000);
   });
   card.addEventListener('mouseleave', () => {
-    clearInterval(interval);
-    imgs[index].classList.remove('active');
+    hovering = false;
+    clearTimeout(timeout);
+    const curr = slides[index];
+    curr.classList.remove('active');
+    if (curr.tagName === 'VIDEO') { curr.pause(); curr.removeEventListener('ended', advance); }
     dots[index].classList.remove('active');
     index = 0;
-    imgs[0].classList.add('active');
+    slides[0].classList.add('active');
     dots[0].classList.add('active');
   });
 });

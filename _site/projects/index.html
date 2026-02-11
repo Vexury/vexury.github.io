@@ -30,14 +30,33 @@
 <p><p><a href="https://globalgamejam.org/jam-sites/2026/ggj-goes-land-sudbaden">GGJ Website</a> · <a href="https://globalgamejam.org/games/2026/quak-3-5">Game Page</a> · <a href="https://play.unity.com/en/games/3063178a-f9ae-42c1-afab-a970aa7c209a/quack-3">Playable Web-Build</a></p></p>
   </div>
   <div class="project-card">
-<p><h3>🎮 Multiplayer Tank Game</h3>
-<p></p></p>
-<p><p></p></p>
+<p><div class="slideshow">
+<video src="/images/VFX_001.mp4" muted playsinline class="active"></video><img src="/images/VFX_001.png" alt="VFX Experiments" ><img src="/images/VFX_002.png" alt="VFX Experiments" ><img src="/images/VFX_003.png" alt="VFX Experiments" ><img src="/images/VFX_004.png" alt="VFX Experiments" >
+<div class="slideshow-dots"><span class="dot active"></span><span class="dot "></span><span class="dot "></span><span class="dot "></span><span class="dot "></span></div>
+</div></p>
+<p><h3>🎮 VFX Experiments</h3>
+<p>I learned how to make interesting-looking VFX in Unity using both the Particle System and the Visual Effect Graph. I was surprised by how many elements there are to a full effect—like anticipation, climax, and aftermath—and each requires its own timings, textures, and SFX too. I followed courses by Gabriel Aguiar Prod.</p>
+<p><strong>Focus:</strong> VFX techniques and systems, texture creation, optimization</p>
+<p><a href="https://www.youtube.com/@GabrielAguiarProd">Gabriel Aguiar Prod.</a></p></p>
   </div>
   <div class="project-card">
+<p><div class="slideshow">
+<img src="/images/Tanks_001.png" alt="Multiplayer Tank Arena" class="active">
+<div class="slideshow-dots"><span class="dot active"></span></div>
+</div></p>
+<p><h3>🎮 Multiplayer Tank Arena</h3>
+<p>In a multiplayer tank arena, you try to collect as many coins as possible. You can shoot other players at the cost of coins but you get their coins when you defeat them. I learned a lot about server/client authority and how to deal with ping/lag. I used Unity Netcode for GameObjects to implement things like server-side projectiles. I also setup a lobby system and matchmaking using Unity Multiplayer Services. I followed a course from Dapper Dino to make this work.</p></p>
+<p><p><a href="https://www.youtube.com/@DapperDinoCodingTutorials">Dapper Dino</a></p></p>
+  </div>
+  <div class="project-card">
+<p><div class="slideshow">
+<img src="/images/Beekeepers_010.png" alt="Cozy Beekeeping Simulator" class="active"><img src="/images/Beekeepers_001.jpg" alt="Cozy Beekeeping Simulator" ><img src="/images/Beekeepers_002.jpg" alt="Cozy Beekeeping Simulator" ><img src="/images/Beekeepers_003.jpg" alt="Cozy Beekeeping Simulator" ><img src="/images/Beekeepers_004.jpg" alt="Cozy Beekeeping Simulator" ><img src="/images/Beekeepers_005.jpg" alt="Cozy Beekeeping Simulator" ><img src="/images/Beekeepers_006.jpg" alt="Cozy Beekeeping Simulator" ><img src="/images/Beekeepers_007.jpg" alt="Cozy Beekeeping Simulator" ><img src="/images/Beekeepers_008.jpg" alt="Cozy Beekeeping Simulator" ><img src="/images/Beekeepers_009.jpg" alt="Cozy Beekeeping Simulator" >
+<div class="slideshow-dots"><span class="dot active"></span><span class="dot "></span><span class="dot "></span><span class="dot "></span><span class="dot "></span><span class="dot "></span><span class="dot "></span><span class="dot "></span><span class="dot "></span><span class="dot "></span></div>
+</div></p>
 <p><h3>🎮 Cozy Beekeeping Simulator</h3>
+<p>You are the owner of a cozy bee farm outside of the city. You cultivate bee colonies, plant flowers for them and go through the process of extracting and refining honey. NPCs from the city come by and buy the honey you offer on your shelves.</p>
+<p><strong>Focus:</strong> Outlines, Interactables, NPCs,Base-Building, Vegetation rendering, Gameplay Loops</p>
 <p></p></p>
-<p><p></p></p>
   </div>
   <div class="project-card">
 <p><div class="slideshow">
@@ -50,16 +69,11 @@
 <p></p></p>
   </div>
   <div class="project-card">
-<p><h3>🎮 VFX Experiments</h3>
-<p></p></p>
-<p><p></p></p>
-  </div>
-  <div class="project-card">
 <p><div class="slideshow">
-<img src="/images/Sanatorium_001.jpg" alt="2D Horror Story-Adventure" class="active"><img src="/images/Sanatorium_002.jpg" alt="2D Horror Story-Adventure" ><img src="/images/Sanatorium_003.jpg" alt="2D Horror Story-Adventure" ><img src="/images/Sanatorium_004.jpg" alt="2D Horror Story-Adventure" ><img src="/images/Sanatorium_005.jpg" alt="2D Horror Story-Adventure" >
+<img src="/images/Sanatorium_001.jpg" alt="2D Horror Story-driven Adventure" class="active"><img src="/images/Sanatorium_002.jpg" alt="2D Horror Story-driven Adventure" ><img src="/images/Sanatorium_003.jpg" alt="2D Horror Story-driven Adventure" ><img src="/images/Sanatorium_004.jpg" alt="2D Horror Story-driven Adventure" ><img src="/images/Sanatorium_005.jpg" alt="2D Horror Story-driven Adventure" >
 <div class="slideshow-dots"><span class="dot active"></span><span class="dot "></span><span class="dot "></span><span class="dot "></span><span class="dot "></span></div>
 </div></p>
-<p><h3>🎮 2D Horror Story-Adventure</h3>
+<p><h3>🎮 2D Horror Story-driven Adventure</h3>
 <p>You wake up alone in a Sanatorium not remembering what happened before. You make your way through the hallways, encountering horrors and puzzles you must uncover to exit this place.</p>
 <p><strong>Focus:</strong> Dialogue system, storytelling, sprite collisions, level design</p>
 <p></p></p>
@@ -69,28 +83,55 @@
 document.querySelectorAll('.project-card').forEach(card => {
   const slideshow = card.querySelector('.slideshow');
   if (!slideshow) return;
-  const imgs = slideshow.querySelectorAll('img');
+  const slides = slideshow.querySelectorAll('img, video');
   const dots = slideshow.querySelectorAll('.dot');
-  if (imgs.length < 2) return;
+  if (slides.length < 2) return;
   let index = 0;
-  let interval;
-  function advance() {
-    imgs[index].classList.remove('active');
+  let timeout;
+  let hovering = false;
+  function showSlide(i) {
+    const prev = slides[index];
+    prev.classList.remove('active');
+    if (prev.tagName === 'VIDEO') { prev.pause(); prev.removeEventListener('ended', advance); }
     dots[index].classList.remove('active');
-    index = (index + 1) % imgs.length;
-    imgs[index].classList.add('active');
+    index = i;
+    const curr = slides[index];
+    curr.classList.add('active');
     dots[index].classList.add('active');
+    if (curr.tagName === 'VIDEO') {
+      curr.currentTime = 0;
+      curr.play();
+      curr.addEventListener('ended', advance, { once: true });
+    } else if (hovering) {
+      timeout = setTimeout(advance, 1000);
+    }
   }
+  function advance() {
+    clearTimeout(timeout);
+    showSlide((index + 1) % slides.length);
+  }
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', (e) => {
+      e.stopPropagation();
+      clearTimeout(timeout);
+      const curr = slides[index];
+      if (curr.tagName === 'VIDEO') curr.removeEventListener('ended', advance);
+      showSlide(i);
+    });
+  });
   card.addEventListener('mouseenter', () => {
+    hovering = true;
     advance();
-    interval = setInterval(advance, 1000);
   });
   card.addEventListener('mouseleave', () => {
-    clearInterval(interval);
-    imgs[index].classList.remove('active');
+    hovering = false;
+    clearTimeout(timeout);
+    const curr = slides[index];
+    curr.classList.remove('active');
+    if (curr.tagName === 'VIDEO') { curr.pause(); curr.removeEventListener('ended', advance); }
     dots[index].classList.remove('active');
     index = 0;
-    imgs[0].classList.add('active');
+    slides[0].classList.add('active');
     dots[0].classList.add('active');
   });
 });
