@@ -363,7 +363,7 @@ footer {
 
 .about-box p {
   font-size: 1.0rem;
-  color: var(--text-muted);
+  color: var(--text);
 }
 
 /* Tabs */

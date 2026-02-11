@@ -1,6 +1,7 @@
 ---
 title: 📖 About this site
 date: 2026-01-10
+summary: I finally built my own website!
 ---
 
 # {{ title }}
