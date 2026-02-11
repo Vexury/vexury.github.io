@@ -227,6 +227,12 @@ footer {
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.project-grid.loaded {
+  opacity: 1;
 }
 
 .project-card {
