@@ -151,6 +151,10 @@ document.querySelectorAll('.project-card').forEach(card => {
   });
 });
 
+window.addEventListener('load', () => {
+  document.querySelector('.project-grid').classList.add('loaded');
+});
+
 const lightbox = document.getElementById('lightbox');
 const lbImg = document.getElementById('lightbox-img');
 const lbVideo = document.getElementById('lightbox-video');
