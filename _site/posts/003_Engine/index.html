@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚙️ Custom Graphics Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <nav>
+        <a href="/" class="">/ Home</a>
+        <a href="/projects/" class="">/ Projects</a>
+      </nav>
+    </header>
+    
+    <main>
+      <h1>⚙️ Custom Graphics Engine</h1>
+<p class="post-date">February 14, 2026</p>
+<p>Links: <a href="https://github.com/Vexury/VexEngine">Source Code</a></p>
+<p>Over the last few years working with graphics and games, I started building my own engine piece by piece.
+When I started learning graphics and rendering, I used to work with existing frameworks like <a href="https://github.com/mmp/pbrt-v4">PBRT</a>.
+Working with such big codebases introduces an immense overhead for learning how it functions and where I can start injecting my own code to manipulate the final rendered image.
+And then you notice that the framework does not provide a feature that you did not realize you needed and then you just go to the next bigger, more bloaty, more complicated one just to test out a few effects or techniques.
+This motivated me to write a modern, clean and simple yet functional engine from scratch that provides me with a flexible playground for my own ideas and experiments.
+I had already done something similar for teaching graphics at KIT where we provided students with exercise frameworks where they can implement their solutions to exercise sheets.
+However, there were multiple such frameworks in place and I never had one engine that I could call mine where everything is built and designed by myself.</p>
+<!-- Engine_001: Screenshot of the full engine UI (editor layout with viewport, hierarchy, inspector, console) -->
+<h2>Window &amp; UI</h2>
+<p>The first step for any graphics application is getting a window on screen. I use <a href="https://www.glfw.org/">GLFW</a> for window creation and input handling — it is lightweight, cross-platform and works with both OpenGL and Vulkan out of the box.</p>
+<p>For the UI layer, I use <a href="https://github.com/ocornut/imgui">Dear ImGui</a> with the <a href="https://github.com/ocornut/imgui/wiki/Docking">docking branch</a>. ImGui is an immediate-mode GUI library, meaning you describe your UI every frame rather than maintaining a persistent widget tree. This makes it incredibly easy to iterate on layouts and debug tools. The docking branch lets me create a fully dockable, rearrangeable editor layout similar to what you would find in Unity or Unreal.</p>
+<!-- Engine_002: Screenshot or short video showing the dockable UI panels being rearranged -->
+<h2>Editor Layout</h2>
+<p>With ImGui docking in place, I built an engine-like editor layout with several panels:</p>
+<ul>
+<li><strong>Scene Hierarchy</strong> — A tree view of all objects in the scene. You can select objects here, and the selection is synced with the viewport.</li>
+<li><strong>Inspector</strong> — Displays the properties of the currently selected object (transform, material, etc.) and lets you edit them directly.</li>
+<li><strong>Console</strong> — A logging console that captures engine output, warnings and errors in real time.</li>
+<li><strong>Viewport</strong> — The main rendering view where the scene is drawn.</li>
+<li><strong>Performance Metrics</strong> — Frame time, FPS, and other stats to keep an eye on how things are running.</li>
+</ul>
+<p>Selecting an object in the hierarchy or clicking it in the viewport highlights it with an <strong>outline rendering</strong> pass, making it easy to see what is currently selected in a complex scene.</p>
+<!-- Engine_003: Screenshot showing object selection with outline highlight in the viewport -->
+<h2>Dual Backend: OpenGL &amp; Vulkan</h2>
+<p>One of the more interesting architectural decisions was supporting two graphics backends: <strong>OpenGL</strong> and <strong>Vulkan</strong>. The engine abstracts rendering behind a common interface, and the CMake configuration builds the project with one backend or the other using a compile flag. This way I can switch between them without touching the application code.</p>
+<p>For getting started with OpenGL, <a href="https://learnopengl.com/">LearnOpenGL</a> is an incredible resource — it walks you through everything from opening a window to PBR shading. For Vulkan, I highly recommend <a href="https://vkguide.dev/">vkguide.dev</a> which takes a very hands-on approach to learning the Vulkan API.</p>
+<p>On the Vulkan side, I use <a href="https://github.com/charles-lunarg/vk-bootstrap">vk-bootstrap</a> to simplify the verbose instance/device setup and <a href="https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator">Vulkan Memory Allocator (VMA)</a> for buffer and image memory management. These two libraries cut down an enormous amount of boilerplate and let you focus on the actual rendering logic instead of fighting the API.</p>
+<!-- Engine_004: Side-by-side comparison of the same scene in OpenGL and Vulkan, or a screenshot of the CMake config -->
+<h2>Rasterization</h2>
+<p>Both backends support classic <strong>rasterization</strong> rendering. Meshes are uploaded to the GPU, transformed by vertex shaders and shaded by fragment shaders. This gives me a fast, interactive preview of the scene that I use for navigating and placing objects before kicking off a more expensive path trace.</p>
+<!-- Engine_005: Screenshot of a rasterized scene in the viewport -->
+<h2>Interactive Camera</h2>
+<p>Navigating the scene is done through an interactive camera that supports <strong>zoom</strong>, <strong>pan</strong> and <strong>orbit rotation</strong>. This feels similar to how you would move around in Blender or other 3D tools — scroll to zoom, middle-mouse to pan, and click-drag to orbit around a focus point. Having a responsive camera is essential for quickly inspecting objects and finding the right angle for a render.</p>
+<h2>Scene Management</h2>
+<p>The engine can <strong>load and delete OBJ meshes</strong> at runtime. You can import objects into the scene, move them around using the inspector transforms, and remove them when they are no longer needed. The scene hierarchy updates automatically to reflect all changes, so you always have a clear overview of what is in the scene.</p>
+<!-- Engine_006: Short video or screenshots showing loading an OBJ, moving it, and deleting it -->
+<h2>CPU Path Tracing</h2>
+<p>The most involved rendering feature is a <strong>CPU path tracer</strong> that runs on the host and displays its result in the viewport using a fullscreen quad. The path tracer is <strong>progressive</strong> — as long as nothing changes in the scene (camera, objects, materials), it keeps accumulating samples and the image converges to a cleaner result over time. The moment something changes, the accumulation resets and a new trace begins from scratch.</p>
+<!-- Engine_007: Video or sequence of screenshots showing progressive convergence (noisy → clean) -->
+<p>The path tracer implements several techniques to reduce noise and converge faster:</p>
+<ul>
+<li><strong>Next Event Estimation (NEE)</strong> — At each bounce, the tracer sends a shadow ray directly toward a light source instead of relying purely on random bounces to eventually hit one. This dramatically reduces variance for direct lighting.</li>
+<li><strong>Multiple Importance Sampling (MIS)</strong> — Combines BSDF sampling and light sampling using balance heuristics, so that both glossy highlights and soft diffuse lighting converge efficiently without either strategy dominating.</li>
+<li><strong>Environment Lighting</strong> — The scene is lit by an environment map (HDR), providing realistic ambient illumination from all directions. This works together with MIS to produce natural-looking outdoor and studio lighting.</li>
+</ul>
+<!-- Engine_008: Comparison of a noisy vs converged render, or a render showing environment lighting -->
+<h2>Feature Checklist</h2>
+<p>Here is an overview of what is done and what I am planning to work on next:</p>
+<p><strong>Engine &amp; UI</strong></p>
+<ul>
+<li>[x] Window creation with GLFW</li>
+<li>[x] ImGui with docking for editor layout</li>
+<li>[x] Scene hierarchy panel</li>
+<li>[x] Inspector panel</li>
+<li>[x] Logging console</li>
+<li>[x] Performance metrics</li>
+<li>[x] Object selection (hierarchy &amp; viewport click)</li>
+<li>[x] Outline rendering for selected objects</li>
+<li>[ ] Viewport gizmos (translate, rotate, scale directly in the viewport)</li>
+<li>[ ] Undo/redo system</li>
+</ul>
+<p><strong>Scene &amp; Assets</strong></p>
+<ul>
+<li>[x] OBJ mesh loading &amp; deletion</li>
+<li>[x] Runtime object transforms via inspector</li>
+<li>[x] Environment map loading (HDR)</li>
+<li>[ ] FBX loading</li>
+<li>[ ] glTF loading</li>
+<li>[ ] Scene serialization (save/load scenes to file)</li>
+</ul>
+<p><strong>Rendering — Rasterization</strong></p>
+<ul>
+<li>[x] OpenGL backend</li>
+<li>[x] Vulkan backend</li>
+<li>[x] CMake compile flag to switch backends</li>
+<li>[x] Interactive camera (zoom, pan, orbit)</li>
+<li>[ ] Shadow mapping</li>
+<li>[ ] GPU-driven path tracing</li>
+<li>[ ] Deferred rendering</li>
+<li>Post-processing
+<ul>
+<li>[x] Exposure / gamma correction</li>
+<li>[x] ACES tone mapping</li>
+<li>[ ] Bloom</li>
+<li>[ ] SSAO</li>
+</ul>
+</li>
+</ul>
+<p><strong>Materials</strong></p>
+<ul>
+<li>[x] Diffuse (Lambertian)</li>
+<li>[ ] Specular (perfect mirror)</li>
+<li>[ ] Dielectric (glass, refraction)</li>
+<li>[ ] Microfacet BSDF (GGX/Cook-Torrance)</li>
+<li>[ ] Textured materials (albedo, normal, roughness maps)</li>
+<li>[ ] Emissive materials</li>
+</ul>
+<p><strong>Global Illumination &amp; Ray Tracing</strong></p>
+<ul>
+<li>[x] CPU progressive path tracer</li>
+<li>[x] Fullscreen quad display</li>
+<li>[x] Automatic reset on scene changes</li>
+<li>[x] Next Event Estimation (NEE)</li>
+<li>[x] Multiple Importance Sampling (MIS)</li>
+<li>[x] Environment lighting</li>
+<li>[ ] Bounding Volume Hierarchy (BVH) acceleration</li>
+<li>[ ] Bidirectional Path Tracing (BDPT)</li>
+<li>[ ] Metropolis Light Transport (MLT)</li>
+<li>[ ] Photon Mapping</li>
+<li>[ ] Volumetric rendering (participating media)</li>
+<li>[ ] Spectral rendering</li>
+<li>[ ] Denoising (OIDN / OptiX)</li>
+</ul>
+<h2>Resources</h2>
+<p>If you are interested in building something similar, here are some of the resources that helped me the most:</p>
+<ul>
+<li><a href="https://learnopengl.com/">LearnOpenGL</a> — Comprehensive OpenGL tutorials from the ground up</li>
+<li><a href="https://vkguide.dev/">vkguide.dev</a> — Practical, modern Vulkan tutorial</li>
+<li><a href="https://raytracing.github.io/">Ray Tracing in One Weekend</a> — The classic starting point for writing a path tracer</li>
+<li><a href="https://www.pbr-book.org/">PBRT</a> — The reference book on physically based rendering</li>
+<li><a href="https://github.com/ocornut/imgui">Dear ImGui</a> — Immediate-mode GUI for tools and debug UI</li>
+<li><a href="https://github.com/charles-lunarg/vk-bootstrap">vk-bootstrap</a> — Simplifies Vulkan initialization</li>
+<li><a href="https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator">Vulkan Memory Allocator</a> — GPU memory management for Vulkan</li>
+</ul>
+<p>This engine is still a work in progress — there is always more to add and improve. But having a codebase that is entirely my own, where I understand every line, makes it a joy to experiment with new rendering techniques.</p>
+
+    </main>
+    
+    <footer>
+      <p>Moritz Grauer © 2026</p>
+    </footer>
+  </div>
+  <script>
+    document.querySelectorAll('a[href^="http"], a[href$=".pdf"]').forEach(a => {
+      if (!a.hostname || a.hostname !== location.hostname || a.href.endsWith('.pdf')) {
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+      }
+    });
+  </script>
+</body>
+</html>
