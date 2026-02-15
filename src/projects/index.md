@@ -8,7 +8,7 @@ title: Projects
   <div class="project-card">
     {% if project.data.images %}
     <div class="slideshow">
-      {% for img in project.data.images %}{% if img contains '.mp4' or img contains '.webm' %}<video src="{{ img }}" muted playsinline {% if forloop.first %}class="active"{% endif %}></video>{% else %}<img src="{{ img }}" alt="{{ project.data.title }}" {% if forloop.first %}class="active"{% endif %}>{% endif %}{% endfor %}
+      {% for img in project.data.images %}{% if img contains '.mp4' or img contains '.webm' %}<video src="{{ img }}" muted playsinline preload="none" {% if forloop.first %}class="active"{% endif %}></video>{% else %}<img src="{{ img }}" alt="{{ project.data.title }}" loading="lazy" {% if forloop.first %}class="active"{% endif %}>{% endif %}{% endfor %}
       <div class="slideshow-dots">{% for img in project.data.images %}<span class="dot {% if forloop.first %}active{% endif %}"></span>{% endfor %}</div>
     </div>
     {% elsif project.data.image %}<img src="{{ project.data.image }}" alt="{{ project.data.title }}">{% endif %}
@@ -82,9 +82,7 @@ document.querySelectorAll('.project-card').forEach(card => {
   });
 });
 
-window.addEventListener('load', () => {
-  document.querySelector('.project-grid').classList.add('loaded');
-});
+document.querySelector('.project-grid').classList.add('loaded');
 
 const lightbox = document.getElementById('lightbox');
 const lbImg = document.getElementById('lightbox-img');
