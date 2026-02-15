@@ -4,7 +4,11 @@
       "Bash(findstr:*)",
       "Bash(ls:*)",
       "Bash(npx @11ty/eleventy:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "WebFetch(domain:developer.nvidia.com)",
+      "Bash(npm install:*)",
+      "Bash(npm run thumbs:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }

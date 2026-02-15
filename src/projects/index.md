@@ -8,7 +8,7 @@ title: Projects
   <div class="project-card">
     {% if project.data.images %}
     <div class="slideshow">
-      {% for img in project.data.images %}{% if img contains '.mp4' or img contains '.webm' %}<video src="{{ img }}" muted playsinline preload="none" {% if forloop.first %}class="active"{% endif %}></video>{% else %}<img src="{{ img }}" alt="{{ project.data.title }}" loading="lazy" {% if forloop.first %}class="active"{% endif %}>{% endif %}{% endfor %}
+      {% for img in project.data.images %}{% if img contains '.mp4' or img contains '.webm' %}<video src="{{ img }}" muted playsinline preload="none" {% if forloop.first %}class="active"{% endif %}></video>{% else %}{% assign base = img | split: '.' | first %}<img src="{{ base | replace: '/images/', '/images/thumbs/' }}.jpg" data-full="{{ img }}" alt="{{ project.data.title }}" loading="lazy" {% if forloop.first %}class="active"{% endif %}>{% endif %}{% endfor %}
       <div class="slideshow-dots">{% for img in project.data.images %}<span class="dot {% if forloop.first %}active{% endif %}"></span>{% endfor %}</div>
     </div>
     {% elsif project.data.image %}<img src="{{ project.data.image }}" alt="{{ project.data.title }}">{% endif %}
@@ -101,7 +101,7 @@ document.querySelectorAll('.slideshow').forEach(ss => {
     } else {
       lbVideo.style.display = 'none';
       lbImg.style.display = 'block';
-      lbImg.src = active.src;
+      lbImg.src = active.dataset.full || active.src;
     }
     lightbox.classList.add('active');
   });
