@@ -1,6 +1,6 @@
 ---
 title: ⚙️ Custom Graphics Engine
-date: 2026-02-17
+date: 2026-02-14
 summary: A C++ graphics engine built from scratch — path tracing, Cook-Torrance GGX, dual OpenGL/Vulkan backend, BVH acceleration and a full editor UI.
 ---
 
@@ -169,6 +169,7 @@ Here is an overview of what is done and what I am planning to work on next:
 - [x] Object selection (hierarchy & viewport click)
 - [x] Outline rendering for selected objects
 - [x] Interactive camera (zoom, pan, orbit)
+- [x] Saving Framebuffer as image to disk
 - [ ] Viewport gizmos (translate, rotate, scale directly in the viewport)
 - [ ] Undo/redo system
 
@@ -187,7 +188,7 @@ Here is an overview of what is done and what I am planning to work on next:
 </details>
 
 <details>
-<summary>Rendering — Global Illumination</summary>
+<summary>Rendering and Global Illumination</summary>
 
 - [x] CMake compile flag to switch backends
 - [x] Bounding Volume Hierarchy (BVH)

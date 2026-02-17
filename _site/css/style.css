@@ -417,12 +417,12 @@ details[open] summary {
 
 details > ul,
 details > ol {
-  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  padding: 1rem 1.25rem;
   margin-bottom: 0;
 }
 
-details > ul ul {
-  padding-left: 1.5rem;
+details > ul > li:last-child,
+details > ol > li:last-child {
   margin-bottom: 0;
 }
 
@@ -481,23 +481,33 @@ blockquote p {
   padding-left: 0;
 }
 
+details > .contains-task-list {
+  padding: 1rem 1.25rem;
+  columns: 2;
+  column-gap: 1.5rem;
+}
+
 .contains-task-list .contains-task-list {
-  padding-left: 1.5rem;
+  padding-left: 1.25rem;
+  margin-top: 0.15rem;
+  columns: 1;
 }
 
 .task-list-item {
-  padding-left: 1.75rem;
+  padding-left: 1.6rem;
   position: relative;
+  margin-bottom: 0.35rem;
+  break-inside: avoid;
 }
 
 .task-list-item-checkbox {
   position: absolute;
   left: 0;
-  top: 0.3em;
+  top: 0.25em;
   appearance: none;
   -webkit-appearance: none;
-  width: 1.1em;
-  height: 1.1em;
+  width: 1em;
+  height: 1em;
   border: 2px solid #aaa;
   border-radius: 3px;
   background: transparent;
@@ -513,9 +523,11 @@ blockquote p {
 .task-list-item-checkbox:checked::after {
   content: '\2713';
   position: absolute;
-  top: -1px;
-  left: 2px;
-  font-size: 0.8em;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.75em;
+  line-height: 1;
   color: white;
   font-weight: bold;
 }

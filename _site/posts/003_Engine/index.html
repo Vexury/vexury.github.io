@@ -20,7 +20,7 @@
     
     <main>
       <h1>⚙️ Custom Graphics Engine</h1>
-<p class="post-date">February 17, 2026</p>
+<p class="post-date">February 14, 2026</p>
 <p>Links: <a href="https://github.com/Vexury/VexEngine">Source Code</a> · <a href="/projects/">Rendered Images</a></p>
 <p>VexEngine is a C++ graphics engine I built from scratch — featuring a progressive path tracer with CPU and GPU backends, Cook-Torrance GGX materials, BVH acceleration, and a dockable editor UI. It supports both OpenGL and Vulkan through an abstracted rendering interface.</p>
 <p>After years of working within large frameworks like <a href="https://github.com/mmp/pbrt-v4">PBRT</a>, where the overhead of navigating someone else's codebase often got in the way of actually experimenting, I wanted a clean, minimal engine that I fully understand and control. Having built exercise frameworks for teaching graphics at KIT, I knew what a good learning-oriented codebase should look like — VexEngine is that, but designed entirely around my own rendering ideas and experiments.</p>
@@ -215,6 +215,7 @@
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Object selection (hierarchy &amp; viewport click)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Outline rendering for selected objects</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Interactive camera (zoom, pan, orbit)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Saving Framebuffer as image to disk</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Viewport gizmos (translate, rotate, scale directly in the viewport)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Undo/redo system</li>
 </ul>
@@ -231,7 +232,7 @@
 </ul>
 </details>
 <details>
-<summary>Rendering — Global Illumination</summary>
+<summary>Rendering and Global Illumination</summary>
 <ul class="contains-task-list">
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> CMake compile flag to switch backends</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Bounding Volume Hierarchy (BVH)
