@@ -1,22 +1,18 @@
 ---
 title: ⚙️ Custom Graphics Engine
-date: 2026-02-14
-summary: I am building my own graphics engine! Path Tracing, Bounding Volume Hierarchies and more...
+date: 2026-02-17
+summary: A C++ graphics engine built from scratch — path tracing, Cook-Torrance GGX, dual OpenGL/Vulkan backend, BVH acceleration and a full editor UI.
 ---
 
 # {{ title }}
 
 <p class="post-date">{{ date | date: "%B %d, %Y" }}</p>
 
-Links: [Source Code](https://github.com/Vexury/VexEngine)
+Links: [Source Code](https://github.com/Vexury/VexEngine) · [Rendered Images](/projects/)
 
-Over the last few years working with graphics and games, I started building my own engine piece by piece.
-When I started learning graphics and rendering, I used to work with existing frameworks like [PBRT](https://github.com/mmp/pbrt-v4).
-Working with such big codebases introduces an immense overhead for learning how it functions and where I can start injecting my own code to manipulate the final rendered image.
-And then you notice that the framework does not provide a feature that you did not realize you needed and then you just go to the next bigger, more bloaty, more complicated one just to test out a few effects or techniques.
-This motivated me to write a modern, clean and simple yet functional engine from scratch that provides me with a flexible playground for my own ideas and experiments.
-I had already done something similar for teaching graphics at KIT where we provided students with exercise frameworks where they can implement their solutions to exercise sheets.
-However, there were multiple such frameworks in place and I never had one engine that I could call mine where everything is built and designed by myself.
+VexEngine is a C++ graphics engine I built from scratch — featuring a progressive path tracer with CPU and GPU backends, Cook-Torrance GGX materials, BVH acceleration, and a dockable editor UI. It supports both OpenGL and Vulkan through an abstracted rendering interface.
+
+After years of working within large frameworks like [PBRT](https://github.com/mmp/pbrt-v4), where the overhead of navigating someone else's codebase often got in the way of actually experimenting, I wanted a clean, minimal engine that I fully understand and control. Having built exercise frameworks for teaching graphics at KIT, I knew what a good learning-oriented codebase should look like — VexEngine is that, but designed entirely around my own rendering ideas and experiments.
 
 <!-- Engine_001: Screenshot of the full engine UI (editor layout with viewport, hierarchy, inspector, console) -->
 
@@ -28,7 +24,7 @@ For the UI layer, I use [Dear ImGui](https://github.com/ocornut/imgui) with the 
 
 <!-- Engine_002: Screenshot or short video showing the dockable UI panels being rearranged -->
 
-## Editor Layout
+## Editor & Scene
 
 With ImGui docking in place, I built an engine-like editor layout with several panels:
 
@@ -42,51 +38,124 @@ Selecting an object in the hierarchy or clicking it in the viewport highlights i
 
 <!-- Engine_003: Screenshot showing object selection with outline highlight in the viewport -->
 
+Navigating the scene is done through an interactive camera that supports **zoom**, **pan** and **orbit rotation**. This feels similar to how you would move around in Blender or other 3D tools — scroll to zoom, middle-mouse to pan, and click-drag to orbit around a focus point.
+
+The engine can load and delete OBJ meshes at runtime using [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader). Objects can be imported into the scene via file dialog and removed when no longer needed. The scene hierarchy updates automatically to reflect all changes.
+
+<!-- Engine_006: Short video or screenshots showing loading an OBJ, moving it, and deleting it -->
+
 ## Dual Backend: OpenGL & Vulkan
 
-One of the more interesting architectural decisions was supporting two graphics backends: **OpenGL** and **Vulkan**. The engine abstracts rendering behind a common interface, and the CMake configuration builds the project with one backend or the other using a compile flag. This way I can switch between them without touching the application code.
+One of the more challenging architectural decisions was supporting two graphics backends: **OpenGL** and **Vulkan**. The engine abstracts rendering behind a common interface, and a CMake compile flag selects the backend — application code stays the same either way.
 
-For getting started with OpenGL, [LearnOpenGL](https://learnopengl.com/) is an incredible resource — it walks you through everything from opening a window to PBR shading. For Vulkan, I highly recommend [vkguide.dev](https://vkguide.dev/) which takes a very hands-on approach to learning the Vulkan API.
-
-On the Vulkan side, I use [vk-bootstrap](https://github.com/charles-lunarg/vk-bootstrap) to simplify the verbose instance/device setup and [Vulkan Memory Allocator (VMA)](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator) for buffer and image memory management. These two libraries cut down an enormous amount of boilerplate and let you focus on the actual rendering logic instead of fighting the API.
+On the Vulkan side, I use [vk-bootstrap](https://github.com/charles-lunarg/vk-bootstrap) for instance/device setup and [VMA](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator) for GPU memory management, which cuts down the verbose boilerplate and lets me focus on the actual rendering logic.
 
 <!-- Engine_004: Side-by-side comparison of the same scene in OpenGL and Vulkan, or a screenshot of the CMake config -->
 
-## Rasterization
+## Rasterization & Debug Renders
 
 Both backends support classic **rasterization** rendering. Meshes are uploaded to the GPU, transformed by vertex shaders and shaded by fragment shaders. This gives me a fast, interactive preview of the scene that I use for navigating and placing objects before kicking off a more expensive path trace.
 
 <!-- Engine_005: Screenshot of a rasterized scene in the viewport -->
 
-## Interactive Camera
+On top of the standard shaded view, the rasterizer supports several **debug visualization modes** that can be toggled in the viewport:
 
-Navigating the scene is done through an interactive camera that supports **zoom**, **pan** and **orbit rotation**. This feels similar to how you would move around in Blender or other 3D tools — scroll to zoom, middle-mouse to pan, and click-drag to orbit around a focus point. Having a responsive camera is essential for quickly inspecting objects and finding the right angle for a render.
+- **Normals** — Visualizes surface normals as RGB colors, useful for checking mesh quality and normal map correctness.
+- **UVs** — Displays texture coordinates as colors, making it easy to spot UV seams and mapping issues.
+- **Depth** — Renders the scene depth buffer as a grayscale image, helpful for verifying camera near/far planes and spatial layout.
+- **Wireframe** — Overlays the triangle mesh wireframe, useful for inspecting geometry density and topology.
 
-## Scene Management
+These debug modes render in real time and are invaluable for quickly diagnosing visual artifacts or verifying that scene data is loaded correctly.
 
-The engine can **load and delete OBJ meshes** at runtime. You can import objects into the scene, move them around using the inspector transforms, and remove them when they are no longer needed. The scene hierarchy updates automatically to reflect all changes, so you always have a clear overview of what is in the scene.
+<!-- Engine_010: Grid of debug render modes showing the same scene in normals, UVs, depth and wireframe -->
 
-<!-- Engine_006: Short video or screenshots showing loading an OBJ, moving it, and deleting it -->
+## Path Tracing
 
-## CPU Path Tracing
-
-The most involved rendering feature is a **CPU path tracer** that runs on the host and displays its result in the viewport using a fullscreen quad. The path tracer is **progressive** — as long as nothing changes in the scene (camera, objects, materials), it keeps accumulating samples and the image converges to a cleaner result over time. The moment something changes, the accumulation resets and a new trace begins from scratch.
+The engine includes a **progressive path tracer** that displays its result in the viewport using a fullscreen quad. As long as nothing changes in the scene (camera, objects, materials), it keeps accumulating samples and the image converges to a cleaner result over time. The moment something changes, the accumulation resets and a new trace begins from scratch.
 
 <!-- Engine_007: Video or sequence of screenshots showing progressive convergence (noisy → clean) -->
 
-The path tracer implements several techniques to reduce noise and converge faster:
+Ray-scene intersection is accelerated by a **Bounding Volume Hierarchy (BVH)** built with **binned Surface Area Heuristic (SAH)**. The SAH builder evaluates split candidates across binned intervals to produce a tree that minimizes expected traversal cost. At query time, the traversal is **ordered** — the closer child node is visited first, which improves early termination and cuts the number of intersection tests significantly.
 
-- **Next Event Estimation (NEE)** — At each bounce, the tracer sends a shadow ray directly toward a light source instead of relying purely on random bounces to eventually hit one. This dramatically reduces variance for direct lighting.
-- **Multiple Importance Sampling (MIS)** — Combines BSDF sampling and light sampling using balance heuristics, so that both glossy highlights and soft diffuse lighting converge efficiently without either strategy dominating.
-- **Environment Lighting** — The scene is lit by an environment map (HDR), providing realistic ambient illumination from all directions. This works together with MIS to produce natural-looking outdoor and studio lighting.
+The path tracer supports four types of light sources, each with its own sampling strategy:
+
+- **Emissive geometry** — Triangles with a solid emissive color (`Ke` in MTL) are treated as area lights. They are collected into a light CDF weighted by surface area, allowing **Next Event Estimation (NEE)** to directly sample points on their surface each bounce. When a path ray hits one of these emitters, it terminates — the surface is treated purely as a light source. **Multiple Importance Sampling (MIS)** balances the NEE and BSDF strategies to reduce variance.
+- **Emissive textures** — Materials with an emissive texture map (`map_Ke`) are handled differently. Because emission varies per-texel, they are not included in the light CDF and cannot be importance-sampled by NEE. Instead, they contribute light only when a ray happens to hit them. Unlike solid emitters, these surfaces continue scattering light via their base material rather than terminating — they are glowing surfaces, not light sources.
+- **Point and directional lights** — Sampled by dedicated NEE paths. The point light uses inverse-square falloff. The directional (sun) light has a configurable angular radius, producing soft shadows — shadow rays are jittered within a cone rather than aimed at a single direction.
+- **Environment lighting** — An HDR environment map provides image-based lighting. A 2D CDF (conditional + marginal) is precomputed for importance sampling, so NEE preferentially samples bright regions of the sky. MIS again balances environment sampling against BSDF sampling.
+
+All four NEE strategies fire independently each bounce, and the emissive material contribution can be toggled off to isolate the effect of explicit light sources.
 
 <!-- Engine_008: Comparison of a noisy vs converged render, or a render showing environment lighting -->
+
+The path tracing algorithm itself is the same across all backends — the difference is where it runs:
+
+- **CPU** — The original implementation, running on the host. Great for debugging and correctness testing since you can step through every ray.
+- **GPU (OpenGL)** — Ported to the GPU using **compute shaders**. The same progressive accumulation and sampling logic runs massively parallel, giving a significant speedup for interactive previews.
+- **GPU (Vulkan)** — Planned. The Vulkan backend will use **hardware ray tracing** (VK_KHR_ray_tracing_pipeline) to leverage dedicated RT cores for acceleration structure traversal and ray-triangle intersection.
+
+## Materials and Textures
+
+The engine supports a full **PBR material pipeline** built on the **Cook-Torrance [microfacet model](https://pbr-book.org/3ed-2018/Reflection_Models/Microfacet_Models)** with a **GGX normal distribution**. Materials are loaded from OBJ/MTL files and automatically mapped to physically based parameters.
+
+**Textured materials** allow spatially varying surface properties. The engine currently supports **base color (albedo) maps** loaded from `map_Kd` in MTL files, as well as emissive and normal maps. When no texture is provided, the solid `Kd` color is used instead.
+
+<!-- Engine_009: Screenshot showing textured vs untextured materials side by side -->
+
+<details>
+<summary>Material Types (from OBJ/MTL illum)</summary>
+
+The engine maps OBJ/MTL illumination models to internal PBR material types:
+
+| illum | Type | materialType | metallic | BRDF |
+|---|---|---|---|---|
+| 0, 1, 2 (default) | Diffuse/Glossy | 0 | 0.0 | Cook-Torrance GGX |
+| 3, 5 | Mirror/Metal | 1→0\* | 1.0 | Cook-Torrance GGX (or perfect mirror if roughness < 0.01) |
+| 4, 6, 7 | Dielectric (glass) | 2 | 0.0 | Fresnel reflect/refract (unchanged) |
+
+> \* `materialType=1` is still set by the loader, but the raytracer dispatch now checks `metallic > 0.99 && roughness < 0.01` for the perfect mirror shortcut, otherwise falls through to Cook-Torrance.
+
+</details>
+
+<details>
+<summary>PBR Parameter Mapping</summary>
+
+| MTL property | PBR parameter | Formula |
+|---|---|---|
+| Ns (shininess) | roughness | `sqrt(2 / (Ns + 2))` — maps Blinn-Phong lobe width to GGX |
+| illum 3/5 | metallic | 1.0 (everything else defaults to 0.0) |
+| Ni (IOR) | ior | Used directly (default 1.5) |
+| Kd | baseColor | Vertex color (or Ks for mirror materials) |
+
+</details>
+
+<details>
+<summary>Roughness Range Examples</summary>
+
+| Ns | Roughness | Appearance |
+|---|---|---|
+| 0 | 1.0 | Fully rough (pure diffuse look) |
+| 10 | 0.41 | Moderate roughness |
+| 100 | 0.14 | Fairly glossy |
+| 1000 | 0.045 | Near-mirror |
+
+</details>
+
+<details>
+<summary>Where Cook-Torrance is NOT Used</summary>
+
+- **Dielectric (type 2)** — Keeps the existing delta Fresnel reflect/refract. Rough dielectrics would need microfacet transmission (a separate feature).
+- **Perfect mirror shortcut** — When `metallic > 0.99` AND `roughness < 0.01`, uses the delta MirrorBSDF to avoid numerical issues at near-zero alpha.
+
+</details>
 
 ## Feature Checklist
 
 Here is an overview of what is done and what I am planning to work on next:
 
-**Engine & UI**
+<details>
+<summary>Engine & UI</summary>
+
 - [x] Window creation with GLFW
 - [x] ImGui with docking for editor layout
 - [x] Scene hierarchy panel
@@ -95,10 +164,15 @@ Here is an overview of what is done and what I am planning to work on next:
 - [x] Performance metrics
 - [x] Object selection (hierarchy & viewport click)
 - [x] Outline rendering for selected objects
+- [x] Interactive camera (zoom, pan, orbit)
 - [ ] Viewport gizmos (translate, rotate, scale directly in the viewport)
 - [ ] Undo/redo system
 
-**Scene & Assets**
+</details>
+
+<details>
+<summary>Scene & Assets</summary>
+
 - [x] OBJ mesh loading & deletion
 - [x] Runtime object transforms via inspector
 - [x] Environment map loading (HDR)
@@ -106,53 +180,80 @@ Here is an overview of what is done and what I am planning to work on next:
 - [ ] glTF loading
 - [ ] Scene serialization (save/load scenes to file)
 
-**Rendering — Rasterization**
-- [x] OpenGL backend
-- [x] Vulkan backend
+</details>
+
+<details>
+<summary>Rendering — Global Illumination</summary>
+
 - [x] CMake compile flag to switch backends
-- [x] Interactive camera (zoom, pan, orbit)
+- [x] Bounding Volume Hierarchy (BVH)
+    - [x] Binned SAH Builder
+    - [x] Ordered Traversal
+- [x] Fullscreen quad
+    - [x] OpenGL
+    - [x] Vulkan
 - [ ] Shadow mapping
-- [ ] GPU-driven path tracing
+    - [ ] OpenGL
+    - [ ] Vulkan
+- [x] CPU Progressive Path Tracing
+- [ ] GPU Progressive Path Tracing
+    - [x] OpenGL (compute shader)
+    - [ ] Vulkan
+- [x] Path Tracing Features
+    - [x] Next Event Estimation (NEE)
+    - [x] Multiple Importance Sampling (MIS)
+    - [x] Environment lighting
+- [x] Debug visualization modes
+    - [x] Normals
+    - [x] UVs
+    - [x] Depth
+    - [x] Wireframe
+- [ ] Denoising
 - [ ] Deferred rendering
-- Post-processing
-  - [x] Exposure / gamma correction
-  - [x] ACES tone mapping
-  - [ ] Bloom
-  - [ ] SSAO
-
-**Materials**
-- [x] Diffuse (Lambertian)
-- [ ] Specular (perfect mirror)
-- [ ] Dielectric (glass, refraction)
-- [ ] Microfacet BSDF (GGX/Cook-Torrance)
-- [ ] Textured materials (albedo, normal, roughness maps)
-- [ ] Emissive materials
-
-**Global Illumination & Ray Tracing**
-- [x] CPU progressive path tracer
-- [x] Fullscreen quad display
-- [x] Automatic reset on scene changes
-- [x] Next Event Estimation (NEE)
-- [x] Multiple Importance Sampling (MIS)
-- [x] Environment lighting
-- [ ] Bounding Volume Hierarchy (BVH) acceleration
+    - [ ] OpenGL
+    - [ ] Vulkan
 - [ ] Bidirectional Path Tracing (BDPT)
 - [ ] Metropolis Light Transport (MLT)
 - [ ] Photon Mapping
 - [ ] Volumetric rendering (participating media)
 - [ ] Spectral rendering
-- [ ] Denoising (OIDN / OptiX)
+
+</details>
+
+<details>
+<summary>Materials</summary>
+
+- [x] Diffuse (Lambertian)
+- [x] Specular (perfect mirror)
+- [x] Dielectric (glass, refraction)
+- [x] Microfacet BSDF (GGX/Cook-Torrance)
+- [x] Textured materials
+    - [x] Base Color / Albedo map
+    - [x] Normal map
+    - [x] Emissive map
+    - [ ] Roughness map
+- [x] PBR parameter mapping from OBJ/MTL
+- [x] Emissive materials
+
+</details>
+
+<details>
+<summary>Post-processing</summary>
+
+- [x] Exposure / gamma correction
+- [x] ACES tone mapping
+- [ ] Bloom
+- [ ] SSAO
+
+</details>
 
 ## Resources
 
-If you are interested in building something similar, here are some of the resources that helped me the most:
+Some of the resources that influenced this project the most:
 
-- [LearnOpenGL](https://learnopengl.com/) — Comprehensive OpenGL tutorials from the ground up
-- [vkguide.dev](https://vkguide.dev/) — Practical, modern Vulkan tutorial
-- [Ray Tracing in One Weekend](https://raytracing.github.io/) — The classic starting point for writing a path tracer
 - [PBRT](https://www.pbr-book.org/) — The reference book on physically based rendering
-- [Dear ImGui](https://github.com/ocornut/imgui) — Immediate-mode GUI for tools and debug UI
-- [vk-bootstrap](https://github.com/charles-lunarg/vk-bootstrap) — Simplifies Vulkan initialization
-- [Vulkan Memory Allocator](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator) — GPU memory management for Vulkan
+- [Ray Tracing in One Weekend](https://raytracing.github.io/) — The classic starting point for writing a path tracer
+- [LearnOpenGL](https://learnopengl.com/) — Comprehensive OpenGL tutorials
+- [vkguide.dev](https://vkguide.dev/) — Practical, modern Vulkan tutorial
 
-This engine is still a work in progress — there is always more to add and improve. But having a codebase that is entirely my own, where I understand every line, makes it a joy to experiment with new rendering techniques.
+This engine is an ongoing project — the roadmap above shows where it is headed. It covers the full stack from low-level GPU API work and acceleration structures to physically based shading and editor tooling, with every component built and understood by me.

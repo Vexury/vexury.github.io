@@ -1,4 +1,11 @@
+const markdownItTaskLists = require('markdown-it-task-lists');
+
 module.exports = function(eleventyConfig) {
+  // Enable task list checkboxes in markdown
+  eleventyConfig.amendLibrary("md", mdLib => {
+    mdLib.use(markdownItTaskLists);
+  });
+
   // Copy CSS to output
   eleventyConfig.addPassthroughCopy("src/css");
   
