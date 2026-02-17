@@ -25,6 +25,9 @@
 <p>VexEngine is a C++ graphics engine I built from scratch — featuring a progressive path tracer with CPU and GPU backends, Cook-Torrance GGX materials, BVH acceleration, and a dockable editor UI. It supports both OpenGL and Vulkan through an abstracted rendering interface.</p>
 <p>After years of working within large frameworks like <a href="https://github.com/mmp/pbrt-v4">PBRT</a>, where the overhead of navigating someone else's codebase often got in the way of actually experimenting, I wanted a clean, minimal engine that I fully understand and control. Having built exercise frameworks for teaching graphics at KIT, I knew what a good learning-oriented codebase should look like — VexEngine is that, but designed entirely around my own rendering ideas and experiments.</p>
 <!-- Engine_001: Screenshot of the full engine UI (editor layout with viewport, hierarchy, inspector, console) -->
+<div style="text-align: center">
+    <img src="/images/Engine_002.png" alt="Alt text" style="max-width:100%">
+</div>
 <h2>Window &amp; UI</h2>
 <p>The first step for any graphics application is getting a window on screen. I use <a href="https://www.glfw.org/">GLFW</a> for window creation and input handling — it is lightweight, cross-platform and works with both OpenGL and Vulkan out of the box.</p>
 <p>For the UI layer, I use <a href="https://github.com/ocornut/imgui">Dear ImGui</a> with the <a href="https://github.com/ocornut/imgui/wiki/Docking">docking branch</a>. ImGui is an immediate-mode GUI library, meaning you describe your UI every frame rather than maintaining a persistent widget tree. This makes it incredibly easy to iterate on layouts and debug tools. The docking branch lets me create a fully dockable, rearrangeable editor layout similar to what you would find in Unity or Unreal.</p>

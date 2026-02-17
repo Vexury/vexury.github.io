@@ -4,7 +4,12 @@ tags: projects
 title: Custom Graphics Engine
 emoji: "\u2699\uFE0F"
 images:
+  - /images/Engine_001.png
   - /images/Engine_002.png
+  - /images/Engine_003.png
+  - /images/Engine_004.png
+  - /images/Engine_005.png
+  - /images/Engine_006.png
 description: C++ graphics engine built from scratch with dual OpenGL/Vulkan backends, progressive path tracing (CPU & GPU via compute shaders), Cook-Torrance GGX materials, BVH acceleration with binned SAH, and a full dockable editor UI. Supports four light source types with NEE and MIS, textured PBR materials, and debug visualization modes. <br>Scene credit — Amazon Lumberyard Bistro ([ORCA](https://developer.nvidia.com/orca/amazon-lumberyard-bistro)), CC-BY 4.0.
 links:
   - label: Source Code (Github)

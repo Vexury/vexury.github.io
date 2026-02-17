@@ -16,6 +16,10 @@ After years of working within large frameworks like [PBRT](https://github.com/mm
 
 <!-- Engine_001: Screenshot of the full engine UI (editor layout with viewport, hierarchy, inspector, console) -->
 
+<div style="text-align: center">
+    <img src="/images/Engine_002.png" alt="Alt text" style="max-width:100%">
+</div>
+
 ## Window & UI
 
 The first step for any graphics application is getting a window on screen. I use [GLFW](https://www.glfw.org/) for window creation and input handling — it is lightweight, cross-platform and works with both OpenGL and Vulkan out of the box.
