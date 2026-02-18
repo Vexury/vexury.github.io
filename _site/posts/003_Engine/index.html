@@ -28,6 +28,135 @@
 <div style="text-align: center">
     <img src="/images/Engine_002.png" alt="Alt text" style="max-width:100%">
 </div>
+<h2>Feature Checklist</h2>
+<p>Here is an overview of what is done and what I am planning to work on next:</p>
+<details>
+<summary>Engine & UI</summary>
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Window creation with GLFW</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> ImGui with docking for editor layout</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Scene hierarchy panel</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Inspector panel</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Logging console</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Performance metrics</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Object selection (hierarchy &amp; viewport click)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Outline rendering for selected objects</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Interactive camera (zoom, pan, orbit)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Saving Framebuffer as image to disk</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Viewport gizmos (translate, rotate, scale directly in the viewport)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Undo/redo system</li>
+</ul>
+</details>
+<details>
+<summary>Scene & Assets</summary>
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> OBJ mesh loading &amp; deletion</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Runtime object transforms via inspector</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Environment map loading (HDR)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> FBX loading</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> glTF loading</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Scene serialization (save/load scenes to file)</li>
+</ul>
+</details>
+<details>
+<summary>Rendering and Global Illumination</summary>
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> CMake compile flag to switch backends</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Bounding Volume Hierarchy (BVH)
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Binned SAH Builder</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Ordered Traversal</li>
+</ul>
+</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Fullscreen quad
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> OpenGL</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Vulkan</li>
+</ul>
+</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Shadow mapping
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> OpenGL</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Vulkan</li>
+</ul>
+</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> CPU Progressive Path Tracing</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> GPU Progressive Path Tracing
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> OpenGL (compute shader)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Vulkan</li>
+</ul>
+</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Path Tracing Features
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Next Event Estimation (NEE)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Multiple Importance Sampling (MIS)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Point light</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Directional (sun) light with soft shadows</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Emissive area lights</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Environment map lighting (importance-sampled)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Firefly clamping</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Anti-aliasing (jittered sampling)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Flat shading toggle</li>
+</ul>
+</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Debug visualization modes
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Normals</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> UVs</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Depth</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Wireframe</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Albedo</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Emission</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Material ID</li>
+</ul>
+</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Denoising</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Deferred rendering
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> OpenGL</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Vulkan</li>
+</ul>
+</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Bidirectional Path Tracing (BDPT)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Metropolis Light Transport (MLT)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Photon Mapping</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Volumetric rendering (participating media)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Spectral rendering</li>
+</ul>
+</details>
+<details>
+<summary>Materials</summary>
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Diffuse (Lambertian)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Specular (perfect mirror)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Dielectric (glass, refraction)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Microfacet BSDF (GGX/Cook-Torrance)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Textured materials
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Base Color / Albedo map</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Normal map</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Emissive map</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Roughness map</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Metallic map</li>
+</ul>
+</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Alpha clip (cutout transparency)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Auto-smooth normals (angle-based)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> PBR parameter mapping from OBJ/MTL</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Emissive materials</li>
+</ul>
+</details>
+<details>
+<summary>Post-processing</summary>
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Exposure / gamma correction</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> ACES tone mapping</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Bloom</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> SSAO</li>
+</ul>
+</details>
+<p>Some of the features are further discussed below.</p>
 <h2>Window &amp; UI</h2>
 <p>The first step for any graphics application is getting a window on screen. I use <a href="https://www.glfw.org/">GLFW</a> for window creation and input handling — it is lightweight, cross-platform and works with both OpenGL and Vulkan out of the box.</p>
 <p>For the UI layer, I use <a href="https://github.com/ocornut/imgui">Dear ImGui</a> with the <a href="https://github.com/ocornut/imgui/wiki/Docking">docking branch</a>. ImGui is an immediate-mode GUI library, meaning you describe your UI every frame rather than maintaining a persistent widget tree. This makes it incredibly easy to iterate on layouts and debug tools. The docking branch lets me create a fully dockable, rearrangeable editor layout similar to what you would find in Unity or Unreal.</p>
@@ -83,7 +212,7 @@
 </ul>
 <h2>Materials and Textures</h2>
 <p>The engine supports a full <strong>PBR material pipeline</strong> built on the <strong>Cook-Torrance <a href="https://pbr-book.org/3ed-2018/Reflection_Models/Microfacet_Models">microfacet model</a></strong> with a <strong>GGX normal distribution</strong>. Materials are loaded from OBJ/MTL files and automatically mapped to physically based parameters.</p>
-<p><strong>Textured materials</strong> allow spatially varying surface properties. The engine currently supports <strong>base color (albedo) maps</strong> loaded from <code>map_Kd</code> in MTL files, as well as emissive and normal maps. When no texture is provided, the solid <code>Kd</code> color is used instead.</p>
+<p><strong>Textured materials</strong> allow spatially varying surface properties. The engine supports <strong>base color (albedo)</strong> (<code>map_Kd</code>), <strong>emissive</strong> (<code>map_Ke</code>), <strong>normal</strong> (<code>map_bump</code>/<code>norm</code>), <strong>roughness</strong> (<code>map_Ns</code>) and <strong>metallic</strong> (<code>map_Pm</code>) maps loaded from MTL files. When no texture is provided, the corresponding scalar value is used as fallback. Roughness and metallic textures are sampled from the R channel.</p>
 <!-- Engine_009: Screenshot showing textured vs untextured materials side by side -->
 <details>
 <summary>Material Types (from OBJ/MTL illum)</summary>
@@ -143,9 +272,19 @@
 <td><code>sqrt(2 / (Ns + 2))</code> — maps Blinn-Phong lobe width to GGX</td>
 </tr>
 <tr>
+<td>map_Ns</td>
+<td>roughness texture</td>
+<td>R channel sampled directly (0=smooth, 1=rough); overrides Ns</td>
+</tr>
+<tr>
 <td>illum 3/5</td>
 <td>metallic</td>
 <td>1.0 (everything else defaults to 0.0)</td>
+</tr>
+<tr>
+<td>map_Pm</td>
+<td>metallic texture</td>
+<td>R channel sampled directly (0=dielectric, 1=metal); overrides illum</td>
 </tr>
 <tr>
 <td>Ni (IOR)</td>
@@ -199,122 +338,6 @@
 <ul>
 <li><strong>Dielectric (type 2)</strong> — Keeps the existing delta Fresnel reflect/refract. Rough dielectrics would need microfacet transmission (a separate feature).</li>
 <li><strong>Perfect mirror shortcut</strong> — When <code>metallic &gt; 0.99</code> AND <code>roughness &lt; 0.01</code>, uses the delta MirrorBSDF to avoid numerical issues at near-zero alpha.</li>
-</ul>
-</details>
-<h2>Feature Checklist</h2>
-<p>Here is an overview of what is done and what I am planning to work on next:</p>
-<details>
-<summary>Engine & UI</summary>
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Window creation with GLFW</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> ImGui with docking for editor layout</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Scene hierarchy panel</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Inspector panel</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Logging console</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Performance metrics</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Object selection (hierarchy &amp; viewport click)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Outline rendering for selected objects</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Interactive camera (zoom, pan, orbit)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Saving Framebuffer as image to disk</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Viewport gizmos (translate, rotate, scale directly in the viewport)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Undo/redo system</li>
-</ul>
-</details>
-<details>
-<summary>Scene & Assets</summary>
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> OBJ mesh loading &amp; deletion</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Runtime object transforms via inspector</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Environment map loading (HDR)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> FBX loading</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> glTF loading</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Scene serialization (save/load scenes to file)</li>
-</ul>
-</details>
-<details>
-<summary>Rendering and Global Illumination</summary>
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> CMake compile flag to switch backends</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Bounding Volume Hierarchy (BVH)
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Binned SAH Builder</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Ordered Traversal</li>
-</ul>
-</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Fullscreen quad
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> OpenGL</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Vulkan</li>
-</ul>
-</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Shadow mapping
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> OpenGL</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Vulkan</li>
-</ul>
-</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> CPU Progressive Path Tracing</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> GPU Progressive Path Tracing
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> OpenGL (compute shader)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Vulkan</li>
-</ul>
-</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Path Tracing Features
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Next Event Estimation (NEE)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Multiple Importance Sampling (MIS)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Environment lighting</li>
-</ul>
-</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Debug visualization modes
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Normals</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> UVs</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Depth</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Wireframe</li>
-</ul>
-</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Denoising</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Deferred rendering
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> OpenGL</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Vulkan</li>
-</ul>
-</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Bidirectional Path Tracing (BDPT)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Metropolis Light Transport (MLT)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Photon Mapping</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Volumetric rendering (participating media)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Spectral rendering</li>
-</ul>
-</details>
-<details>
-<summary>Materials</summary>
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Diffuse (Lambertian)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Specular (perfect mirror)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Dielectric (glass, refraction)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Microfacet BSDF (GGX/Cook-Torrance)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Textured materials
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Base Color / Albedo map</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Normal map</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Emissive map</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Roughness map</li>
-</ul>
-</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> PBR parameter mapping from OBJ/MTL</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Emissive materials</li>
-</ul>
-</details>
-<details>
-<summary>Post-processing</summary>
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Exposure / gamma correction</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> ACES tone mapping</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Bloom</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> SSAO</li>
 </ul>
 </details>
 <h2>Resources</h2>

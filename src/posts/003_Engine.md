@@ -20,6 +20,119 @@ After years of working within large frameworks like [PBRT](https://github.com/mm
     <img src="/images/Engine_002.png" alt="Alt text" style="max-width:100%">
 </div>
 
+## Feature Checklist
+
+Here is an overview of what is done and what I am planning to work on next:
+
+<details>
+<summary>Engine & UI</summary>
+
+- [x] Window creation with GLFW
+- [x] ImGui with docking for editor layout
+- [x] Scene hierarchy panel
+- [x] Inspector panel
+- [x] Logging console
+- [x] Performance metrics
+- [x] Object selection (hierarchy & viewport click)
+- [x] Outline rendering for selected objects
+- [x] Interactive camera (zoom, pan, orbit)
+- [x] Saving Framebuffer as image to disk
+- [ ] Viewport gizmos (translate, rotate, scale directly in the viewport)
+- [ ] Undo/redo system
+
+</details>
+
+<details>
+<summary>Scene & Assets</summary>
+
+- [x] OBJ mesh loading & deletion
+- [ ] Runtime object transforms via inspector
+- [x] Environment map loading (HDR)
+- [ ] FBX loading
+- [ ] glTF loading
+- [ ] Scene serialization (save/load scenes to file)
+
+</details>
+
+<details>
+<summary>Rendering and Global Illumination</summary>
+
+- [x] CMake compile flag to switch backends
+- [x] Bounding Volume Hierarchy (BVH)
+    - [x] Binned SAH Builder
+    - [x] Ordered Traversal
+- [x] Fullscreen quad
+    - [x] OpenGL
+    - [x] Vulkan
+- [ ] Shadow mapping
+    - [ ] OpenGL
+    - [ ] Vulkan
+- [x] CPU Progressive Path Tracing
+- [ ] GPU Progressive Path Tracing
+    - [x] OpenGL (compute shader)
+    - [ ] Vulkan
+- [x] Path Tracing Features
+    - [x] Next Event Estimation (NEE)
+    - [x] Multiple Importance Sampling (MIS)
+    - [x] Point light
+    - [x] Directional (sun) light with soft shadows
+    - [x] Emissive area lights
+    - [x] Environment map lighting (importance-sampled)
+    - [x] Firefly clamping
+    - [x] Anti-aliasing (jittered sampling)
+    - [x] Flat shading toggle
+- [x] Debug visualization modes
+    - [x] Normals
+    - [x] UVs
+    - [x] Depth
+    - [x] Wireframe
+    - [x] Albedo
+    - [x] Emission
+    - [x] Material ID
+- [ ] Denoising
+- [ ] Deferred rendering
+    - [ ] OpenGL
+    - [ ] Vulkan
+- [ ] Bidirectional Path Tracing (BDPT)
+- [ ] Metropolis Light Transport (MLT)
+- [ ] Photon Mapping
+- [ ] Volumetric rendering (participating media)
+- [ ] Spectral rendering
+
+</details>
+
+<details>
+<summary>Materials</summary>
+
+- [x] Diffuse (Lambertian)
+- [x] Specular (perfect mirror)
+- [x] Dielectric (glass, refraction)
+- [x] Microfacet BSDF (GGX/Cook-Torrance)
+- [x] Textured materials
+    - [x] Base Color / Albedo map
+    - [x] Normal map
+    - [x] Emissive map
+    - [x] Roughness map
+    - [x] Metallic map
+- [x] Alpha clip (cutout transparency)
+- [x] Auto-smooth normals (angle-based)
+- [x] PBR parameter mapping from OBJ/MTL
+- [x] Emissive materials
+
+</details>
+
+<details>
+<summary>Post-processing</summary>
+
+- [x] Exposure / gamma correction
+- [x] ACES tone mapping
+- [ ] Bloom
+- [ ] SSAO
+
+</details>
+
+Some of the features are further discussed below.
+
 ## Window & UI
 
 The first step for any graphics application is getting a window on screen. I use [GLFW](https://www.glfw.org/) for window creation and input handling — it is lightweight, cross-platform and works with both OpenGL and Vulkan out of the box.
@@ -102,7 +215,7 @@ The path tracing algorithm itself is the same across all backends — the differ
 
 The engine supports a full **PBR material pipeline** built on the **Cook-Torrance [microfacet model](https://pbr-book.org/3ed-2018/Reflection_Models/Microfacet_Models)** with a **GGX normal distribution**. Materials are loaded from OBJ/MTL files and automatically mapped to physically based parameters.
 
-**Textured materials** allow spatially varying surface properties. The engine currently supports **base color (albedo) maps** loaded from `map_Kd` in MTL files, as well as emissive and normal maps. When no texture is provided, the solid `Kd` color is used instead.
+**Textured materials** allow spatially varying surface properties. The engine supports **base color (albedo)** (`map_Kd`), **emissive** (`map_Ke`), **normal** (`map_bump`/`norm`), **roughness** (`map_Ns`) and **metallic** (`map_Pm`) maps loaded from MTL files. When no texture is provided, the corresponding scalar value is used as fallback. Roughness and metallic textures are sampled from the R channel.
 
 <!-- Engine_009: Screenshot showing textured vs untextured materials side by side -->
 
@@ -127,7 +240,9 @@ The engine maps OBJ/MTL illumination models to internal PBR material types:
 | MTL property | PBR parameter | Formula |
 |---|---|---|
 | Ns (shininess) | roughness | `sqrt(2 / (Ns + 2))` — maps Blinn-Phong lobe width to GGX |
+| map_Ns | roughness texture | R channel sampled directly (0=smooth, 1=rough); overrides Ns |
 | illum 3/5 | metallic | 1.0 (everything else defaults to 0.0) |
+| map_Pm | metallic texture | R channel sampled directly (0=dielectric, 1=metal); overrides illum |
 | Ni (IOR) | ior | Used directly (default 1.5) |
 | Kd | baseColor | Vertex color (or Ks for mirror materials) |
 
@@ -150,105 +265,6 @@ The engine maps OBJ/MTL illumination models to internal PBR material types:
 
 - **Dielectric (type 2)** — Keeps the existing delta Fresnel reflect/refract. Rough dielectrics would need microfacet transmission (a separate feature).
 - **Perfect mirror shortcut** — When `metallic > 0.99` AND `roughness < 0.01`, uses the delta MirrorBSDF to avoid numerical issues at near-zero alpha.
-
-</details>
-
-## Feature Checklist
-
-Here is an overview of what is done and what I am planning to work on next:
-
-<details>
-<summary>Engine & UI</summary>
-
-- [x] Window creation with GLFW
-- [x] ImGui with docking for editor layout
-- [x] Scene hierarchy panel
-- [x] Inspector panel
-- [x] Logging console
-- [x] Performance metrics
-- [x] Object selection (hierarchy & viewport click)
-- [x] Outline rendering for selected objects
-- [x] Interactive camera (zoom, pan, orbit)
-- [x] Saving Framebuffer as image to disk
-- [ ] Viewport gizmos (translate, rotate, scale directly in the viewport)
-- [ ] Undo/redo system
-
-</details>
-
-<details>
-<summary>Scene & Assets</summary>
-
-- [x] OBJ mesh loading & deletion
-- [x] Runtime object transforms via inspector
-- [x] Environment map loading (HDR)
-- [ ] FBX loading
-- [ ] glTF loading
-- [ ] Scene serialization (save/load scenes to file)
-
-</details>
-
-<details>
-<summary>Rendering and Global Illumination</summary>
-
-- [x] CMake compile flag to switch backends
-- [x] Bounding Volume Hierarchy (BVH)
-    - [x] Binned SAH Builder
-    - [x] Ordered Traversal
-- [x] Fullscreen quad
-    - [x] OpenGL
-    - [x] Vulkan
-- [ ] Shadow mapping
-    - [ ] OpenGL
-    - [ ] Vulkan
-- [x] CPU Progressive Path Tracing
-- [ ] GPU Progressive Path Tracing
-    - [x] OpenGL (compute shader)
-    - [ ] Vulkan
-- [x] Path Tracing Features
-    - [x] Next Event Estimation (NEE)
-    - [x] Multiple Importance Sampling (MIS)
-    - [x] Environment lighting
-- [x] Debug visualization modes
-    - [x] Normals
-    - [x] UVs
-    - [x] Depth
-    - [x] Wireframe
-- [ ] Denoising
-- [ ] Deferred rendering
-    - [ ] OpenGL
-    - [ ] Vulkan
-- [ ] Bidirectional Path Tracing (BDPT)
-- [ ] Metropolis Light Transport (MLT)
-- [ ] Photon Mapping
-- [ ] Volumetric rendering (participating media)
-- [ ] Spectral rendering
-
-</details>
-
-<details>
-<summary>Materials</summary>
-
-- [x] Diffuse (Lambertian)
-- [x] Specular (perfect mirror)
-- [x] Dielectric (glass, refraction)
-- [x] Microfacet BSDF (GGX/Cook-Torrance)
-- [x] Textured materials
-    - [x] Base Color / Albedo map
-    - [x] Normal map
-    - [x] Emissive map
-    - [ ] Roughness map
-- [x] PBR parameter mapping from OBJ/MTL
-- [x] Emissive materials
-
-</details>
-
-<details>
-<summary>Post-processing</summary>
-
-- [x] Exposure / gamma correction
-- [x] ACES tone mapping
-- [ ] Bloom
-- [ ] SSAO
 
 </details>
 
