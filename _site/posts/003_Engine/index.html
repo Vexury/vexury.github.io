@@ -95,6 +95,7 @@
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Directional (sun) light with soft shadows</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Emissive area lights</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Environment map lighting (importance-sampled)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> VNDF specular sampling (Heitz 2018)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Firefly clamping</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Anti-aliasing (jittered sampling)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Flat shading toggle</li>
@@ -203,6 +204,7 @@
 <li><strong>Environment lighting</strong> — An HDR environment map provides image-based lighting. A 2D CDF (conditional + marginal) is precomputed for importance sampling, so NEE preferentially samples bright regions of the sky. MIS again balances environment sampling against BSDF sampling.</li>
 </ul>
 <p>All four NEE strategies fire independently each bounce, and the emissive material contribution can be toggled off to isolate the effect of explicit light sources.</p>
+<p>The specular lobe uses <strong>VNDF sampling</strong> (Heitz 2018 — <a href="https://jcgt.org/published/0007/04/01/">Sampling the GGX Distribution of Visible Normals</a>) instead of plain NDF sampling. NDF sampling draws half-vectors blind to the view direction, which frequently produces reflected directions below the surface at grazing angles — wasting the sample and losing energy. VNDF sampling restricts half-vectors to those actually visible from the current view direction, eliminating most of these invalid samples.</p>
 <!-- Engine_008: Comparison of a noisy vs converged render, or a render showing environment lighting -->
 <p>The path tracing algorithm itself is the same across all backends — the difference is where it runs:</p>
 <ul>

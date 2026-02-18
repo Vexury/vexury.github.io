@@ -78,6 +78,7 @@ Here is an overview of what is done and what I am planning to work on next:
     - [x] Directional (sun) light with soft shadows
     - [x] Emissive area lights
     - [x] Environment map lighting (importance-sampled)
+    - [x] VNDF specular sampling (Heitz 2018)
     - [x] Firefly clamping
     - [x] Anti-aliasing (jittered sampling)
     - [x] Flat shading toggle
@@ -202,6 +203,8 @@ The path tracer supports four types of light sources, each with its own sampling
 - **Environment lighting** — An HDR environment map provides image-based lighting. A 2D CDF (conditional + marginal) is precomputed for importance sampling, so NEE preferentially samples bright regions of the sky. MIS again balances environment sampling against BSDF sampling.
 
 All four NEE strategies fire independently each bounce, and the emissive material contribution can be toggled off to isolate the effect of explicit light sources.
+
+The specular lobe uses **VNDF sampling** (Heitz 2018 — [Sampling the GGX Distribution of Visible Normals](https://jcgt.org/published/0007/04/01/)) instead of plain NDF sampling. NDF sampling draws half-vectors blind to the view direction, which frequently produces reflected directions below the surface at grazing angles — wasting the sample and losing energy. VNDF sampling restricts half-vectors to those actually visible from the current view direction, eliminating most of these invalid samples.
 
 <!-- Engine_008: Comparison of a noisy vs converged render, or a render showing environment lighting -->
 
