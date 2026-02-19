@@ -9,7 +9,7 @@ title: Projects
     {% if project.data.images %}
     <div class="slideshow">
       {% for img in project.data.images %}{% if img contains '.mp4' or img contains '.webm' %}<video src="{{ img }}" muted playsinline preload="none" {% if forloop.first %}class="active"{% endif %}></video>{% else %}{% assign base = img | split: '.' | first %}<img src="{{ base | replace: '/images/', '/images/thumbs/' }}.jpg" data-full="{{ img }}" alt="{{ project.data.title }}" loading="lazy" {% if forloop.first %}class="active"{% endif %}>{% endif %}{% endfor %}
-      <div class="slideshow-dots">{% for img in project.data.images %}<span class="dot {% if forloop.first %}active{% endif %}"></span>{% endfor %}</div>
+      <div class="slideshow-dots"><div class="slideshow-dots-inner">{% for img in project.data.images %}<span class="dot {% if forloop.first %}active{% endif %}"></span>{% endfor %}</div></div>
     </div>
     {% elsif project.data.image %}<img src="{{ project.data.image }}" alt="{{ project.data.title }}">{% endif %}
     <h3>{{ project.data.emoji }} {{ project.data.title }}</h3>
@@ -49,13 +49,15 @@ document.querySelectorAll('.project-card').forEach(card => {
       curr.play();
       curr.addEventListener('ended', advance, { once: true });
     } else if (hovering) {
-      timeout = setTimeout(advance, 1000);
+      timeout = setTimeout(advance, 3000);
     }
   }
   function advance() {
     clearTimeout(timeout);
     showSlide((index + 1) % slides.length);
   }
+  const dotsInner = slideshow.querySelector('.slideshow-dots-inner');
+  if (dotsInner) dotsInner.addEventListener('click', (e) => e.stopPropagation());
   dots.forEach((dot, i) => {
     dot.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -67,7 +69,7 @@ document.querySelectorAll('.project-card').forEach(card => {
   });
   card.addEventListener('mouseenter', () => {
     hovering = true;
-    advance();
+    timeout = setTimeout(advance, 3000);
   });
   card.addEventListener('mouseleave', () => {
     hovering = false;
@@ -80,6 +82,27 @@ document.querySelectorAll('.project-card').forEach(card => {
     slides[0].classList.add('active');
     dots[0].classList.add('active');
   });
+  let dragStartX = 0;
+  let dragging = false;
+  function onDragStart(x) { dragStartX = x; dragging = false; }
+  function onDragMove(x) { if (Math.abs(x - dragStartX) > 5) dragging = true; }
+  function onDragEnd(x) {
+    const dx = x - dragStartX;
+    if (Math.abs(dx) < 40) return;
+    clearTimeout(timeout);
+    const curr = slides[index];
+    if (curr.tagName === 'VIDEO') curr.removeEventListener('ended', advance);
+    const dir = dx < 0 ? 1 : -1;
+    showSlide((index + dir + slides.length) % slides.length);
+  }
+  slideshow.addEventListener('touchstart', (e) => onDragStart(e.touches[0].clientX), { passive: true });
+  slideshow.addEventListener('touchmove', (e) => onDragMove(e.touches[0].clientX), { passive: true });
+  slideshow.addEventListener('touchend', (e) => onDragEnd(e.changedTouches[0].clientX), { passive: true });
+  slideshow.addEventListener('dragstart', (e) => e.preventDefault());
+  slideshow.addEventListener('mousedown', (e) => { e.preventDefault(); onDragStart(e.clientX); });
+  slideshow.addEventListener('mousemove', (e) => { if (e.buttons === 1) onDragMove(e.clientX); });
+  slideshow.addEventListener('mouseup', (e) => onDragEnd(e.clientX));
+  slideshow.addEventListener('click', (e) => { if (dragging) e.stopImmediatePropagation(); }, true);
 });
 
 document.querySelector('.project-grid').classList.add('loaded');

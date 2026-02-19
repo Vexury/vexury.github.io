@@ -295,13 +295,23 @@ footer {
   display: flex;
   justify-content: center;
   gap: 6px;
+  pointer-events: none;
+}
+.slideshow-dots-inner {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 99px;
+  padding: 5px 8px;
+  pointer-events: all;
 }
 
 .dot {
   cursor: pointer;
   user-select: none;
-  width: 7px;
-  height: 7px;
+  width: 8.75px;
+  height: 8.75px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.5);
   transition: background 0.3s;
