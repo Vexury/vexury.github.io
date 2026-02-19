@@ -18,6 +18,8 @@ After years of working within large frameworks like [PBRT](https://github.com/mm
 
 <div style="text-align: center">
     <img src="/images/Engine_002.png" alt="Alt text" style="max-width:100%">
+    
+    Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
 </div>
 
 ## Feature Checklist
@@ -70,6 +72,7 @@ Here is an overview of what is done and what I am planning to work on next:
 - [x] CPU Progressive Path Tracing
 - [ ] GPU Progressive Path Tracing
     - [x] OpenGL (compute shader)
+    - [x] Live shader reload (F5 / button, OpenGL)
     - [ ] Vulkan
 - [x] Path Tracing Features
     - [x] Next Event Estimation (NEE)
@@ -105,17 +108,17 @@ Here is an overview of what is done and what I am planning to work on next:
 <details>
 <summary>Materials</summary>
 
-- [x] Diffuse (Lambertian)
-- [x] Specular (perfect mirror)
-- [x] Dielectric (glass, refraction)
-- [x] Microfacet BSDF (GGX/Cook-Torrance)
+- [x] Microfacet BSDF (GGX/Cook-Torrance) — handles both diffuse and specular lobes
+- [x] Mirror (perfect specular, delta BRDF)
+- [x] Dielectric (glass, Fresnel reflect/refract, delta BRDF)
 - [x] Textured materials
     - [x] Base Color / Albedo map
     - [x] Normal map
     - [x] Emissive map
     - [x] Roughness map
     - [x] Metallic map
-- [x] Alpha clip (cutout transparency)
+- [x] Alpha clip (cutout transparency from RGBA diffuse texture)
+- [x] Constant transparency (MTL `d`/`Tr` → Dielectric)
 - [x] Auto-smooth normals (angle-based)
 - [x] PBR parameter mapping from OBJ/MTL
 - [x] Emissive materials
@@ -225,29 +228,31 @@ The engine supports a full **PBR material pipeline** built on the **Cook-Torranc
 <details>
 <summary>Material Types (from OBJ/MTL illum)</summary>
 
-The engine maps OBJ/MTL illumination models to internal PBR material types:
+The engine maps OBJ/MTL fields to three internal material types. They can also be set manually in the Inspector.
 
-| illum | Type | materialType | metallic | BRDF |
-|---|---|---|---|---|
-| 0, 1, 2 (default) | Diffuse/Glossy | 0 | 0.0 | Cook-Torrance GGX |
-| 3, 5 | Mirror/Metal | 1→0\* | 1.0 | Cook-Torrance GGX (or perfect mirror if roughness < 0.01) |
-| 4, 6, 7 | Dielectric (glass) | 2 | 0.0 | Fresnel reflect/refract (unchanged) |
+| MTL condition | Type | materialType | BRDF |
+|---|---|---|---|
+| illum 0, 1, 2 (default) | Microfacet | 0 | Cook-Torrance GGX (diffuse + specular) |
+| illum 3, 5 | Mirror | 1 | MirrorBSDF (delta, no NEE) |
+| illum 4, 6, 7 | Dielectric | 2 | Fresnel reflect/refract (delta) |
+| `d < 1` without alpha-clip texture | Dielectric | 2 | Fresnel reflect/refract (delta) |
 
-> \* `materialType=1` is still set by the loader, but the raytracer dispatch now checks `metallic > 0.99 && roughness < 0.01` for the perfect mirror shortcut, otherwise falls through to Cook-Torrance.
+The dispatch also treats Microfacet materials with `metallic > 0.99` and `roughness < 0.01` as a perfect mirror shortcut via MirrorBSDF, avoiding numerical issues at near-zero GGX alpha.
 
 </details>
 
 <details>
 <summary>PBR Parameter Mapping</summary>
 
-| MTL property | PBR parameter | Formula |
+| MTL property | PBR parameter | Notes |
 |---|---|---|
-| Ns (shininess) | roughness | `sqrt(2 / (Ns + 2))` — maps Blinn-Phong lobe width to GGX |
-| map_Ns | roughness texture | R channel sampled directly (0=smooth, 1=rough); overrides Ns |
-| illum 3/5 | metallic | 1.0 (everything else defaults to 0.0) |
-| map_Pm | metallic texture | R channel sampled directly (0=dielectric, 1=metal); overrides illum |
-| Ni (IOR) | ior | Used directly (default 1.5) |
-| Kd | baseColor | Vertex color (or Ks for mirror materials) |
+| Ns (shininess) | roughness | `clamp(sqrt(2 / (max(Ns,0) + 2)), 0, 1)` — maps Blinn-Phong lobe width to GGX |
+| map_Ns | roughness texture | R channel, expected in 0–1 PBR range (not as Ns exponent) |
+| illum 3/5 | metallic | 1.0 (all other types default to 0.0) |
+| map_Pm | metallic texture | R channel sampled directly (0=dielectric, 1=metal) |
+| Ni (IOR) | ior | Used directly for Dielectric (default 1.5) |
+| Kd | baseColor | Vertex color (Ks for mirror, Tf for dielectric tint if set) |
+| d / Tr | materialType | `d < 1` without alpha-clip texture → Dielectric (type 2) |
 
 </details>
 
@@ -266,8 +271,9 @@ The engine maps OBJ/MTL illumination models to internal PBR material types:
 <details>
 <summary>Where Cook-Torrance is NOT Used</summary>
 
-- **Dielectric (type 2)** — Keeps the existing delta Fresnel reflect/refract. Rough dielectrics would need microfacet transmission (a separate feature).
-- **Perfect mirror shortcut** — When `metallic > 0.99` AND `roughness < 0.01`, uses the delta MirrorBSDF to avoid numerical issues at near-zero alpha.
+- **Mirror (type 1)** — Always dispatches to the delta MirrorBSDF (set by illum 3/5 in MTL or manually in the Inspector). Roughness and metallic are ignored. The surface albedo tints the reflection.
+- **Perfect mirror shortcut** — Microfacet materials with `metallic > 0.99` and `roughness < 0.01` also dispatch to MirrorBSDF to avoid numerical issues at near-zero GGX alpha.
+- **Dielectric (type 2)** — Uses delta Fresnel reflect/refract (Snell's law). Rough dielectrics would need microfacet transmission — a separate feature.
 
 </details>
 

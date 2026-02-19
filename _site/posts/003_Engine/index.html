@@ -27,6 +27,7 @@
 <!-- Engine_001: Screenshot of the full engine UI (editor layout with viewport, hierarchy, inspector, console) -->
 <div style="text-align: center">
     <img src="/images/Engine_002.png" alt="Alt text" style="max-width:100%">
+<p>Scene: Nvidia <a href="https://developer.nvidia.com/orca/amazon-lumberyard-bistro">Amazon Lumberyard Bistro</a> (CC-BY 4.0)</p>
 </div>
 <h2>Feature Checklist</h2>
 <p>Here is an overview of what is done and what I am planning to work on next:</p>
@@ -84,6 +85,7 @@
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> GPU Progressive Path Tracing
 <ul class="contains-task-list">
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> OpenGL (compute shader)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Live shader reload (F5 / button, OpenGL)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Vulkan</li>
 </ul>
 </li>
@@ -129,10 +131,9 @@
 <details>
 <summary>Materials</summary>
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Diffuse (Lambertian)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Specular (perfect mirror)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Dielectric (glass, refraction)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Microfacet BSDF (GGX/Cook-Torrance)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Microfacet BSDF (GGX/Cook-Torrance) — handles both diffuse and specular lobes</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Mirror (perfect specular, delta BRDF)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Dielectric (glass, Fresnel reflect/refract, delta BRDF)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Textured materials
 <ul class="contains-task-list">
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Base Color / Albedo map</li>
@@ -142,7 +143,8 @@
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Metallic map</li>
 </ul>
 </li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Alpha clip (cutout transparency)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Alpha clip (cutout transparency from RGBA diffuse texture)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Constant transparency (MTL <code>d</code>/<code>Tr</code> → Dielectric)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Auto-smooth normals (angle-based)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> PBR parameter mapping from OBJ/MTL</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Emissive materials</li>
@@ -218,44 +220,44 @@
 <!-- Engine_009: Screenshot showing textured vs untextured materials side by side -->
 <details>
 <summary>Material Types (from OBJ/MTL illum)</summary>
-<p>The engine maps OBJ/MTL illumination models to internal PBR material types:</p>
+<p>The engine maps OBJ/MTL fields to three internal material types. They can also be set manually in the Inspector.</p>
 <table>
 <thead>
 <tr>
-<th>illum</th>
+<th>MTL condition</th>
 <th>Type</th>
 <th>materialType</th>
-<th>metallic</th>
 <th>BRDF</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>0, 1, 2 (default)</td>
-<td>Diffuse/Glossy</td>
+<td>illum 0, 1, 2 (default)</td>
+<td>Microfacet</td>
 <td>0</td>
-<td>0.0</td>
-<td>Cook-Torrance GGX</td>
+<td>Cook-Torrance GGX (diffuse + specular)</td>
 </tr>
 <tr>
-<td>3, 5</td>
-<td>Mirror/Metal</td>
-<td>1→0*</td>
-<td>1.0</td>
-<td>Cook-Torrance GGX (or perfect mirror if roughness &lt; 0.01)</td>
+<td>illum 3, 5</td>
+<td>Mirror</td>
+<td>1</td>
+<td>MirrorBSDF (delta, no NEE)</td>
 </tr>
 <tr>
-<td>4, 6, 7</td>
-<td>Dielectric (glass)</td>
+<td>illum 4, 6, 7</td>
+<td>Dielectric</td>
 <td>2</td>
-<td>0.0</td>
-<td>Fresnel reflect/refract (unchanged)</td>
+<td>Fresnel reflect/refract (delta)</td>
+</tr>
+<tr>
+<td><code>d &lt; 1</code> without alpha-clip texture</td>
+<td>Dielectric</td>
+<td>2</td>
+<td>Fresnel reflect/refract (delta)</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>* <code>materialType=1</code> is still set by the loader, but the raytracer dispatch now checks <code>metallic &gt; 0.99 &amp;&amp; roughness &lt; 0.01</code> for the perfect mirror shortcut, otherwise falls through to Cook-Torrance.</p>
-</blockquote>
+<p>The dispatch also treats Microfacet materials with <code>metallic &gt; 0.99</code> and <code>roughness &lt; 0.01</code> as a perfect mirror shortcut via MirrorBSDF, avoiding numerical issues at near-zero GGX alpha.</p>
 </details>
 <details>
 <summary>PBR Parameter Mapping</summary>
@@ -264,39 +266,44 @@
 <tr>
 <th>MTL property</th>
 <th>PBR parameter</th>
-<th>Formula</th>
+<th>Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Ns (shininess)</td>
 <td>roughness</td>
-<td><code>sqrt(2 / (Ns + 2))</code> — maps Blinn-Phong lobe width to GGX</td>
+<td><code>clamp(sqrt(2 / (max(Ns,0) + 2)), 0, 1)</code> — maps Blinn-Phong lobe width to GGX</td>
 </tr>
 <tr>
 <td>map_Ns</td>
 <td>roughness texture</td>
-<td>R channel sampled directly (0=smooth, 1=rough); overrides Ns</td>
+<td>R channel, expected in 0–1 PBR range (not as Ns exponent)</td>
 </tr>
 <tr>
 <td>illum 3/5</td>
 <td>metallic</td>
-<td>1.0 (everything else defaults to 0.0)</td>
+<td>1.0 (all other types default to 0.0)</td>
 </tr>
 <tr>
 <td>map_Pm</td>
 <td>metallic texture</td>
-<td>R channel sampled directly (0=dielectric, 1=metal); overrides illum</td>
+<td>R channel sampled directly (0=dielectric, 1=metal)</td>
 </tr>
 <tr>
 <td>Ni (IOR)</td>
 <td>ior</td>
-<td>Used directly (default 1.5)</td>
+<td>Used directly for Dielectric (default 1.5)</td>
 </tr>
 <tr>
 <td>Kd</td>
 <td>baseColor</td>
-<td>Vertex color (or Ks for mirror materials)</td>
+<td>Vertex color (Ks for mirror, Tf for dielectric tint if set)</td>
+</tr>
+<tr>
+<td>d / Tr</td>
+<td>materialType</td>
+<td><code>d &lt; 1</code> without alpha-clip texture → Dielectric (type 2)</td>
 </tr>
 </tbody>
 </table>
@@ -338,8 +345,9 @@
 <details>
 <summary>Where Cook-Torrance is NOT Used</summary>
 <ul>
-<li><strong>Dielectric (type 2)</strong> — Keeps the existing delta Fresnel reflect/refract. Rough dielectrics would need microfacet transmission (a separate feature).</li>
-<li><strong>Perfect mirror shortcut</strong> — When <code>metallic &gt; 0.99</code> AND <code>roughness &lt; 0.01</code>, uses the delta MirrorBSDF to avoid numerical issues at near-zero alpha.</li>
+<li><strong>Mirror (type 1)</strong> — Always dispatches to the delta MirrorBSDF (set by illum 3/5 in MTL or manually in the Inspector). Roughness and metallic are ignored. The surface albedo tints the reflection.</li>
+<li><strong>Perfect mirror shortcut</strong> — Microfacet materials with <code>metallic &gt; 0.99</code> and <code>roughness &lt; 0.01</code> also dispatch to MirrorBSDF to avoid numerical issues at near-zero GGX alpha.</li>
+<li><strong>Dielectric (type 2)</strong> — Uses delta Fresnel reflect/refract (Snell's law). Rough dielectrics would need microfacet transmission — a separate feature.</li>
 </ul>
 </details>
 <h2>Resources</h2>
