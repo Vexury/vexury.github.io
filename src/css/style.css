@@ -45,13 +45,14 @@ header nav a {
   color: var(--text-muted);
   font-weight: 600;
   font-size: 1.25rem;
-  transition: color 0.2s;
+  transition: color 0.2s, background 0.2s;
   position: relative;
-  padding-bottom: 0.25rem;
+  padding: 0.25rem 0.4rem;
 }
 
 header nav a:hover {
-  color: var(--text);
+  color: white;
+  background: var(--text);
 }
 
 header nav a.active {
