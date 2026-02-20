@@ -84,6 +84,7 @@ Here is an overview of what is done and what I am planning to work on next:
     - [x] VNDF specular sampling (Heitz 2018)
     - [x] Firefly clamping
     - [x] Anti-aliasing (jittered sampling)
+    - [x] Depth of field (thin-lens camera model)
     - [x] Flat shading toggle
 - [x] Debug visualization modes
     - [x] Normals
@@ -208,6 +209,8 @@ The path tracer supports four types of light sources, each with its own sampling
 All four NEE strategies fire independently each bounce, and the emissive material contribution can be toggled off to isolate the effect of explicit light sources.
 
 The specular lobe uses **VNDF sampling** (Heitz 2018 — [Sampling the GGX Distribution of Visible Normals](https://jcgt.org/published/0007/04/01/)) instead of plain NDF sampling. NDF sampling draws half-vectors blind to the view direction, which frequently produces reflected directions below the surface at grazing angles — wasting the sample and losing energy. VNDF sampling restricts half-vectors to those actually visible from the current view direction, eliminating most of these invalid samples.
+
+The path tracer also supports **depth of field** via a thin-lens camera model. Instead of firing all rays from a single point (pinhole), each primary ray originates from a random position on a disk of configurable radius (the aperture), aimed at a common focal plane at a configurable focus distance. Objects at the focal plane are perfectly sharp regardless of where on the lens disk the ray starts; objects nearer or farther produce a circle of confusion that grows with distance from the focal plane. Concentric disk mapping keeps the sample distribution uniform across the lens. Setting aperture to zero falls back to the exact pinhole behaviour with no overhead. Both the CPU and GPU path tracers share the same model.
 
 <!-- Engine_008: Comparison of a noisy vs converged render, or a render showing environment lighting -->
 
