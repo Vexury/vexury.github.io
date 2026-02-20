@@ -82,6 +82,7 @@ Here is an overview of what is done and what I am planning to work on next:
     - [x] Emissive area lights
     - [x] Environment map lighting (importance-sampled)
     - [x] VNDF specular sampling (Heitz 2018)
+    - [x] Russian Roulette path termination
     - [x] Firefly clamping
     - [x] Anti-aliasing (jittered sampling)
     - [x] Depth of field (thin-lens camera model)
@@ -207,6 +208,8 @@ The path tracer supports four types of light sources, each with its own sampling
 - **Environment lighting** — An HDR environment map provides image-based lighting. A 2D CDF (conditional + marginal) is precomputed for importance sampling, so NEE preferentially samples bright regions of the sky. MIS again balances environment sampling against BSDF sampling.
 
 All four NEE strategies fire independently each bounce, and the emissive material contribution can be toggled off to isolate the effect of explicit light sources.
+
+Path depth is managed with **Russian Roulette** rather than a hard cut-off. After the first two bounces, each subsequent bounce computes a survival probability equal to the luminance of the current path throughput, capped at 0.95. The path is terminated with probability `1 − p` and, if it survives, the throughput is divided by `p` to keep the estimator unbiased. Paths that have bounced through dark surfaces lose energy quickly and are terminated early; paths that are still bright continue. This means raising the maximum depth has little cost in practice — most paths self-terminate long before the cap — and no energy is wasted computing bounces that contribute almost nothing to the final image.
 
 The specular lobe uses **VNDF sampling** (Heitz 2018 — [Sampling the GGX Distribution of Visible Normals](https://jcgt.org/published/0007/04/01/)) instead of plain NDF sampling. NDF sampling draws half-vectors blind to the view direction, which frequently produces reflected directions below the surface at grazing angles — wasting the sample and losing energy. VNDF sampling restricts half-vectors to those actually visible from the current view direction, eliminating most of these invalid samples.
 
