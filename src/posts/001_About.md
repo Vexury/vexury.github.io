@@ -9,7 +9,7 @@ summary: I finally built my own website!
 <p class="post-date">{{ date | date: "%B %d, %Y" }}</p>
 
 <div class="info-box">
-⚙️ Built with <a href="https://www.11ty.dev/">11ty</a> · Hosted on <a href="https://pages.github.com/">GitHub Pages</a> · Analytics by <a href="https://www.goatcounter.com/">GoatCounter</a>
+⚙️ Built with <a href="https://www.11ty.dev/">11ty</a> · Hosted on <a href="https://pages.github.com/">GitHub Pages</a> · Analytics by <a href="https://www.goatcounter.com/">GoatCounter</a> · <a href="https://github.com/Vexury/vexury.github.io">Source on GitHub</a>
 </div>
 
 I wanted a minimal place to:
