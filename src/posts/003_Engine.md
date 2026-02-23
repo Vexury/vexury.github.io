@@ -18,7 +18,7 @@ VexEngine is a C++ graphics engine I built from scratch — featuring a progress
       Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
 </div>
 
-After years of working within large frameworks like [PBRT](https://github.com/mmp/pbrt-v4), where the overhead of navigating someone else's codebase often got in the way of actually experimenting, I wanted a clean, minimal engine that I fully understand and control. Having built exercise frameworks for teaching graphics at KIT, I knew what a good learning-oriented codebase should look like — VexEngine is that, but designed entirely around my own rendering ideas and experiments.
+After years of working within large frameworks like [PBRT](https://github.com/mmp/pbrt-v4), where the overhead of navigating someone else's codebase often got in the way of actually experimenting, I wanted a clean, minimal engine that I fully understand and control. Having maintained the exercise frameworks for KIT's *Computergrafik* and *Fotorealistische Bildsynthese* courses — covering ray tracing, BVH, path tracing, NEE, MIS, and microfacet BRDFs — I knew exactly what a well-structured rendering codebase should look like. VexEngine is that, but built around my own experiments rather than a fixed curriculum.
 
 ## Feature Checklist
 
