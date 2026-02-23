@@ -21,8 +21,10 @@ title: Projects
 </div>
 
 <div class="lightbox" id="lightbox">
+  <button class="lb-prev">&#8592;</button>
   <img id="lightbox-img">
   <video id="lightbox-video" controls autoplay loop></video>
+  <button class="lb-next">&#8594;</button>
 </div>
 
 <script>
@@ -110,6 +112,32 @@ document.querySelector('.project-grid').classList.add('loaded');
 const lightbox = document.getElementById('lightbox');
 const lbImg = document.getElementById('lightbox-img');
 const lbVideo = document.getElementById('lightbox-video');
+const lbPrevBtn = lightbox.querySelector('.lb-prev');
+const lbNextBtn = lightbox.querySelector('.lb-next');
+
+let lbSlides = [];
+let lbIndex = 0;
+
+function lbShow(index) {
+  lbIndex = (index + lbSlides.length) % lbSlides.length;
+  lbVideo.pause();
+  const slide = lbSlides[lbIndex];
+  if (slide.tagName === 'VIDEO') {
+    lbImg.style.display = 'none';
+    lbVideo.style.display = 'block';
+    lbVideo.src = slide.src;
+  } else {
+    lbVideo.style.display = 'none';
+    lbImg.style.display = 'block';
+    lbImg.src = slide.dataset.full || slide.src;
+  }
+}
+
+function lbClose() {
+  lightbox.classList.remove('active');
+  lbVideo.pause();
+  lbVideo.removeAttribute('src');
+}
 
 document.querySelectorAll('.slideshow').forEach(ss => {
   ss.style.cursor = 'pointer';
@@ -117,32 +145,24 @@ document.querySelectorAll('.slideshow').forEach(ss => {
     if (e.target.classList.contains('dot')) return;
     const active = ss.querySelector('img.active, video.active');
     if (!active) return;
-    if (active.tagName === 'VIDEO') {
-      lbImg.style.display = 'none';
-      lbVideo.style.display = 'block';
-      lbVideo.src = active.src;
-    } else {
-      lbVideo.style.display = 'none';
-      lbImg.style.display = 'block';
-      lbImg.src = active.dataset.full || active.src;
-    }
+    lbSlides = Array.from(ss.querySelectorAll('img, video'));
+    const multi = lbSlides.length > 1;
+    lbPrevBtn.hidden = !multi;
+    lbNextBtn.hidden = !multi;
+    lbShow(lbSlides.indexOf(active));
     lightbox.classList.add('active');
   });
 });
 
-lightbox.addEventListener('click', (e) => {
-  if (e.target === lightbox) {
-    lightbox.classList.remove('active');
-    lbVideo.pause();
-    lbVideo.removeAttribute('src');
-  }
-});
+lbPrevBtn.addEventListener('click', (e) => { e.stopPropagation(); lbShow(lbIndex - 1); });
+lbNextBtn.addEventListener('click', (e) => { e.stopPropagation(); lbShow(lbIndex + 1); });
+
+lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lbClose(); });
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-    lightbox.classList.remove('active');
-    lbVideo.pause();
-    lbVideo.removeAttribute('src');
-  }
+  if (!lightbox.classList.contains('active')) return;
+  if (e.key === 'Escape') lbClose();
+  if (e.key === 'ArrowLeft') lbShow(lbIndex - 1);
+  if (e.key === 'ArrowRight') lbShow(lbIndex + 1);
 });
 </script>
