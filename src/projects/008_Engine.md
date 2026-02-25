@@ -1,7 +1,7 @@
 ---
 permalink: false
 tags: projects
-title: Custom Graphics Engine
+title: VexEngine - Custom Rendering Engine
 emoji: "\u2699\uFE0F"
 images:
   - /images/Engine_001.png
