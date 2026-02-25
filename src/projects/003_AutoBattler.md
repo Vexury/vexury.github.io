@@ -9,6 +9,6 @@ images:
   - /images/AutoBattler_002.png
   - /images/AutoBattler_003.png
   - /images/AutoBattler_004.png
-description: You recruit characters and accept quests and bounties in town. You encoutner scoundrels and monsters and so you then take your team to a strategic hexgrid-based battlefield. Place your units in a clever way to maximize their effectiveness in battle.
-focus: Hexgrid algorithms (e.g. A&#42;), character animation, athentic world design
+description: You recruit characters and accept quests and bounties in town. You encounter scoundrels and monsters and so you then take your team to a strategic hexgrid-based battlefield. Place your units in a clever way to maximize their effectiveness in battle.
+focus: Hexgrid algorithms (e.g. A&#42;), character animation, authentic world design
 ---
