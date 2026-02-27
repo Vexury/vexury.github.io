@@ -281,14 +281,14 @@
 <p>OpenGL is the simpler backend and makes iteration fast: shader hot-reload works at the press of F5, and the driver handles a lot of state implicitly. Vulkan is far more explicit — render passes, descriptor sets, pipeline layouts, synchronization barriers — everything has to be declared. That verbosity is the price of admission for hardware ray tracing via <code>VK_KHR_ray_tracing_pipeline</code>, which wouldn't have been possible on the OpenGL side. <a href="https://github.com/charles-lunarg/vk-bootstrap">vk-bootstrap</a> handles instance and device setup, and <a href="https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator">VMA</a> manages GPU memory allocation — both reduce boilerplate without hiding anything important.</p>
 <div style="margin:1.5rem auto; width:100%">
   <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
-    <img class="ic-right" src="/images/Engine_Chess_PathTracing.png" alt="Vulkan hardware ray tracing">
-    <img class="ic-left" src="/images/Engine_Chess_Rasterization.png" alt="OpenGL rasterizer">
+    <img class="ic-right" src="/images/Engine_Compare_PT.png" alt="Vulkan hardware ray tracing">
+    <img class="ic-left" src="/images/Engine_Compare_Rast.png" alt="OpenGL rasterizer">
     <div class="ic-line"></div>
-    <span class="ic-label ic-label-left">OpenGL — rasterizer</span>
-    <span class="ic-label ic-label-right">Vulkan — hardware ray tracing</span>
+    <span class="ic-label ic-label-left">Rasterizer (OpenGL)</span>
+    <span class="ic-label ic-label-right">Path Tracer (Vulkan)</span>
   </div>
   <div style="text-align:center; color:#888; font-size:0.85em; margin-top:0.5rem">
-<p>Scene: <a href="https://polyhaven.com/a/chess_set">Chess Set</a> (CC0)</div></p>
+<p>Scene: Nvidia <a href="https://developer.nvidia.com/orca/amazon-lumberyard-bistro">Amazon Lumberyard Bistro</a> (CC-BY 4.0)</div></p>
 </div>
 <h2>Rasterization &amp; Debug Views</h2>
 <p>Both backends support standard rasterization for fast interactive preview — the default mode for navigating the scene and placing objects before running a more expensive path trace. The rasterized image is rendered into an HDR intermediate framebuffer and then passed through a fullscreen tone-map pass that applies <strong>ACES tone mapping</strong> and <strong>exposure / gamma correction</strong> before display.</p>

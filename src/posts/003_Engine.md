@@ -210,15 +210,15 @@ OpenGL is the simpler backend and makes iteration fast: shader hot-reload works 
 
 <div style="margin:1.5rem auto; width:100%">
   <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
-    <img class="ic-right" src="/images/Engine_Chess_PathTracing.png" alt="Vulkan hardware ray tracing">
-    <img class="ic-left" src="/images/Engine_Chess_Rasterization.png" alt="OpenGL rasterizer">
+    <img class="ic-right" src="/images/Engine_Compare_PT.png" alt="Vulkan hardware ray tracing">
+    <img class="ic-left" src="/images/Engine_Compare_Rast.png" alt="OpenGL rasterizer">
     <div class="ic-line"></div>
-    <span class="ic-label ic-label-left">OpenGL — rasterizer</span>
-    <span class="ic-label ic-label-right">Vulkan — hardware ray tracing</span>
+    <span class="ic-label ic-label-left">Rasterizer (OpenGL)</span>
+    <span class="ic-label ic-label-right">Path Tracer (Vulkan)</span>
   </div>
   <div style="text-align:center; color:#888; font-size:0.85em; margin-top:0.5rem">
   
-  Scene: [Chess Set](https://polyhaven.com/a/chess_set) (CC0)</div>
+  Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)</div>
 </div>
 
 ## Rasterization & Debug Views
