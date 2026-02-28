@@ -134,7 +134,7 @@ Here is an overview of what is done and what I am planning to work on next:
 
 - [x] Exposure / gamma correction
 - [x] ACES tone mapping
-- [ ] Bloom
+- [x] Bloom
 - [ ] SSAO
 
 </details>
@@ -291,6 +291,33 @@ Getting the bias right requires balancing two artifacts: too little causes self-
 - **Hardware constant depth bias** — A small constant bias (`glPolygonOffset` / `vkCmdSetDepthBias`) applied during shadow map rendering handles the residual case where `NdotL ≈ 1` and the normal offset is near zero. The slope-scale component is intentionally zero — at grazing angles it diverges and recreates the peter-panning that normal offset is designed to avoid.
 
 </details>
+
+## Post-Processing
+
+The post-processing stack sits between the HDR render and the final display output. Every render path — rasterizer and path tracer, OpenGL and Vulkan — shares the same pipeline: **bloom** composited in linear HDR space, then **ACES tone mapping** and **exposure / gamma correction** in a single fullscreen pass.
+
+**Bloom** runs as a three-stage pipeline on a half-resolution offscreen framebuffer:
+
+1. **Threshold** — A fragment shader reads the HDR source, converts each pixel to luminance, and applies a soft ramp: pixels below the threshold contribute nothing, pixels above it contribute proportionally to how far they exceed it. Only bright surfaces — emissive materials, specular highlights, direct light hits — pass through.
+
+2. **Separable Gaussian blur** — A pair of ping-pong framebuffers alternate horizontal and vertical 9-tap Gaussian passes (σ ≈ 1.5). Running the blur multiple times spreads the glow further without a wider kernel.
+
+3. **Composite** — The blurred bloom map is additively mixed onto the HDR image at a configurable intensity, before tone mapping is applied. Compositing in HDR space means the glow from an overexposed surface stays bright through the tone mapper rather than getting clipped to a flat white halo.
+
+One complication arises with the GPU path tracers: the accumulation buffer stores a running sum across N samples, not a normalised average. The threshold shader divides by the sample count before extracting bright pixels — without this, the bloom contribution would grow linearly with N and blow the image out to white after enough samples.
+
+<div style="margin:1.5rem auto; width:100%">
+  <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
+    <img class="ic-right" src="/images/Engine_Compare_Bloom.png" alt="Bloom on">
+    <img class="ic-left" src="/images/Engine_Compare_NoBloom.png" alt="Bloom off">
+    <div class="ic-line"></div>
+    <span class="ic-label ic-label-left">Bloom off</span>
+    <span class="ic-label ic-label-right">Bloom on</span>
+  </div>
+  <div style="text-align:center; color:#888; font-size:0.85em; margin-top:0.5rem">
+
+  Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)</div>
+</div>
 
 ## Path Tracing
 

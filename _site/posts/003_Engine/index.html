@@ -161,7 +161,7 @@
 <ul class="contains-task-list">
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Exposure / gamma correction</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> ACES tone mapping</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Bloom</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Bloom</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> SSAO</li>
 </ul>
 </details>
@@ -350,6 +350,32 @@
 <li><strong>Hardware constant depth bias</strong> — A small constant bias (<code>glPolygonOffset</code> / <code>vkCmdSetDepthBias</code>) applied during shadow map rendering handles the residual case where <code>NdotL ≈ 1</code> and the normal offset is near zero. The slope-scale component is intentionally zero — at grazing angles it diverges and recreates the peter-panning that normal offset is designed to avoid.</li>
 </ul>
 </details>
+<h2>Post-Processing</h2>
+<p>The post-processing stack sits between the HDR render and the final display output. Every render path — rasterizer and path tracer, OpenGL and Vulkan — shares the same pipeline: <strong>bloom</strong> composited in linear HDR space, then <strong>ACES tone mapping</strong> and <strong>exposure / gamma correction</strong> in a single fullscreen pass.</p>
+<p><strong>Bloom</strong> runs as a three-stage pipeline on a half-resolution offscreen framebuffer:</p>
+<ol>
+<li>
+<p><strong>Threshold</strong> — A fragment shader reads the HDR source, converts each pixel to luminance, and applies a soft ramp: pixels below the threshold contribute nothing, pixels above it contribute proportionally to how far they exceed it. Only bright surfaces — emissive materials, specular highlights, direct light hits — pass through.</p>
+</li>
+<li>
+<p><strong>Separable Gaussian blur</strong> — A pair of ping-pong framebuffers alternate horizontal and vertical 9-tap Gaussian passes (σ ≈ 1.5). Running the blur multiple times spreads the glow further without a wider kernel.</p>
+</li>
+<li>
+<p><strong>Composite</strong> — The blurred bloom map is additively mixed onto the HDR image at a configurable intensity, before tone mapping is applied. Compositing in HDR space means the glow from an overexposed surface stays bright through the tone mapper rather than getting clipped to a flat white halo.</p>
+</li>
+</ol>
+<p>One complication arises with the GPU path tracers: the accumulation buffer stores a running sum across N samples, not a normalised average. The threshold shader divides by the sample count before extracting bright pixels — without this, the bloom contribution would grow linearly with N and blow the image out to white after enough samples.</p>
+<div style="margin:1.5rem auto; width:100%">
+  <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
+    <img class="ic-right" src="/images/Engine_Compare_Bloom.png" alt="Bloom on">
+    <img class="ic-left" src="/images/Engine_Compare_NoBloom.png" alt="Bloom off">
+    <div class="ic-line"></div>
+    <span class="ic-label ic-label-left">Bloom off</span>
+    <span class="ic-label ic-label-right">Bloom on</span>
+  </div>
+  <div style="text-align:center; color:#888; font-size:0.85em; margin-top:0.5rem">
+<p>Scene: Nvidia <a href="https://developer.nvidia.com/orca/amazon-lumberyard-bistro">Amazon Lumberyard Bistro</a> (CC-BY 4.0)</div></p>
+</div>
 <h2>Path Tracing</h2>
 <p>The engine's main rendering mode is a <strong>progressive path tracer</strong> displayed in the viewport via a fullscreen quad. It accumulates samples silently in the background — the longer the scene sits still, the cleaner the image gets. Any change to the camera, geometry, or settings immediately resets the accumulation and starts fresh.</p>
 <div style="display:grid; grid-template-columns: repeat(4, 1fr); margin:1.5rem auto; width:100%; overflow:hidden">
