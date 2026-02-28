@@ -1,38 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>📖 About this site</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
-
-</head>
-<body>
-  <div class="container">
-    <header>
-      <nav>
-        <a href="/" class="">/ Home</a>
-        <a href="/projects/" class="">/ Projects</a>
-      </nav>
-    </header>
-    
-    <main>
-      <div class="post-content"><h1>📖 About this site</h1>
-<p class="post-date">January 10, 2026</p>
-<div class="info-box">
-⚙️ Built with <a href="https://www.11ty.dev/">11ty</a> · Hosted on <a href="https://pages.github.com/">GitHub Pages</a> · Analytics by <a href="https://www.goatcounter.com/">GoatCounter</a> · <a href="https://github.com/Vexury/vexury.github.io">Source on GitHub</a>
-</div>
-<p>I wanted a minimal place to:</p>
-<ul>
-<li><strong>Share my projects</strong> — a lot of them are unfinished, but that is part of the process</li>
-<li><strong>Write about what I am learning</strong> — graphics, rendering, game dev and everything in between</li>
-<li><strong>Keep a devlog</strong> — to document progress and look back on later</li>
-</ul>
-<p>No frameworks, no build tools beyond 11ty, no cookies. Just plain HTML, CSS and a bit of JavaScript.</p>
-</div>
+---
+layout: base.html
+---
+<div class="post-content">{{ content }}</div>
 <script>
 (function () {
   var headings = document.querySelectorAll('.post-content h2');
@@ -113,22 +82,3 @@
   }, { passive: true });
 })();
 </script>
-
-    </main>
-    
-    <footer>
-      <p>Moritz Grauer © 2026</p>
-    </footer>
-  </div>
-  <script>
-    document.querySelectorAll('a[href^="http"], a[href$=".pdf"]').forEach(a => {
-      if (!a.hostname || a.hostname !== location.hostname || a.href.endsWith('.pdf')) {
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-      }
-    });
-  </script>
-  <script data-goatcounter="https://vexury.goatcounter.com/count"
-          async src="//gc.zgo.at/count.js"></script>
-</body>
-</html>
