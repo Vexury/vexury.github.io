@@ -28,7 +28,7 @@
       <img class="lb" src="/images/Engine_011.png" alt="Full editor layout" style="max-width:100%">
 <p>Scene: Nvidia <a href="https://developer.nvidia.com/orca/amazon-lumberyard-bistro">Amazon Lumberyard Bistro</a> (CC-BY 4.0)</p>
 </div>
-<p>After years of working within large frameworks like <a href="https://github.com/mmp/pbrt-v4">PBRT</a>, where the overhead of navigating someone else's codebase often got in the way of actually experimenting, I wanted a clean, minimal engine that I fully understand and control. Having maintained the exercise frameworks for KIT's <em>Computergrafik</em> and <em>Fotorealistische Bildsynthese</em> courses — covering ray tracing, BVH, path tracing, NEE, MIS, and microfacet BRDFs — I knew exactly what a well-structured rendering codebase should look like. VexEngine is that, but built around my own experiments rather than a fixed curriculum.</p>
+<p>After years of working within large frameworks like <a href="https://github.com/mmp/pbrt-v4">PBRT</a>, where the overhead of navigating someone else's codebase often got in the way of actually experimenting, I wanted a clean, minimal engine that I fully understand and control. I have already worked with multiple rendering frameworks for teaching at KIT but VexEngine is built around my own experiments rather than a fixed curriculum.</p>
 <h2>Feature Checklist</h2>
 <p>Here is an overview of what is done and what I am planning to work on next:</p>
 <details>
@@ -44,7 +44,7 @@
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Outline rendering for selected objects</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Interactive camera (zoom, pan, orbit)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Saving Framebuffer as image to disk</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Viewport gizmos (translate, rotate, scale directly in the viewport)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Viewport gizmos (translate, rotate, scale in the viewport)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Undo/redo system</li>
 </ul>
 </details>
@@ -52,7 +52,7 @@
 <summary>Scene & Assets</summary>
 <ul class="contains-task-list">
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> OBJ mesh loading &amp; deletion</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Runtime object transforms via inspector</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Runtime object transforms via inspector</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Environment map loading (HDR)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> FBX loading</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> glTF loading</li>
@@ -63,6 +63,7 @@
 <summary>Rendering and Global Illumination</summary>
 <ul class="contains-task-list">
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> CMake compile flag to switch backends</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Live shader reload (F5 / button, OpenGL)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Bounding Volume Hierarchy (BVH)
 <ul class="contains-task-list">
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Binned SAH Builder</li>
@@ -77,11 +78,9 @@
 </li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Shadow mapping (rasterizer, both backends)
 <ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> AABB-fitted orthographic frustum (computed once at scene load)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Normal offset bias scaled to world-space texel size</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Receiver plane depth bias (RPDB) correcting PCF tap depths for sloped surfaces</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> AABB-fitted orthographic frustum</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Receiver plane depth bias (RPDB)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> PCF 3×3 soft shadows</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Per-scene bias slider in Sun inspector</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Shadow map debug view in Sun inspector</li>
 </ul>
 </li>
@@ -89,7 +88,6 @@
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> GPU Progressive Path Tracing
 <ul class="contains-task-list">
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> OpenGL (compute shader)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Live shader reload (F5 / button, OpenGL)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Vulkan (VK_KHR_ray_tracing_pipeline, hardware RT cores)</li>
 </ul>
 </li>
@@ -106,27 +104,11 @@
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Firefly clamping</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Anti-aliasing (jittered sampling)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Depth of field (thin-lens camera model)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Flat shading toggle</li>
 </ul>
 </li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Debug visualization modes
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Normals</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> UVs</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Depth</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Wireframe</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Albedo</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Emission</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Material ID</li>
-</ul>
-</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Debug visualization modes</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Denoising</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Deferred rendering
-<ul class="contains-task-list">
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> OpenGL</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Vulkan</li>
-</ul>
-</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Deferred rendering</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Bidirectional Path Tracing (BDPT)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Metropolis Light Transport (MLT)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Photon Mapping</li>
@@ -140,6 +122,7 @@
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Microfacet BSDF (GGX/Cook-Torrance) — handles both diffuse and specular lobes</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Mirror (perfect specular, delta BRDF)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Dielectric (glass, Fresnel reflect/refract, delta BRDF)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> PBR parameter mapping from OBJ/MTL</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Textured materials
 <ul class="contains-task-list">
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Base Color / Albedo map</li>
@@ -150,10 +133,7 @@
 </ul>
 </li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Alpha clip (cutout transparency from RGBA diffuse texture)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Constant transparency (MTL <code>d</code>/<code>Tr</code> → Dielectric)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Auto-smooth normals (angle-based)</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> PBR parameter mapping from OBJ/MTL</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Emissive materials</li>
 </ul>
 </details>
 <details>
@@ -162,7 +142,9 @@
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Exposure / gamma correction</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> ACES tone mapping</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Bloom</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> SSAO</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Chromatic Aberration</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Vignette</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Color Grading</li>
 </ul>
 </details>
 <p>Some of the features are further discussed below.</p>
@@ -174,8 +156,8 @@
 </div>
 <h2>Editor &amp; Scene</h2>
 <p>The editor is built around five dockable panels. The <strong>Scene Hierarchy</strong> shows all loaded objects in a tree; clicking one selects it and syncs the viewport highlight. The <strong>Inspector</strong> exposes the selected object's material and rendering properties — roughness, metallic, emissive intensity, shadow bias — and lets you edit them live. The <strong>Console</strong> captures all engine output in real time, the <strong>Viewport</strong> is the main rendering view, and <strong>Performance Metrics</strong> track frame time, FPS and draw call counts.</p>
-<p>Navigating the scene feels like Blender: scroll to zoom, middle-mouse to pan, click-drag to orbit around a focus point. Meshes can be loaded and deleted at runtime via file dialog using <a href="https://github.com/tinyobjloader/tinyobjloader">tinyobjloader</a>; the hierarchy updates automatically to reflect changes.</p>
-<p>Clicking an object in the viewport highlights it with a <strong>screen-space outline</strong>: the selected geometry is rendered as a solid silhouette into an offscreen mask, which the tone-map pass then dilates with a 5×5 kernel and composites as an orange ring over the final image. The approach produces clean, pixel-consistent outlines at any distance — something the older normal-extrusion technique couldn't reliably deliver.</p>
+<p>Navigating the scene feels like Blender: scroll to zoom, middle-mouse to pan, click-drag to orbit around a focus point. Meshes can be loaded and deleted at runtime via file dialog using <a href="https://github.com/tinyobjloader/tinyobjloader">tinyobjloader</a>, the hierarchy updates automatically to reflect changes.</p>
+<p>Clicking an object in the viewport highlights it with a <strong>screen-space outline</strong>: the selected geometry is rendered as a solid silhouette into an offscreen mask, which the tone-map pass then dilates with a 5×5 kernel and composites as an orange ring over the final image.</p>
 <div style="text-align:center; color:#888; font-size:0.85em;">
       <img class="lb" src="/images/Engine_Selection.png" alt="Full editor layout" style="max-width:100%">
 <p>Scene: <a href="https://polyhaven.com/a/chess_set">Chess Set</a> (CC0)</p>

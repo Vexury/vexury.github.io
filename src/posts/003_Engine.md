@@ -18,7 +18,7 @@ VexEngine is a C++ graphics engine I built from scratch — featuring a progress
       Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
 </div>
 
-After years of working within large frameworks like [PBRT](https://github.com/mmp/pbrt-v4), where the overhead of navigating someone else's codebase often got in the way of actually experimenting, I wanted a clean, minimal engine that I fully understand and control. Having maintained the exercise frameworks for KIT's *Computergrafik* and *Fotorealistische Bildsynthese* courses — covering ray tracing, BVH, path tracing, NEE, MIS, and microfacet BRDFs — I knew exactly what a well-structured rendering codebase should look like. VexEngine is that, but built around my own experiments rather than a fixed curriculum.
+After years of working within large frameworks like [PBRT](https://github.com/mmp/pbrt-v4), where the overhead of navigating someone else's codebase often got in the way of actually experimenting, I wanted a clean, minimal engine that I fully understand and control. I have already worked with multiple rendering frameworks for teaching at KIT but VexEngine is built around my own experiments rather than a fixed curriculum.
 
 ## Feature Checklist
 
@@ -37,7 +37,7 @@ Here is an overview of what is done and what I am planning to work on next:
 - [x] Outline rendering for selected objects
 - [x] Interactive camera (zoom, pan, orbit)
 - [x] Saving Framebuffer as image to disk
-- [ ] Viewport gizmos (translate, rotate, scale directly in the viewport)
+- [x] Viewport gizmos (translate, rotate, scale in the viewport)
 - [ ] Undo/redo system
 
 </details>
@@ -46,7 +46,7 @@ Here is an overview of what is done and what I am planning to work on next:
 <summary>Scene & Assets</summary>
 
 - [x] OBJ mesh loading & deletion
-- [ ] Runtime object transforms via inspector
+- [x] Runtime object transforms via inspector
 - [x] Environment map loading (HDR)
 - [ ] FBX loading
 - [ ] glTF loading
@@ -58,6 +58,7 @@ Here is an overview of what is done and what I am planning to work on next:
 <summary>Rendering and Global Illumination</summary>
 
 - [x] CMake compile flag to switch backends
+- [x] Live shader reload (F5 / button, OpenGL)
 - [x] Bounding Volume Hierarchy (BVH)
     - [x] Binned SAH Builder
     - [x] Ordered Traversal
@@ -65,16 +66,13 @@ Here is an overview of what is done and what I am planning to work on next:
     - [x] OpenGL
     - [x] Vulkan
 - [x] Shadow mapping (rasterizer, both backends)
-    - [x] AABB-fitted orthographic frustum (computed once at scene load)
-    - [x] Normal offset bias scaled to world-space texel size
-    - [x] Receiver plane depth bias (RPDB) correcting PCF tap depths for sloped surfaces
+    - [x] AABB-fitted orthographic frustum
+    - [x] Receiver plane depth bias (RPDB)
     - [x] PCF 3×3 soft shadows
-    - [x] Per-scene bias slider in Sun inspector
     - [x] Shadow map debug view in Sun inspector
 - [x] CPU Progressive Path Tracing
 - [x] GPU Progressive Path Tracing
     - [x] OpenGL (compute shader)
-    - [x] Live shader reload (F5 / button, OpenGL)
     - [x] Vulkan (VK_KHR_ray_tracing_pipeline, hardware RT cores)
 - [x] Path Tracing Features
     - [x] Next Event Estimation (NEE)
@@ -88,19 +86,9 @@ Here is an overview of what is done and what I am planning to work on next:
     - [x] Firefly clamping
     - [x] Anti-aliasing (jittered sampling)
     - [x] Depth of field (thin-lens camera model)
-    - [x] Flat shading toggle
 - [x] Debug visualization modes
-    - [x] Normals
-    - [x] UVs
-    - [x] Depth
-    - [x] Wireframe
-    - [x] Albedo
-    - [x] Emission
-    - [x] Material ID
 - [ ] Denoising
 - [ ] Deferred rendering
-    - [ ] OpenGL
-    - [ ] Vulkan
 - [ ] Bidirectional Path Tracing (BDPT)
 - [ ] Metropolis Light Transport (MLT)
 - [ ] Photon Mapping
@@ -115,6 +103,7 @@ Here is an overview of what is done and what I am planning to work on next:
 - [x] Microfacet BSDF (GGX/Cook-Torrance) — handles both diffuse and specular lobes
 - [x] Mirror (perfect specular, delta BRDF)
 - [x] Dielectric (glass, Fresnel reflect/refract, delta BRDF)
+- [x] PBR parameter mapping from OBJ/MTL
 - [x] Textured materials
     - [x] Base Color / Albedo map
     - [x] Normal map
@@ -122,10 +111,7 @@ Here is an overview of what is done and what I am planning to work on next:
     - [x] Roughness map
     - [x] Metallic map
 - [x] Alpha clip (cutout transparency from RGBA diffuse texture)
-- [x] Constant transparency (MTL `d`/`Tr` → Dielectric)
 - [x] Auto-smooth normals (angle-based)
-- [x] PBR parameter mapping from OBJ/MTL
-- [x] Emissive materials
 
 </details>
 
@@ -135,7 +121,9 @@ Here is an overview of what is done and what I am planning to work on next:
 - [x] Exposure / gamma correction
 - [x] ACES tone mapping
 - [x] Bloom
-- [ ] SSAO
+- [ ] Chromatic Aberration
+- [ ] Vignette
+- [ ] Color Grading
 
 </details>
 
@@ -155,9 +143,9 @@ The foundation is [GLFW](https://www.glfw.org/) for window creation and input ha
 
 The editor is built around five dockable panels. The **Scene Hierarchy** shows all loaded objects in a tree; clicking one selects it and syncs the viewport highlight. The **Inspector** exposes the selected object's material and rendering properties — roughness, metallic, emissive intensity, shadow bias — and lets you edit them live. The **Console** captures all engine output in real time, the **Viewport** is the main rendering view, and **Performance Metrics** track frame time, FPS and draw call counts.
 
-Navigating the scene feels like Blender: scroll to zoom, middle-mouse to pan, click-drag to orbit around a focus point. Meshes can be loaded and deleted at runtime via file dialog using [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader); the hierarchy updates automatically to reflect changes.
+Navigating the scene feels like Blender: scroll to zoom, middle-mouse to pan, click-drag to orbit around a focus point. Meshes can be loaded and deleted at runtime via file dialog using [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader), the hierarchy updates automatically to reflect changes.
 
-Clicking an object in the viewport highlights it with a **screen-space outline**: the selected geometry is rendered as a solid silhouette into an offscreen mask, which the tone-map pass then dilates with a 5×5 kernel and composites as an orange ring over the final image. The approach produces clean, pixel-consistent outlines at any distance — something the older normal-extrusion technique couldn't reliably deliver.
+Clicking an object in the viewport highlights it with a **screen-space outline**: the selected geometry is rendered as a solid silhouette into an offscreen mask, which the tone-map pass then dilates with a 5×5 kernel and composites as an orange ring over the final image.
 
 <div style="text-align:center; color:#888; font-size:0.85em;">
       <img class="lb" src="/images/Engine_Selection.png" alt="Full editor layout" style="max-width:100%">
