@@ -93,7 +93,7 @@ Here is an overview of what is done and what I am planning to work on next:
 - [ ] Bidirectional Path Tracing (BDPT)
 - [ ] Metropolis Light Transport (MLT)
 - [ ] Photon Mapping
-- [ ] Volumetric rendering (participating media)
+- [x] Volumetric rendering (participating media)
 - [ ] Spectral rendering
 
 </details>
@@ -376,6 +376,20 @@ The algorithm is the same across all three backends — the difference is where 
 
 <div style="text-align:center; color:#888; font-size:0.85em;">
       <img class="lb" src="/images/Engine_010.png" alt="Full editor layout" style="max-width:100%">
+
+      Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
+</div>
+
+## Volumetric Participating Media
+
+The path tracer supports **physically-based participating media** — fog, haze, light shafts, and colored smoke — as first-class scene objects. Volumes are axis-aligned bounding boxes placed anywhere in the scene, or set to infinite mode for global atmospheric effects. Each volume has three parameters: **density** (σt, the extinction coefficient), **scatter color** (per-channel scattering albedo, so volumes can be tinted), and **anisotropy** (the Henyey-Greenstein *g* parameter, controlling whether light scatters forward, backward, or isotropically).
+
+The implementation is fully analytical — no additional geometry, BVH nodes, or TLAS instances. Every path tracing bounce intersects each volume against the ray using a slab test. If the ray enters a volume, a free-flight distance is drawn by exponential importance sampling. If that distance falls before the surface hit, a **scatter event** occurs: the throughput is weighted by the scattering albedo, a new direction is drawn from the Henyey-Greenstein distribution, and NEE fires toward all active lights using the phase function as the directional weight. If no scatter occurs within the slab, Beer-Lambert transmittance attenuates the throughput by `exp(−σt × path length)` before the ray continues to the surface.
+
+Anisotropy (*g*) shapes the scattering lobe: *g* = 0 gives isotropic fog, *g* → +1 concentrates scattering forward and produces glowing halos around lights visible through haze, and *g* < 0 scatters back toward the source.
+
+<div style="text-align:center; color:#888; font-size:0.85em;">
+      <img class="lb" src="/images/Engine_Bistro_Fog.png" alt="Volumetric fog in the Bistro scene" style="max-width:100%">
 
       Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
 </div>

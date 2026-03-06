@@ -23,7 +23,7 @@
       <div class="post-content"><h1>⚙️ VexEngine - Custom Rendering Engine</h1>
 <p class="post-date">February 14, 2026</p>
 <p>Links: <a href="https://github.com/Vexury/VexEngine">Source Code</a> · <a href="/projects/">Rendered Images</a></p>
-<p>VexEngine is a C++ graphics engine I built from scratch — featuring a progressive path tracer with CPU and GPU backends, Cook-Torrance GGX materials, BVH acceleration, and a dockable editor UI. It supports both OpenGL and Vulkan through an abstracted rendering interface.</p>
+<p>VexEngine is a C++ graphics engine I built from scratch — featuring a progressive path tracer with CPU and GPU backends, Cook-Torrance GGX materials, BVH acceleration, denoising and a dockable editor UI. It supports both OpenGL and Vulkan through an abstracted rendering interface.</p>
 <div style="text-align:center; color:#888; font-size:0.85em;">
       <img class="lb" src="/images/Engine_011.png" alt="Full editor layout" style="max-width:100%">
 <p>Scene: Nvidia <a href="https://developer.nvidia.com/orca/amazon-lumberyard-bistro">Amazon Lumberyard Bistro</a> (CC-BY 4.0)</p>
@@ -116,7 +116,7 @@
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Bidirectional Path Tracing (BDPT)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Metropolis Light Transport (MLT)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Photon Mapping</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Volumetric rendering (participating media)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Volumetric rendering (participating media)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Spectral rendering</li>
 </ul>
 </details>
@@ -411,6 +411,14 @@
 </ul>
 <div style="text-align:center; color:#888; font-size:0.85em;">
       <img class="lb" src="/images/Engine_010.png" alt="Full editor layout" style="max-width:100%">
+<p>Scene: Nvidia <a href="https://developer.nvidia.com/orca/amazon-lumberyard-bistro">Amazon Lumberyard Bistro</a> (CC-BY 4.0)</p>
+</div>
+<h2>Volumetric Participating Media</h2>
+<p>The path tracer supports <strong>physically-based participating media</strong> — fog, haze, light shafts, and colored smoke — as first-class scene objects. Volumes are axis-aligned bounding boxes placed anywhere in the scene, or set to infinite mode for global atmospheric effects. Each volume has three parameters: <strong>density</strong> (σt, the extinction coefficient), <strong>scatter color</strong> (per-channel scattering albedo, so volumes can be tinted), and <strong>anisotropy</strong> (the Henyey-Greenstein <em>g</em> parameter, controlling whether light scatters forward, backward, or isotropically).</p>
+<p>The implementation is fully analytical — no additional geometry, BVH nodes, or TLAS instances. Every path tracing bounce intersects each volume against the ray using a slab test. If the ray enters a volume, a free-flight distance is drawn by exponential importance sampling. If that distance falls before the surface hit, a <strong>scatter event</strong> occurs: the throughput is weighted by the scattering albedo, a new direction is drawn from the Henyey-Greenstein distribution, and NEE fires toward all active lights using the phase function as the directional weight. If no scatter occurs within the slab, Beer-Lambert transmittance attenuates the throughput by <code>exp(−σt × path length)</code> before the ray continues to the surface.</p>
+<p>Anisotropy (<em>g</em>) shapes the scattering lobe: <em>g</em> = 0 gives isotropic fog, <em>g</em> → +1 concentrates scattering forward and produces glowing halos around lights visible through haze, and <em>g</em> &lt; 0 scatters back toward the source.</p>
+<div style="text-align:center; color:#888; font-size:0.85em;">
+      <img class="lb" src="/images/Engine_Bistro_Fog.png" alt="Volumetric fog in the Bistro scene" style="max-width:100%">
 <p>Scene: Nvidia <a href="https://developer.nvidia.com/orca/amazon-lumberyard-bistro">Amazon Lumberyard Bistro</a> (CC-BY 4.0)</p>
 </div>
 <h2>Denoising</h2>
