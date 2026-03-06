@@ -1,7 +1,7 @@
 ---
 title: ⚙️ VexEngine - Custom Rendering Engine
 date: 2026-02-14
-summary: A C++ graphics engine built from scratch — path tracing, Cook-Torrance GGX, dual OpenGL/Vulkan backend, BVH acceleration and a full editor UI.
+summary: A C++ graphics engine built from scratch — path tracing, Cook-Torrance GGX, dual OpenGL/Vulkan backend, BVH acceleration, denoising and a full editor UI.
 ---
 
 # {{ title }}
@@ -10,7 +10,7 @@ summary: A C++ graphics engine built from scratch — path tracing, Cook-Torranc
 
 Links: [Source Code](https://github.com/Vexury/VexEngine) · [Rendered Images](/projects/)
 
-VexEngine is a C++ graphics engine I built from scratch — featuring a progressive path tracer with CPU and GPU backends, Cook-Torrance GGX materials, BVH acceleration, and a dockable editor UI. It supports both OpenGL and Vulkan through an abstracted rendering interface.
+VexEngine is a C++ graphics engine I built from scratch — featuring a progressive path tracer with CPU and GPU backends, Cook-Torrance GGX materials, BVH acceleration, denoising and a dockable editor UI. It supports both OpenGL and Vulkan through an abstracted rendering interface.
 
 <div style="text-align:center; color:#888; font-size:0.85em;">
       <img class="lb" src="/images/Engine_011.png" alt="Full editor layout" style="max-width:100%">
