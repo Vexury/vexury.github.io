@@ -87,7 +87,8 @@ Here is an overview of what is done and what I am planning to work on next:
     - [x] Anti-aliasing (jittered sampling)
     - [x] Depth of field (thin-lens camera model)
 - [x] Debug visualization modes
-- [ ] Denoising
+- [x] Denoising
+    - [x] OIDN (Intel Open Image Denoise, CPU)
 - [ ] Deferred rendering
 - [ ] Bidirectional Path Tracing (BDPT)
 - [ ] Metropolis Light Transport (MLT)
@@ -377,6 +378,27 @@ The algorithm is the same across all three backends — the difference is where 
       <img class="lb" src="/images/Engine_010.png" alt="Full editor layout" style="max-width:100%">
 
       Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
+</div>
+
+## Denoising
+
+Even a well-optimised path tracer needs many samples before the image looks clean — at 1 SPP the noise is severe, and reaching a perceptually converged result can take hundreds of passes. Rather than waiting, the engine integrates [Intel Open Image Denoise (OIDN)](https://www.openimagedenoise.org/) as a one-click post-process that runs on the CPU and produces a clean result in a fraction of a second.
+
+The integration works entirely on the CPU side and is backend-agnostic. A "Denoise" button appears in the Settings panel whenever samples have been accumulated; pressing it reads back the current accumulation buffer as **linear HDR float RGB** — before any tone mapping — feeds it into OIDN's RT filter, then applies the same exposure, ACES tone mapping and gamma correction as the live display. The result replaces the viewport image and accumulation is frozen. Moving the camera or changing any scene parameter immediately clears the denoised result and restarts accumulation from zero.
+
+For the Vulkan GPU path tracer the readback copies the RGBA32F accumulation image from device memory to a CPU-side staging buffer via an immediate-submit command, divides out the per-pixel sample counter stored in the alpha channel, and passes the resulting linear HDR data directly to OIDN. For the CPU path tracer the accumulation buffer is already on the host, so no copy is needed.
+
+<div style="margin:1.5rem auto; width:100%">
+  <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
+    <img class="ic-right" src="/images/Engine_Bistro_16_SPP_denoised.png" alt="OIDN denoised">
+    <img class="ic-left" src="/images/Engine_Bistro_16_SPP.png" alt="16 SPP raw">
+    <div class="ic-line"></div>
+    <span class="ic-label ic-label-left">16 SPP (raw)</span>
+    <span class="ic-label ic-label-right">OIDN denoised</span>
+  </div>
+  <div style="text-align:center; color:#888; font-size:0.85em; margin-top:0.5rem">
+
+  Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)</div>
 </div>
 
 ## Materials and Textures
