@@ -2,6 +2,7 @@
 title: ⚙️ VexEngine - Custom Rendering Engine
 date: 2026-02-14
 summary: A C++ graphics engine built from scratch — path tracing, Cook-Torrance GGX, dual OpenGL/Vulkan backend, BVH acceleration, denoising and a full editor UI.
+preview_image: /images/thumbs/Engine_011.jpg
 ---
 
 # {{ title }}

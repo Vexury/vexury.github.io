@@ -20,9 +20,16 @@ title: Home
     {% for post in collections.posts %}
     <li>
       <a href="{{ post.url }}">
-        <h3>{{ post.data.title }}</h3>
-        <span class="post-date">{{ post.data.date | date: "%B %d, %Y" }}</span>
-        {% if post.data.summary %}<span class="post-summary">{{ post.data.summary }}</span>{% endif %}
+        <div class="post-preview-content">
+          <h3>{{ post.data.title }}</h3>
+          <span class="post-date">{{ post.data.date | date: "%B %d, %Y" }}</span>
+          {% if post.data.summary %}<span class="post-summary">{{ post.data.summary }}</span>{% endif %}
+        </div>
+        {% if post.data.preview_image %}
+        <div class="post-preview-img">
+          <img src="{{ post.data.preview_image }}" alt="">
+        </div>
+        {% endif %}
       </a>
     </li>
     {% endfor %}
