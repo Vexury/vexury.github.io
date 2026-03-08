@@ -39,7 +39,8 @@ Here is an overview of what is done and what I am planning to work on next:
 - [x] Interactive camera (zoom, pan, orbit)
 - [x] Saving Framebuffer as image to disk
 - [x] Viewport gizmos (translate, rotate, scale in the viewport)
-- [ ] Undo/redo system
+- [x] Undo/redo system (command stack, Ctrl+Z/Y)
+- [x] Primitive objects (plane, cube, sphere, cylinder)
 
 </details>
 
@@ -131,9 +132,9 @@ Here is an overview of what is done and what I am planning to work on next:
 
 Some of the features are further discussed below.
 
-## Window & UI
+## Editor
 
-The foundation is [GLFW](https://www.glfw.org/) for window creation and input handling — lightweight, cross-platform, and compatible with both OpenGL and Vulkan out of the box. On top of that sits [Dear ImGui](https://github.com/ocornut/imgui) with the [docking branch](https://github.com/ocornut/imgui/wiki/Docking), which gives me a fully rearrangeable editor where every panel can be docked, undocked and resized freely. Since ImGui is immediate-mode, the UI is just code — no widget trees, no event callbacks, just describe what you want each frame and move on.
+The foundation is [GLFW](https://www.glfw.org/) for window creation and input handling, with [Dear ImGui](https://github.com/ocornut/imgui) (docking branch) on top for the UI. Since ImGui is immediate-mode, the entire editor is just code — no widget trees, no event callbacks, just describe what you want each frame and move on. Every panel can be freely docked, undocked and resized.
 
 <div style="text-align:center; color:#888; font-size:0.85em;">
       <img class="lb" src="/images/Engine_002.png" alt="Full editor layout" style="max-width:100%">
@@ -141,9 +142,7 @@ The foundation is [GLFW](https://www.glfw.org/) for window creation and input ha
       Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
 </div>
 
-## Editor & Scene
-
-The editor is built around five dockable panels. The **Scene Hierarchy** shows all loaded objects in a tree; clicking one selects it and syncs the viewport highlight. The **Inspector** exposes the selected object's material and rendering properties — roughness, metallic, emissive intensity, shadow bias — and lets you edit them live. The **Console** captures all engine output in real time, the **Viewport** is the main rendering view, and **Performance Metrics** track frame time, FPS and draw call counts.
+The editor is built around five panels. The **Scene Hierarchy** shows all loaded objects in a tree; clicking one selects it and syncs the viewport highlight. The **Inspector** exposes the selected object's material and rendering properties — roughness, metallic, emissive intensity, shadow bias — and lets you edit them live. The **Console** captures all engine output in real time, the **Viewport** is the main rendering view, and **Performance Metrics** track frame time, FPS and draw call counts.
 
 Navigating the scene feels like Blender: scroll to zoom, middle-mouse to pan, click-drag to orbit around a focus point. Meshes can be loaded and deleted at runtime via file dialog using [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader), the hierarchy updates automatically to reflect changes.
 
@@ -154,6 +153,8 @@ Clicking an object in the viewport highlights it with a **screen-space outline**
 
       Scene: [Chess Set](https://polyhaven.com/a/chess_set) (CC0)
 </div>
+
+Selected objects can also be transformed directly in the viewport: **W** for translate, **E** for rotate, **R** for scale, **G** to toggle local/global space. The gizmo is drawn using the ImGui draw list, so it requires no additional GPU passes. The **pivot point** is derived from the geometry's own AABB rather than the matrix origin, so scaling and rotating always feel anchored to the visual center of the object. All operations are recorded as **undoable commands** (Ctrl+Z / Ctrl+Y), and Ctrl+D duplicates the selected object. Primitive objects — plane, cube, UV sphere, and cylinder — can be created directly from the hierarchy panel.
 
 <details>
 <summary>Picking, Selection & Outline — Implementation Details</summary>
@@ -187,8 +188,23 @@ Clicking an object in the viewport highlights it with a **screen-space outline**
 | | OpenGL | Vulkan |
 |---|---|---|
 | Mask binding | `GL_TEXTURE1` + `setInt("u_outlineMask", 1)` | `setExternalTextureVK(slot=1)` → descriptor set 2 (`layout(set=2, binding=0)`) |
-| Enable flag | `uniform bool u_enableOutline` | Push constant at byte offset 64 (`layout(offset=64) uint enableOutline`) |
+| Enable flag | `uniform bool u_enableOutline` | Push constant at byte offset 128 (`layout(offset=128) uint enableOutline`) |
 | Flag dispatch | `setBool` → `glUniform1i` | `setBool` → immediate `vkCmdPushConstants` |
+
+</details>
+
+<details>
+<summary>Gizmo Implementation Details</summary>
+
+All three modes operate in world space and write back to local space via `inverse(groupMatrix) × newWorldMatrix` for submesh cases.
+
+**Translate** — A ray is cast from the camera through the cursor and projected onto the axis line. The offset accumulated is `newWorld[3] += axis × worldDist`, applied directly to the translation column. Using `glm::translate` instead would apply the offset in local space and produce wrong results when the object is rotated.
+
+**Rotate** — A ray-plane intersection gives the cursor's hit point on the plane perpendicular to the rotation axis. An angle is read as `atan2(cross · axis, dot)` relative to a reference vector frozen at drag start, so the handle tracks the cursor continuously rather than snapping to an absolute angle.
+
+**Scale** — Pivot preservation is handled analytically: after scaling the matrix, the translation column is corrected with `newWorld[3] = pivot − newWorld × localCenter`, where `localCenter` is the AABB center in local space frozen at drag start. This keeps the pivot stationary while the mesh grows. The center knob performs uniform scaling and is tested first in the hit list so it always takes priority over the axis handles.
+
+**Undo/redo** — Every drag end emits a `CmdSetTransform` command pushed onto a 50-deep deque-based command stack. The command stores the before/after world matrices and converts to local space on apply via `applyTransformMat`. Ctrl+Z/Y walk the stack; Ctrl+D emits a `CmdDuplicate`.
 
 </details>
 
@@ -281,33 +297,6 @@ Getting the bias right requires balancing two artifacts: too little causes self-
 - **Hardware constant depth bias** — A small constant bias (`glPolygonOffset` / `vkCmdSetDepthBias`) applied during shadow map rendering handles the residual case where `NdotL ≈ 1` and the normal offset is near zero. The slope-scale component is intentionally zero — at grazing angles it diverges and recreates the peter-panning that normal offset is designed to avoid.
 
 </details>
-
-## Post-Processing
-
-The post-processing stack sits between the HDR render and the final display output. Every render path — rasterizer and path tracer, OpenGL and Vulkan — shares the same pipeline: **bloom** composited in linear HDR space, then **ACES tone mapping** and **exposure / gamma correction** in a single fullscreen pass.
-
-**Bloom** runs as a three-stage pipeline on a half-resolution offscreen framebuffer:
-
-1. **Threshold** — A fragment shader reads the HDR source, converts each pixel to luminance, and applies a soft ramp: pixels below the threshold contribute nothing, pixels above it contribute proportionally to how far they exceed it. Only bright surfaces — emissive materials, specular highlights, direct light hits — pass through.
-
-2. **Separable Gaussian blur** — A pair of ping-pong framebuffers alternate horizontal and vertical 9-tap Gaussian passes (σ ≈ 1.5). Running the blur multiple times spreads the glow further without a wider kernel.
-
-3. **Composite** — The blurred bloom map is additively mixed onto the HDR image at a configurable intensity, before tone mapping is applied. Compositing in HDR space means the glow from an overexposed surface stays bright through the tone mapper rather than getting clipped to a flat white halo.
-
-One complication arises with the GPU path tracers: the accumulation buffer stores a running sum across N samples, not a normalised average. The threshold shader divides by the sample count before extracting bright pixels — without this, the bloom contribution would grow linearly with N and blow the image out to white after enough samples.
-
-<div style="margin:1.5rem auto; width:100%">
-  <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
-    <img class="ic-right" src="/images/Engine_Compare_Bloom.png" alt="Bloom on">
-    <img class="ic-left" src="/images/Engine_Compare_NoBloom.png" alt="Bloom off">
-    <div class="ic-line"></div>
-    <span class="ic-label ic-label-left">Bloom off</span>
-    <span class="ic-label ic-label-right">Bloom on</span>
-  </div>
-  <div style="text-align:center; color:#888; font-size:0.85em; margin-top:0.5rem">
-
-  Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)</div>
-</div>
 
 ## Path Tracing
 
@@ -410,6 +399,33 @@ For the Vulkan GPU path tracer the readback copies the RGBA32F accumulation imag
     <div class="ic-line"></div>
     <span class="ic-label ic-label-left">16 SPP (raw)</span>
     <span class="ic-label ic-label-right">OIDN denoised</span>
+  </div>
+  <div style="text-align:center; color:#888; font-size:0.85em; margin-top:0.5rem">
+
+  Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)</div>
+</div>
+
+## Post-Processing
+
+The post-processing stack sits between the HDR render and the final display output. Every render path — rasterizer and path tracer, OpenGL and Vulkan — shares the same pipeline: **bloom** composited in linear HDR space, then **ACES tone mapping** and **exposure / gamma correction** in a single fullscreen pass.
+
+**Bloom** runs as a three-stage pipeline on a half-resolution offscreen framebuffer:
+
+1. **Threshold** — A fragment shader reads the HDR source, converts each pixel to luminance, and applies a soft ramp: pixels below the threshold contribute nothing, pixels above it contribute proportionally to how far they exceed it. Only bright surfaces — emissive materials, specular highlights, direct light hits — pass through.
+
+2. **Separable Gaussian blur** — A pair of ping-pong framebuffers alternate horizontal and vertical 9-tap Gaussian passes (σ ≈ 1.5). Running the blur multiple times spreads the glow further without a wider kernel.
+
+3. **Composite** — The blurred bloom map is additively mixed onto the HDR image at a configurable intensity, before tone mapping is applied. Compositing in HDR space means the glow from an overexposed surface stays bright through the tone mapper rather than getting clipped to a flat white halo.
+
+One complication arises with the GPU path tracers: the accumulation buffer stores a running sum across N samples, not a normalised average. The threshold shader divides by the sample count before extracting bright pixels — without this, the bloom contribution would grow linearly with N and blow the image out to white after enough samples.
+
+<div style="margin:1.5rem auto; width:100%">
+  <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
+    <img class="ic-right" src="/images/Engine_Compare_Bloom.png" alt="Bloom on">
+    <img class="ic-left" src="/images/Engine_Compare_NoBloom.png" alt="Bloom off">
+    <div class="ic-line"></div>
+    <span class="ic-label ic-label-left">Bloom off</span>
+    <span class="ic-label ic-label-right">Bloom on</span>
   </div>
   <div style="text-align:center; color:#888; font-size:0.85em; margin-top:0.5rem">
 
