@@ -142,7 +142,7 @@ The foundation is [GLFW](https://www.glfw.org/) for window creation and input ha
       Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
 </div>
 
-The editor is built around five panels. The **Scene Hierarchy** shows all loaded objects in a tree; clicking one selects it and syncs the viewport highlight. The **Inspector** exposes the selected object's material and rendering properties — roughness, metallic, emissive intensity, shadow bias — and lets you edit them live. The **Console** captures all engine output in real time, the **Viewport** is the main rendering view, and **Performance Metrics** track frame time, FPS and draw call counts.
+The editor is built around five panels. The **Scene Hierarchy** shows all loaded objects in a tree; clicking one selects it and syncs the viewport highlight. The **Inspector** exposes the selected object's material and rendering properties — base color tint, roughness, metallic, emissive strength, IOR — and lets you edit them live across all render backends. Each texture slot shows an inline thumbnail; hovering it pops up a larger preview so you can identify maps at a glance without leaving the inspector. The **Console** captures all engine output in real time, the **Viewport** is the main rendering view, and **Performance Metrics** track frame time, FPS and draw call counts.
 
 Navigating the scene feels like Blender: scroll to zoom, middle-mouse to pan, click-drag to orbit around a focus point. Meshes can be loaded and deleted at runtime via file dialog using [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader), the hierarchy updates automatically to reflect changes.
 
@@ -437,6 +437,8 @@ One complication arises with the GPU path tracers: the accumulation buffer store
 The engine supports a full **PBR material pipeline** built on the **Cook-Torrance [microfacet model](https://pbr-book.org/3ed-2018/Reflection_Models/Microfacet_Models)** with a **GGX normal distribution**. Three material types are supported — **Microfacet** for the general case, **Mirror** for perfect specular surfaces, and **Dielectric** for glass and other transmissive materials. All are loaded automatically from OBJ/MTL files and can be overridden per-object in the Inspector.
 
 Textures can drive any surface property spatially: **base color**, **normal**, **emissive**, **roughness** and **metallic** maps are all supported, loaded from the standard MTL fields. When no texture is present, the scalar material value is used as fallback.
+
+Every material property is **live-editable in the Inspector** without reloading the scene. A **base color tint** multiplies on top of the vertex or texture color — useful for quick color variations. An **emissive strength** multiplier scales the emissive contribution independently of the map, so you can dial a glowing surface from off to extremely bright at any time. **Alpha clip** can be toggled per-submesh. For Dielectric materials, an IOR preset popup offers one-click values for common materials (water, glass, crystal, diamond). Each texture slot shows a small inline thumbnail in the inspector, and hovering over one shows a proportionally-scaled preview — making it easy to verify which map is loaded without opening a file browser.
 
 <details>
 <summary>Material Types (from OBJ/MTL illum)</summary>
