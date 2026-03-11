@@ -39,7 +39,7 @@
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Scene hierarchy panel</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Inspector panel</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Logging console</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Performance metrics</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Performance metrics (FPS, samples/sec for all path tracing modes)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Object selection (hierarchy &amp; viewport click)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Outline rendering for selected objects</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Interactive camera (zoom, pan, orbit)</li>
@@ -89,6 +89,7 @@
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> GPU Progressive Path Tracing
 <ul class="contains-task-list">
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> OpenGL (compute shader)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Vulkan (compute shader, software BVH)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Vulkan (VK_KHR_ray_tracing_pipeline, hardware RT cores)</li>
 </ul>
 </li>
@@ -159,7 +160,7 @@
       <img class="lb" src="/images/Engine_002.png" alt="Full editor layout" style="max-width:100%">
 <p>Scene: Nvidia <a href="https://developer.nvidia.com/orca/amazon-lumberyard-bistro">Amazon Lumberyard Bistro</a> (CC-BY 4.0)</p>
 </div>
-<p>The editor is built around five panels. The <strong>Scene Hierarchy</strong> shows all loaded objects in a tree; clicking one selects it and syncs the viewport highlight. The <strong>Inspector</strong> exposes the selected object's material and rendering properties — roughness, metallic, emissive intensity, shadow bias — and lets you edit them live. The <strong>Console</strong> captures all engine output in real time, the <strong>Viewport</strong> is the main rendering view, and <strong>Performance Metrics</strong> track frame time, FPS and draw call counts.</p>
+<p>The editor is built around five panels. The <strong>Scene Hierarchy</strong> shows all loaded objects in a tree; clicking one selects it and syncs the viewport highlight. The <strong>Inspector</strong> exposes the selected object's material and rendering properties — base color tint, roughness, metallic, emissive strength, IOR — and lets you edit them live across all render backends. Each texture slot shows an inline thumbnail; hovering it pops up a larger preview so you can identify maps at a glance without leaving the inspector. The <strong>Console</strong> captures all engine output in real time, the <strong>Viewport</strong> is the main rendering view, and <strong>Performance Metrics</strong> track frame time, FPS and draw call counts.</p>
 <p>Navigating the scene feels like Blender: scroll to zoom, middle-mouse to pan, click-drag to orbit around a focus point. Meshes can be loaded and deleted at runtime via file dialog using <a href="https://github.com/tinyobjloader/tinyobjloader">tinyobjloader</a>, the hierarchy updates automatically to reflect changes.</p>
 <p>Clicking an object in the viewport highlights it with a <strong>screen-space outline</strong>: the selected geometry is rendered as a solid silhouette into an offscreen mask, which the tone-map pass then dilates with a 5×5 kernel and composites as an orange ring over the final image.</p>
 <div style="text-align:center; color:#888; font-size:0.85em;">
@@ -386,11 +387,12 @@
 <summary>Depth of Field</summary>
 <p>Depth of field uses a <strong>thin-lens camera model</strong>. Instead of firing all rays from a single point (pinhole), each primary ray originates from a random position on a disk of configurable radius (the aperture), aimed at a focal plane at a configurable distance. Objects at the focal plane are perfectly sharp; objects nearer or farther accumulate a circle of confusion that grows with distance. Concentric disk mapping keeps the sample distribution uniform across the lens. Setting aperture to zero falls back to exact pinhole behaviour with no overhead. Both CPU and GPU path tracers share the same model.</p>
 </details>
-<p>The algorithm is the same across all three backends — the difference is where it runs:</p>
+<p>The algorithm is the same across all four backends — the difference is where it runs:</p>
 <ul>
 <li><strong>CPU</strong> — The original implementation, running on the host. Slow, but every ray can be stepped through in a debugger, which was invaluable when building out the lighting and sampling logic.</li>
-<li><strong>GPU (OpenGL)</strong> — The same algorithm ported to a <strong>compute shader</strong>. Runs massively parallel with a significant speedup, and supports <strong>live shader reload</strong> (F5) for fast iteration.</li>
-<li><strong>GPU (Vulkan)</strong> — Uses <strong>hardware ray tracing</strong> (<code>VK_KHR_ray_tracing_pipeline</code>) with dedicated RT cores for BVH traversal and ray-triangle intersection. The algorithm spans five shader stages (rgen, rmiss, shadow rmiss, rchit, rahit) with an iterative loop in the ray generation shader to stay within a recursion depth of one.</li>
+<li><strong>GPU (OpenGL compute)</strong> — The same algorithm ported to a <strong>GLSL compute shader</strong>. Runs massively parallel with a significant speedup, and supports <strong>live shader reload</strong> (F5) for fast iteration.</li>
+<li><strong>GPU (Vulkan compute)</strong> — Algorithmically identical to the OpenGL compute path, ported to Vulkan. Uses a CPU-built BVH uploaded as an SSBO and a single <code>pathtracer.comp</code> compute shader dispatched in 8×8 workgroups. Works on any Vulkan device regardless of hardware RT support.</li>
+<li><strong>GPU (Vulkan HW RT)</strong> — Uses <strong>hardware ray tracing</strong> (<code>VK_KHR_ray_tracing_pipeline</code>) with dedicated RT cores for BVH traversal and ray-triangle intersection. The algorithm spans five shader stages (rgen, rmiss, shadow rmiss, rchit, rahit) with an iterative loop in the ray generation shader to stay within a recursion depth of one.</li>
 </ul>
 <div style="text-align:center; color:#888; font-size:0.85em;">
       <img class="lb" src="/images/Engine_010.png" alt="Full editor layout" style="max-width:100%">
@@ -407,7 +409,7 @@
 <h2>Denoising</h2>
 <p>Even a well-optimised path tracer needs many samples before the image looks clean — at 1 SPP the noise is severe, and reaching a perceptually converged result can take hundreds of passes. Rather than waiting, the engine integrates <a href="https://www.openimagedenoise.org/">Intel Open Image Denoise (OIDN)</a> as a one-click post-process that runs on the CPU and produces a clean result in a fraction of a second.</p>
 <p>The integration works entirely on the CPU side and is backend-agnostic. A &quot;Denoise&quot; button appears in the Settings panel whenever samples have been accumulated; pressing it reads back the current accumulation buffer as <strong>linear HDR float RGB</strong> — before any tone mapping — feeds it into OIDN's RT filter, then applies the same exposure, ACES tone mapping and gamma correction as the live display. The result replaces the viewport image and accumulation is frozen. Moving the camera or changing any scene parameter immediately clears the denoised result and restarts accumulation from zero.</p>
-<p>For the Vulkan GPU path tracer the readback copies the RGBA32F accumulation image from device memory to a CPU-side staging buffer via an immediate-submit command, divides out the per-pixel sample counter stored in the alpha channel, and passes the resulting linear HDR data directly to OIDN. For the CPU path tracer the accumulation buffer is already on the host, so no copy is needed.</p>
+<p>For both Vulkan GPU path tracers (HW RT and compute) the readback copies the RGBA32F accumulation image from device memory to a CPU-side staging buffer via an immediate-submit command, divides out the per-pixel sample counter stored in the alpha channel, and passes the resulting linear HDR data directly to OIDN. For the CPU path tracer the accumulation buffer is already on the host, so no copy is needed.</p>
 <div style="margin:1.5rem auto; width:100%">
   <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
     <img class="ic-right" src="/images/Engine_Bistro_16_SPP_denoised.png" alt="OIDN denoised">
@@ -448,6 +450,7 @@
 <h2>Materials and Textures</h2>
 <p>The engine supports a full <strong>PBR material pipeline</strong> built on the <strong>Cook-Torrance <a href="https://pbr-book.org/3ed-2018/Reflection_Models/Microfacet_Models">microfacet model</a></strong> with a <strong>GGX normal distribution</strong>. Three material types are supported — <strong>Microfacet</strong> for the general case, <strong>Mirror</strong> for perfect specular surfaces, and <strong>Dielectric</strong> for glass and other transmissive materials. All are loaded automatically from OBJ/MTL files and can be overridden per-object in the Inspector.</p>
 <p>Textures can drive any surface property spatially: <strong>base color</strong>, <strong>normal</strong>, <strong>emissive</strong>, <strong>roughness</strong> and <strong>metallic</strong> maps are all supported, loaded from the standard MTL fields. When no texture is present, the scalar material value is used as fallback.</p>
+<p>Every material property is <strong>live-editable in the Inspector</strong> without reloading the scene. A <strong>base color tint</strong> multiplies on top of the vertex or texture color — useful for quick color variations. An <strong>emissive strength</strong> multiplier scales the emissive contribution independently of the map, so you can dial a glowing surface from off to extremely bright at any time. <strong>Alpha clip</strong> can be toggled per-submesh. For Dielectric materials, an IOR preset popup offers one-click values for common materials (water, glass, crystal, diamond). Each texture slot shows a small inline thumbnail in the inspector, and hovering over one shows a proportionally-scaled preview — making it easy to verify which map is loaded without opening a file browser.</p>
 <details>
 <summary>Material Types (from OBJ/MTL illum)</summary>
 <p>The engine maps OBJ/MTL fields to three internal material types. They can also be set manually in the Inspector.</p>
