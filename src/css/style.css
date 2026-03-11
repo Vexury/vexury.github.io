@@ -262,6 +262,15 @@ footer {
   flex-direction: column;
 }
 
+.project-card.featured {
+  grid-column: span 2;
+}
+
+.project-card.featured .slideshow {
+  height: auto;
+  aspect-ratio: 18 / 9;
+}
+
 .project-card h3 {
   margin-top: 0;
   margin-bottom: 0.75rem;
@@ -394,6 +403,10 @@ footer {
 @media (max-width: 768px) {
   .project-grid {
     grid-template-columns: 1fr;
+  }
+
+  .project-card.featured {
+    grid-column: span 1;
   }
 }
 

@@ -1,6 +1,7 @@
 ---
 permalink: false
 tags: projects
+featured: true
 title: VexEngine - Custom Rendering Engine
 emoji: "\u2699\uFE0F"
 images:
