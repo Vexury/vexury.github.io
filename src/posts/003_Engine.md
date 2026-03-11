@@ -33,7 +33,7 @@ Here is an overview of what is done and what I am planning to work on next:
 - [x] Scene hierarchy panel
 - [x] Inspector panel
 - [x] Logging console
-- [x] Performance metrics
+- [x] Performance metrics (FPS, samples/sec for all path tracing modes)
 - [x] Object selection (hierarchy & viewport click)
 - [x] Outline rendering for selected objects
 - [x] Interactive camera (zoom, pan, orbit)
@@ -75,6 +75,7 @@ Here is an overview of what is done and what I am planning to work on next:
 - [x] CPU Progressive Path Tracing
 - [x] GPU Progressive Path Tracing
     - [x] OpenGL (compute shader)
+    - [x] Vulkan (compute shader, software BVH)
     - [x] Vulkan (VK_KHR_ray_tracing_pipeline, hardware RT cores)
 - [x] Path Tracing Features
     - [x] Next Event Estimation (NEE)
@@ -358,11 +359,12 @@ Depth of field uses a **thin-lens camera model**. Instead of firing all rays fro
 
 </details>
 
-The algorithm is the same across all three backends — the difference is where it runs:
+The algorithm is the same across all four backends — the difference is where it runs:
 
 - **CPU** — The original implementation, running on the host. Slow, but every ray can be stepped through in a debugger, which was invaluable when building out the lighting and sampling logic.
-- **GPU (OpenGL)** — The same algorithm ported to a **compute shader**. Runs massively parallel with a significant speedup, and supports **live shader reload** (F5) for fast iteration.
-- **GPU (Vulkan)** — Uses **hardware ray tracing** (`VK_KHR_ray_tracing_pipeline`) with dedicated RT cores for BVH traversal and ray-triangle intersection. The algorithm spans five shader stages (rgen, rmiss, shadow rmiss, rchit, rahit) with an iterative loop in the ray generation shader to stay within a recursion depth of one.
+- **GPU (OpenGL compute)** — The same algorithm ported to a **GLSL compute shader**. Runs massively parallel with a significant speedup, and supports **live shader reload** (F5) for fast iteration.
+- **GPU (Vulkan compute)** — Algorithmically identical to the OpenGL compute path, ported to Vulkan. Uses a CPU-built BVH uploaded as an SSBO and a single `pathtracer.comp` compute shader dispatched in 8×8 workgroups. Works on any Vulkan device regardless of hardware RT support.
+- **GPU (Vulkan HW RT)** — Uses **hardware ray tracing** (`VK_KHR_ray_tracing_pipeline`) with dedicated RT cores for BVH traversal and ray-triangle intersection. The algorithm spans five shader stages (rgen, rmiss, shadow rmiss, rchit, rahit) with an iterative loop in the ray generation shader to stay within a recursion depth of one.
 
 <div style="text-align:center; color:#888; font-size:0.85em;">
       <img class="lb" src="/images/Engine_010.png" alt="Full editor layout" style="max-width:100%">
@@ -390,7 +392,7 @@ Even a well-optimised path tracer needs many samples before the image looks clea
 
 The integration works entirely on the CPU side and is backend-agnostic. A "Denoise" button appears in the Settings panel whenever samples have been accumulated; pressing it reads back the current accumulation buffer as **linear HDR float RGB** — before any tone mapping — feeds it into OIDN's RT filter, then applies the same exposure, ACES tone mapping and gamma correction as the live display. The result replaces the viewport image and accumulation is frozen. Moving the camera or changing any scene parameter immediately clears the denoised result and restarts accumulation from zero.
 
-For the Vulkan GPU path tracer the readback copies the RGBA32F accumulation image from device memory to a CPU-side staging buffer via an immediate-submit command, divides out the per-pixel sample counter stored in the alpha channel, and passes the resulting linear HDR data directly to OIDN. For the CPU path tracer the accumulation buffer is already on the host, so no copy is needed.
+For both Vulkan GPU path tracers (HW RT and compute) the readback copies the RGBA32F accumulation image from device memory to a CPU-side staging buffer via an immediate-submit command, divides out the per-pixel sample counter stored in the alpha channel, and passes the resulting linear HDR data directly to OIDN. For the CPU path tracer the accumulation buffer is already on the host, so no copy is needed.
 
 <div style="margin:1.5rem auto; width:100%">
   <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
