@@ -30,7 +30,7 @@ Here is an overview of what is done and what I am planning to work on next:
 
 - [x] Window creation with GLFW
 - [x] ImGui with docking for editor layout
-- [x] Scene hierarchy panel
+- [x] Scene hierarchy panel (n-level tree, drag-and-drop reparenting)
 - [x] Inspector panel
 - [x] Logging console
 - [x] Performance metrics (FPS, samples/sec for all path tracing modes)
@@ -143,7 +143,7 @@ The foundation is [GLFW](https://www.glfw.org/) for window creation and input ha
       Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
 </div>
 
-The editor is built around five panels. The **Scene Hierarchy** shows all loaded objects in a tree; clicking one selects it and syncs the viewport highlight. The **Inspector** exposes the selected object's material and rendering properties — base color tint, roughness, metallic, emissive strength, IOR — and lets you edit them live across all render backends. Each texture slot shows an inline thumbnail; hovering it pops up a larger preview so you can identify maps at a glance without leaving the inspector. The **Console** captures all engine output in real time, the **Viewport** is the main rendering view, and **Performance Metrics** track frame time, FPS and draw call counts.
+The editor is built around five panels. The **Scene Hierarchy** is a free n-level tree: every node can be parented under any other by drag-and-drop, and the hierarchy updates immediately. OBJ files with multiple named objects are imported as a root node with one child per object name. Clicking a node selects it and syncs the viewport highlight. The **Inspector** exposes the selected node's local transform and material properties — base color tint, roughness, metallic, emissive strength, IOR — and lets you edit them live across all render backends. Each texture slot shows an inline thumbnail; hovering it pops up a larger preview so you can identify maps at a glance without leaving the inspector. The **Console** captures all engine output in real time, the **Viewport** is the main rendering view, and **Performance Metrics** track frame time, FPS and draw call counts.
 
 Navigating the scene feels like Blender: scroll to zoom, middle-mouse to pan, click-drag to orbit around a focus point. Meshes can be loaded and deleted at runtime via file dialog using [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader), the hierarchy updates automatically to reflect changes.
 
@@ -197,7 +197,7 @@ Selected objects can also be transformed directly in the viewport: **W** for tra
 <details>
 <summary>Gizmo Implementation Details</summary>
 
-All three modes operate in world space and write back to local space via `inverse(groupMatrix) × newWorldMatrix` for submesh cases.
+All three modes operate in world space. The gizmo target is the selected scene node; the world matrix is resolved by walking the parent chain (`getWorldMatrix` = recursive parent × local). Write-back converts the new world matrix to local space via `inverse(parentWorld) × newWorld`.
 
 **Translate** — A ray is cast from the camera through the cursor and projected onto the axis line. The offset accumulated is `newWorld[3] += axis × worldDist`, applied directly to the translation column. Using `glm::translate` instead would apply the offset in local space and produce wrong results when the object is rotated.
 
@@ -205,7 +205,7 @@ All three modes operate in world space and write back to local space via `invers
 
 **Scale** — Pivot preservation is handled analytically: after scaling the matrix, the translation column is corrected with `newWorld[3] = pivot − newWorld × localCenter`, where `localCenter` is the AABB center in local space frozen at drag start. This keeps the pivot stationary while the mesh grows. The center knob performs uniform scaling and is tested first in the hit list so it always takes priority over the axis handles.
 
-**Undo/redo** — Every drag end emits a `CmdSetTransform` command pushed onto a 50-deep deque-based command stack. The command stores the before/after world matrices and converts to local space on apply via `applyTransformMat`. Ctrl+Z/Y walk the stack; Ctrl+D emits a `CmdDuplicate`.
+**Undo/redo** — Every drag end emits a `CmdSetTransform` command pushed onto a 50-deep deque-based command stack. The command stores the before/after **local** matrices directly (no conversion needed at apply time). Hierarchy drag-and-drop emits a `CmdReparent` command that adjusts `parentIndex`, `childIndices`, and the local matrix to preserve world position. Ctrl+Z/Y walk the stack; Ctrl+D emits a `CmdAddNode` to duplicate the selected node as a sibling.
 
 </details>
 
