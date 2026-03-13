@@ -147,6 +147,34 @@ The editor is built around five panels. The **Scene Hierarchy** is a free n-leve
 
 Navigating the scene feels like Blender: scroll to zoom, middle-mouse to pan, click-drag to orbit around a focus point. Meshes can be loaded and deleted at runtime via file dialog using [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader), the hierarchy updates automatically to reflect changes.
 
+<details>
+<summary>OBJ Import Performance</summary>
+
+Loading large scenes exposed three layered bottlenecks in the import pipeline, each fixed independently.
+
+**Double texture decode** — `Texture2D::createFromFile` decoded each texture from disk for GPU upload, then `rebuildRaytraceGeometry` decoded the same files again from disk to build the CPU-side ray tracing data structures. For Bistro (274 unique textures) this meant 548 `stbi_load` calls. The fix: decode once with the rows unflipped, cache the raw pixels in a `Scene::importedTexPixels` map, flip the rows in-place for GPU upload, then let the ray tracing rebuild consume the cached pixels directly and clear the map when done.
+
+**Ray tracing SSBO size** — All texture pixels are packed into a flat GPU buffer for the path tracer's texture array. At full resolution, Bistro's 274 textures produced a 3536 MB SSBO. Textures in the ray tracing SSBO are now capped at 1024 px per axis (nearest-neighbour downsample) before packing, reducing it to 884 MB with no visible quality difference at path-traced sample counts.
+
+**Sequential texture decode** — After the above two fixes, the remaining bottleneck was the GPU upload phase: 274 textures decoded sequentially on the main thread before being uploaded. Since `stbi_load` is thread-safe for concurrent calls, all unique texture paths are now decoded in parallel across N worker threads (N = hardware concurrency) before the GPU upload begins. Each thread takes work from a shared atomic index, writes into a pre-allocated slot, and the main thread moves all results into `importedTexPixels` after joining — no locking required.
+
+Measured on the Bistro exterior (1591 submeshes, 2.8M triangles, 274 textures) after each fix:
+
+| State | GPU upload | Total import |
+|---|---|---|
+| After fixes 1 & 2 | 12 106 ms | 18.6 s |
+| + parallel decode (28 threads) | 668 ms decode + 1 732 ms upload | **8.4 s** |
+
+The remaining ~5 s are tinyobjloader parsing (2.3 s) and SSBO/BVH packing (3.2 s), both sequential by nature.
+
+**Render-mode switch** — Switching to a path tracing mode after loading triggers a geometry rebuild. The pixel cache is cleared after each rebuild to avoid holding ~3.5 GB of raw texture data permanently, so rebuilds previously re-read all 274 textures from disk (9.7 s). A `prefetchTextures()` call at the start of each rebuild re-fills the cache in parallel if empty, bringing the stall from 10.5 s to ~2.5–5 s depending on mode.
+
+**Double BVH build** — The Compute and CPU path tracing modes built two identical BVHs: one inside `CPURaytracer::setGeometry` and a second `m_rtBVH` for triangle reordering in the GPU compute SSBO. Since both traverse `scene.nodes` in identical order, the resulting permutation is the same. `getBVH()` is now exposed on `CPURaytracer`, and `m_rtBVH` is assigned from it directly — saving ~2.2 s per Compute RT rebuild. CPU Raytrace and Compute Raytrace mode switches now take ~5 s; HW RT takes ~2.5 s.
+
+**Redundant RT→RT rebuilds** — Every render-mode switch previously forced a full geometry rebuild, even when switching between two RT modes (e.g. CPU → Compute). The rebuild is only necessary when leaving rasterizer mode (gizmo edits are deferred there). RT→RT switches now skip the rebuild entirely; the existing `m_cpuBVHDirty` flag still triggers a rebuild when a mode needs the CPU BVH for the first time (e.g. HW RT → CPU RT). Switching between CPU RT and Compute RT is now instant.
+
+</details>
+
 Clicking an object in the viewport highlights it with a **screen-space outline**: the selected geometry is rendered as a solid silhouette into an offscreen mask, which the tone-map pass then dilates with a 5×5 kernel and composites as an orange ring over the final image.
 
 <div style="text-align:center; color:#888; font-size:0.85em;">

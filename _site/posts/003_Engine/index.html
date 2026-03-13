@@ -36,7 +36,7 @@
 <ul class="contains-task-list">
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Window creation with GLFW</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> ImGui with docking for editor layout</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Scene hierarchy panel</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Scene hierarchy panel (n-level tree, drag-and-drop reparenting)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Inspector panel</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Logging console</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Performance metrics (FPS, samples/sec for all path tracing modes)</li>
@@ -160,8 +160,41 @@
       <img class="lb" src="/images/Engine_002.png" alt="Full editor layout" style="max-width:100%">
 <p>Scene: Nvidia <a href="https://developer.nvidia.com/orca/amazon-lumberyard-bistro">Amazon Lumberyard Bistro</a> (CC-BY 4.0)</p>
 </div>
-<p>The editor is built around five panels. The <strong>Scene Hierarchy</strong> shows all loaded objects in a tree; clicking one selects it and syncs the viewport highlight. The <strong>Inspector</strong> exposes the selected object's material and rendering properties — base color tint, roughness, metallic, emissive strength, IOR — and lets you edit them live across all render backends. Each texture slot shows an inline thumbnail; hovering it pops up a larger preview so you can identify maps at a glance without leaving the inspector. The <strong>Console</strong> captures all engine output in real time, the <strong>Viewport</strong> is the main rendering view, and <strong>Performance Metrics</strong> track frame time, FPS and draw call counts.</p>
+<p>The editor is built around five panels. The <strong>Scene Hierarchy</strong> is a free n-level tree: every node can be parented under any other by drag-and-drop, and the hierarchy updates immediately. OBJ files with multiple named objects are imported as a root node with one child per object name. Clicking a node selects it and syncs the viewport highlight. The <strong>Inspector</strong> exposes the selected node's local transform and material properties — base color tint, roughness, metallic, emissive strength, IOR — and lets you edit them live across all render backends. Each texture slot shows an inline thumbnail; hovering it pops up a larger preview so you can identify maps at a glance without leaving the inspector. The <strong>Console</strong> captures all engine output in real time, the <strong>Viewport</strong> is the main rendering view, and <strong>Performance Metrics</strong> track frame time, FPS and draw call counts.</p>
 <p>Navigating the scene feels like Blender: scroll to zoom, middle-mouse to pan, click-drag to orbit around a focus point. Meshes can be loaded and deleted at runtime via file dialog using <a href="https://github.com/tinyobjloader/tinyobjloader">tinyobjloader</a>, the hierarchy updates automatically to reflect changes.</p>
+<details>
+<summary>OBJ Import Performance</summary>
+<p>Loading large scenes exposed three layered bottlenecks in the import pipeline, each fixed independently.</p>
+<p><strong>Double texture decode</strong> — <code>Texture2D::createFromFile</code> decoded each texture from disk for GPU upload, then <code>rebuildRaytraceGeometry</code> decoded the same files again from disk to build the CPU-side ray tracing data structures. For Bistro (274 unique textures) this meant 548 <code>stbi_load</code> calls. The fix: decode once with the rows unflipped, cache the raw pixels in a <code>Scene::importedTexPixels</code> map, flip the rows in-place for GPU upload, then let the ray tracing rebuild consume the cached pixels directly and clear the map when done.</p>
+<p><strong>Ray tracing SSBO size</strong> — All texture pixels are packed into a flat GPU buffer for the path tracer's texture array. At full resolution, Bistro's 274 textures produced a 3536 MB SSBO. Textures in the ray tracing SSBO are now capped at 1024 px per axis (nearest-neighbour downsample) before packing, reducing it to 884 MB with no visible quality difference at path-traced sample counts.</p>
+<p><strong>Sequential texture decode</strong> — After the above two fixes, the remaining bottleneck was the GPU upload phase: 274 textures decoded sequentially on the main thread before being uploaded. Since <code>stbi_load</code> is thread-safe for concurrent calls, all unique texture paths are now decoded in parallel across N worker threads (N = hardware concurrency) before the GPU upload begins. Each thread takes work from a shared atomic index, writes into a pre-allocated slot, and the main thread moves all results into <code>importedTexPixels</code> after joining — no locking required.</p>
+<p>Measured on the Bistro exterior (1591 submeshes, 2.8M triangles, 274 textures) after each fix:</p>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>GPU upload</th>
+<th>Total import</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>After fixes 1 &amp; 2</td>
+<td>12 106 ms</td>
+<td>18.6 s</td>
+</tr>
+<tr>
+<td>+ parallel decode (28 threads)</td>
+<td>668 ms decode + 1 732 ms upload</td>
+<td><strong>8.4 s</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The remaining ~5 s are tinyobjloader parsing (2.3 s) and SSBO/BVH packing (3.2 s), both sequential by nature.</p>
+<p><strong>Render-mode switch</strong> — Switching to a path tracing mode after loading triggers a geometry rebuild. The pixel cache is cleared after each rebuild to avoid holding ~3.5 GB of raw texture data permanently, so rebuilds previously re-read all 274 textures from disk (9.7 s). A <code>prefetchTextures()</code> call at the start of each rebuild re-fills the cache in parallel if empty, bringing the stall from 10.5 s to ~2.5–5 s depending on mode.</p>
+<p><strong>Double BVH build</strong> — The Compute and CPU path tracing modes built two identical BVHs: one inside <code>CPURaytracer::setGeometry</code> and a second <code>m_rtBVH</code> for triangle reordering in the GPU compute SSBO. Since both traverse <code>scene.nodes</code> in identical order, the resulting permutation is the same. <code>getBVH()</code> is now exposed on <code>CPURaytracer</code>, and <code>m_rtBVH</code> is assigned from it directly — saving ~2.2 s per Compute RT rebuild. CPU Raytrace and Compute Raytrace mode switches now take ~5 s; HW RT takes ~2.5 s.</p>
+<p><strong>Redundant RT→RT rebuilds</strong> — Every render-mode switch previously forced a full geometry rebuild, even when switching between two RT modes (e.g. CPU → Compute). The rebuild is only necessary when leaving rasterizer mode (gizmo edits are deferred there). RT→RT switches now skip the rebuild entirely; the existing <code>m_cpuBVHDirty</code> flag still triggers a rebuild when a mode needs the CPU BVH for the first time (e.g. HW RT → CPU RT). Switching between CPU RT and Compute RT is now instant.</p>
+</details>
 <p>Clicking an object in the viewport highlights it with a <strong>screen-space outline</strong>: the selected geometry is rendered as a solid silhouette into an offscreen mask, which the tone-map pass then dilates with a 5×5 kernel and composites as an orange ring over the final image.</p>
 <div style="text-align:center; color:#888; font-size:0.85em;">
       <img class="lb" src="/images/Engine_Selection.png" alt="Full editor layout" style="max-width:100%">
@@ -266,11 +299,11 @@
 </details>
 <details>
 <summary>Gizmo Implementation Details</summary>
-<p>All three modes operate in world space and write back to local space via <code>inverse(groupMatrix) × newWorldMatrix</code> for submesh cases.</p>
+<p>All three modes operate in world space. The gizmo target is the selected scene node; the world matrix is resolved by walking the parent chain (<code>getWorldMatrix</code> = recursive parent × local). Write-back converts the new world matrix to local space via <code>inverse(parentWorld) × newWorld</code>.</p>
 <p><strong>Translate</strong> — A ray is cast from the camera through the cursor and projected onto the axis line. The offset accumulated is <code>newWorld[3] += axis × worldDist</code>, applied directly to the translation column. Using <code>glm::translate</code> instead would apply the offset in local space and produce wrong results when the object is rotated.</p>
 <p><strong>Rotate</strong> — A ray-plane intersection gives the cursor's hit point on the plane perpendicular to the rotation axis. An angle is read as <code>atan2(cross · axis, dot)</code> relative to a reference vector frozen at drag start, so the handle tracks the cursor continuously rather than snapping to an absolute angle.</p>
 <p><strong>Scale</strong> — Pivot preservation is handled analytically: after scaling the matrix, the translation column is corrected with <code>newWorld[3] = pivot − newWorld × localCenter</code>, where <code>localCenter</code> is the AABB center in local space frozen at drag start. This keeps the pivot stationary while the mesh grows. The center knob performs uniform scaling and is tested first in the hit list so it always takes priority over the axis handles.</p>
-<p><strong>Undo/redo</strong> — Every drag end emits a <code>CmdSetTransform</code> command pushed onto a 50-deep deque-based command stack. The command stores the before/after world matrices and converts to local space on apply via <code>applyTransformMat</code>. Ctrl+Z/Y walk the stack; Ctrl+D emits a <code>CmdDuplicate</code>.</p>
+<p><strong>Undo/redo</strong> — Every drag end emits a <code>CmdSetTransform</code> command pushed onto a 50-deep deque-based command stack. The command stores the before/after <strong>local</strong> matrices directly (no conversion needed at apply time). Hierarchy drag-and-drop emits a <code>CmdReparent</code> command that adjusts <code>parentIndex</code>, <code>childIndices</code>, and the local matrix to preserve world position. Ctrl+Z/Y walk the stack; Ctrl+D emits a <code>CmdAddNode</code> to duplicate the selected node as a sibling.</p>
 </details>
 <h2>Dual Backend: OpenGL &amp; Vulkan</h2>
 <p>One of the more unusual design decisions is supporting two graphics APIs, selected at compile time via a CMake flag. All GPU concepts — shaders, framebuffers, meshes, textures — sit behind a common interface; the application layer never calls any GL or VK functions directly. This forced me to think carefully about where abstraction boundaries belong, and made every feature run twice — a surprisingly effective way to catch design mistakes early.</p>
