@@ -48,10 +48,10 @@ Here is an overview of what is done and what I am planning to work on next:
 <summary>Scene & Assets</summary>
 
 - [x] OBJ mesh loading & deletion
+- [x] glTF loading (.gltf + .bin, full PBR/ARM texture support, node hierarchy)
 - [x] Runtime object transforms via inspector
 - [x] Environment map loading (HDR)
 - [ ] FBX loading
-- [ ] glTF loading
 - [ ] Scene serialization (save/load scenes to file)
 
 </details>
@@ -112,8 +112,10 @@ Here is an overview of what is done and what I am planning to work on next:
     - [x] Base Color / Albedo map
     - [x] Normal map
     - [x] Emissive map
-    - [x] Roughness map
-    - [x] Metallic map
+    - [x] Roughness map (G channel of ARM, or separate greyscale)
+    - [x] Metallic map (B channel of ARM, or separate greyscale)
+    - [x] AO map (R channel of ARM, or separate greyscale)
+    - [x] ARM-packed texture (single texture: R=AO, G=Roughness, B=Metallic)
 - [x] Alpha clip (cutout transparency from RGBA diffuse texture)
 - [x] Auto-smooth normals (angle-based)
 
@@ -145,7 +147,7 @@ The foundation is [GLFW](https://www.glfw.org/) for window creation and input ha
 
 The editor is built around five panels. The **Scene Hierarchy** is a free n-level tree: every node can be parented under any other by drag-and-drop, and the hierarchy updates immediately. OBJ files with multiple named objects are imported as a root node with one child per object name. Clicking a node selects it and syncs the viewport highlight. The **Inspector** exposes the selected node's local transform and material properties — base color tint, roughness, metallic, emissive strength, IOR — and lets you edit them live across all render backends. Each texture slot shows an inline thumbnail; hovering it pops up a larger preview so you can identify maps at a glance without leaving the inspector. The **Console** captures all engine output in real time, the **Viewport** is the main rendering view, and **Performance Metrics** track frame time, FPS and draw call counts.
 
-Navigating the scene feels like Blender: scroll to zoom, middle-mouse to pan, click-drag to orbit around a focus point. Meshes can be loaded and deleted at runtime via file dialog using [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader), the hierarchy updates automatically to reflect changes.
+Navigating the scene feels like Blender: scroll to zoom, middle-mouse to pan, click-drag to orbit around a focus point. Meshes can be loaded at runtime via file dialog — OBJ via [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader), and glTF via [tinygltf](https://github.com/syoyo/tinygltf). glTF imports preserve the full node hierarchy from the file, creating one SceneNode per GLTF node under a named root. Materials are imported with full PBR data: ARM-packed `metallicRoughnessTexture` maps are automatically split across the AO (R), Roughness (G), and Metallic (B) slots with no redundant GPU copies.
 
 <details>
 <summary>OBJ Import Performance</summary>
@@ -296,6 +298,7 @@ On top of the standard shaded view, several **debug visualization modes** can be
 - **Albedo / Emission / Material ID** — Passes that isolate specific shading components for quick inspection.
 - **UVs** — Texture coordinates as colors, good for spotting seams and mapping problems.
 - **Depth** — Grayscale depth buffer, helpful for verifying near/far plane settings.
+- **Roughness / Metallic / AO** — PBR channel isolation; reads the correct channel from ARM-packed textures (G/B/R respectively) or the scalar fallback.
 
 ## Shadow Mapping
 
@@ -466,7 +469,7 @@ One complication arises with the GPU path tracers: the accumulation buffer store
 
 The engine supports a full **PBR material pipeline** built on the **Cook-Torrance [microfacet model](https://pbr-book.org/3ed-2018/Reflection_Models/Microfacet_Models)** with a **GGX normal distribution**. Three material types are supported — **Microfacet** for the general case, **Mirror** for perfect specular surfaces, and **Dielectric** for glass and other transmissive materials. All are loaded automatically from OBJ/MTL files and can be overridden per-object in the Inspector.
 
-Textures can drive any surface property spatially: **base color**, **normal**, **emissive**, **roughness** and **metallic** maps are all supported, loaded from the standard MTL fields. When no texture is present, the scalar material value is used as fallback.
+Textures can drive any surface property spatially: **base color**, **normal**, **emissive**, **roughness**, **metallic**, and **ambient occlusion** maps are all supported. OBJ/MTL files use separate per-channel greyscale maps; glTF files typically pack roughness, metallic, and AO into a single **ARM texture** (R=AO, G=Roughness, B=Metallic). The engine handles both formats uniformly — ARM maps are deduped at the `shared_ptr` level so all three slots reference the same GPU texture object. When no texture is present, the scalar material value is used as fallback.
 
 Every material property is **live-editable in the Inspector** without reloading the scene. A **base color tint** multiplies on top of the vertex or texture color — useful for quick color variations. An **emissive strength** multiplier scales the emissive contribution independently of the map, so you can dial a glowing surface from off to extremely bright at any time. **Alpha clip** can be toggled per-submesh. For Dielectric materials, an IOR preset popup offers one-click values for common materials (water, glass, crystal, diamond). Each texture slot shows a small inline thumbnail in the inspector, and hovering over one shows a proportionally-scaled preview — making it easy to verify which map is loaded without opening a file browser.
 
