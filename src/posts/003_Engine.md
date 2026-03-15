@@ -358,6 +358,19 @@ The BVH is built with **binned Surface Area Heuristic (SAH)**. The builder evalu
 </details>
 
 <details>
+<summary>Ray-Triangle Intersection Precision</summary>
+
+The three software path tracers use **Möller-Trumbore** (MT) for ray-triangle intersection. MT computes the determinant `a = dot(edge1, cross(dir, edge2))`, which equals `−dot(dir, geoNormal) × 2 × area`. Two choices in the formulation directly affect numerical robustness at grazing angles.
+
+**Near-parallel epsilon** — `a` approaching zero means the ray is nearly coplanar with the triangle. A naive absolute threshold rejects valid near-grazing intersections on small triangles because `|a| = sin(θ) × 2 × area`, so the effective minimum angle scales inversely with triangle size. The engine uses `1e-9`, well below the range where floating-point division becomes unstable but permissive enough for genuinely shallow hits. The t-threshold (self-intersection guard) is kept separate at `1e-7` since it operates in world-space distance rather than determinant scale.
+
+**Barycentric bounds tolerance** — Once `a` passes the epsilon check, `f = 1/a` can still be large at shallow angles, amplifying rounding error in the subsequent dot products for `u` and `v`. A ray landing exactly on a triangle edge can compute slightly outside `[0, 1]`. Rather than a strict simplex test, the engine allows `1e-5` of outward slack on all three edges. This is not clamped before use: the interpolated attributes (normals, UVs, tangents) are computed with the raw coordinates, since a `1e-5` extrapolation past an edge is imperceptible and adjacent triangles share the same vertex data at their boundary anyway.
+
+**Limitations** — Both tolerances are absolute rather than relative to triangle size. On large triangles the `1e-9` epsilon still rejects extreme grazing angles; on very small triangles the `1e-5` UV slack is a proportionally larger fraction of the triangle and could admit a hit in a gap at a non-manifold edge or T-junction.
+
+</details>
+
+<details>
 <summary>Light Sources & Sampling</summary>
 
 - **Emissive geometry** — Triangles with a solid emissive color (`Ke`) are treated as area lights. They are collected into a CDF weighted by surface area, allowing NEE to directly sample points on their surface each bounce. When a path ray hits one of these emitters it terminates — the surface is a pure light source. MIS balances NEE and BSDF sampling to reduce variance.
@@ -494,12 +507,15 @@ The dispatch also treats Microfacet materials with `metallic > 0.99` and `roughn
 
 | MTL property | PBR parameter | Notes |
 |---|---|---|
-| Ns (shininess) | roughness | `clamp(sqrt(2 / (max(Ns,0) + 2)), 0, 1)` — maps Blinn-Phong lobe width to GGX |
-| map_Ns | roughness texture | R channel, expected in 0–1 PBR range (not as Ns exponent) |
-| illum 3/5 | metallic | 1.0 (all other types default to 0.0) |
+| Pr | roughness | PBR scalar (0–1); used directly when present |
+| Ns (shininess) | roughness | Fallback: `clamp(1 - sqrt(max(Ns,0) / 1000), 0, 1)` — inverts Blender's export formula `Ns = (1−r)²×1000` |
+| map_Pr | roughness texture | Preferred; expected in 0–1 PBR range |
+| map_Ns | roughness texture | Fallback if map_Pr absent |
+| Pm | metallic | PBR scalar (0–1); used directly when present |
+| illum 3/5 | metallic | 1.0 (overrides Pm for mirror materials) |
 | map_Pm | metallic texture | R channel sampled directly (0=dielectric, 1=metal) |
 | Ni (IOR) | ior | Used directly for Dielectric (default 1.5) |
-| Kd | baseColor | Vertex color (Ks for mirror, Tf for dielectric tint if set) |
+| Kd | baseColor | Vertex color (Ks for mirror; ignored for dielectrics — refraction is always clear) |
 | d / Tr | materialType | `d < 1` without alpha-clip texture → Dielectric (type 2) |
 
 </details>
@@ -509,10 +525,12 @@ The dispatch also treats Microfacet materials with `metallic > 0.99` and `roughn
 
 | Ns | Roughness | Appearance |
 |---|---|---|
-| 0 | 1.0 | Fully rough (pure diffuse look) |
-| 10 | 0.41 | Moderate roughness |
-| 100 | 0.14 | Fairly glossy |
-| 1000 | 0.045 | Near-mirror |
+| 0 | 1.00 | Fully rough |
+| 10 | 0.90 | Very rough |
+| 100 | 0.68 | Moderately rough |
+| 200 | 0.55 | Semi-rough (typical Blender interior material) |
+| 500 | 0.29 | Fairly glossy |
+| 1000 | 0.00 | Mirror-smooth |
 
 </details>
 
@@ -521,9 +539,15 @@ The dispatch also treats Microfacet materials with `metallic > 0.99` and `roughn
 
 - **Mirror (type 1)** — Always dispatches to the delta MirrorBSDF (set by illum 3/5 in MTL or manually in the Inspector). Roughness and metallic are ignored. The surface albedo tints the reflection.
 - **Perfect mirror shortcut** — Microfacet materials with `metallic > 0.99` and `roughness < 0.01` also dispatch to MirrorBSDF to avoid numerical issues at near-zero GGX alpha.
-- **Dielectric (type 2)** — Uses delta Fresnel reflect/refract (Snell's law). Rough dielectrics would need microfacet transmission — a separate feature.
+- **Dielectric (type 2)** — Uses delta Fresnel reflect/refract (Snell's law). Refraction transmits with full throughput — the surface has no absorption, giving perfectly clear glass. Tinted glass would require Beer-Lambert attenuation over distance, which is left to the volumetric system. Rough dielectrics would need microfacet transmission — a separate feature.
 
 </details>
+<br>
+<div style="text-align:center; color:#888; font-size:0.85em;">
+      <img class="lb" src="/images/Engine_BistroInterior_Denoised.png" alt="Bistro interior path traced render" style="max-width:100%">
+
+      Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
+</div>
 
 ## Resources
 

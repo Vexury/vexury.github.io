@@ -53,10 +53,10 @@
 <summary>Scene & Assets</summary>
 <ul class="contains-task-list">
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> OBJ mesh loading &amp; deletion</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> glTF loading (.gltf + .bin, full PBR/ARM texture support, node hierarchy)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Runtime object transforms via inspector</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Environment map loading (HDR)</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> FBX loading</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> glTF loading</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Scene serialization (save/load scenes to file)</li>
 </ul>
 </details>
@@ -134,8 +134,10 @@
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Base Color / Albedo map</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Normal map</li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Emissive map</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Roughness map</li>
-<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Metallic map</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Roughness map (G channel of ARM, or separate greyscale)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Metallic map (B channel of ARM, or separate greyscale)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> AO map (R channel of ARM, or separate greyscale)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> ARM-packed texture (single texture: R=AO, G=Roughness, B=Metallic)</li>
 </ul>
 </li>
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Alpha clip (cutout transparency from RGBA diffuse texture)</li>
@@ -161,7 +163,7 @@
 <p>Scene: Nvidia <a href="https://developer.nvidia.com/orca/amazon-lumberyard-bistro">Amazon Lumberyard Bistro</a> (CC-BY 4.0)</p>
 </div>
 <p>The editor is built around five panels. The <strong>Scene Hierarchy</strong> is a free n-level tree: every node can be parented under any other by drag-and-drop, and the hierarchy updates immediately. OBJ files with multiple named objects are imported as a root node with one child per object name. Clicking a node selects it and syncs the viewport highlight. The <strong>Inspector</strong> exposes the selected node's local transform and material properties — base color tint, roughness, metallic, emissive strength, IOR — and lets you edit them live across all render backends. Each texture slot shows an inline thumbnail; hovering it pops up a larger preview so you can identify maps at a glance without leaving the inspector. The <strong>Console</strong> captures all engine output in real time, the <strong>Viewport</strong> is the main rendering view, and <strong>Performance Metrics</strong> track frame time, FPS and draw call counts.</p>
-<p>Navigating the scene feels like Blender: scroll to zoom, middle-mouse to pan, click-drag to orbit around a focus point. Meshes can be loaded and deleted at runtime via file dialog using <a href="https://github.com/tinyobjloader/tinyobjloader">tinyobjloader</a>, the hierarchy updates automatically to reflect changes.</p>
+<p>Navigating the scene feels like Blender: scroll to zoom, middle-mouse to pan, click-drag to orbit around a focus point. Meshes can be loaded at runtime via file dialog — OBJ via <a href="https://github.com/tinyobjloader/tinyobjloader">tinyobjloader</a>, and glTF via <a href="https://github.com/syoyo/tinygltf">tinygltf</a>. glTF imports preserve the full node hierarchy from the file, creating one SceneNode per GLTF node under a named root. Materials are imported with full PBR data: ARM-packed <code>metallicRoughnessTexture</code> maps are automatically split across the AO (R), Roughness (G), and Metallic (B) slots with no redundant GPU copies.</p>
 <details>
 <summary>OBJ Import Performance</summary>
 <p>Loading large scenes exposed three layered bottlenecks in the import pipeline, each fixed independently.</p>
@@ -355,6 +357,7 @@
 <li><strong>Albedo / Emission / Material ID</strong> — Passes that isolate specific shading components for quick inspection.</li>
 <li><strong>UVs</strong> — Texture coordinates as colors, good for spotting seams and mapping problems.</li>
 <li><strong>Depth</strong> — Grayscale depth buffer, helpful for verifying near/far plane settings.</li>
+<li><strong>Roughness / Metallic / AO</strong> — PBR channel isolation; reads the correct channel from ARM-packed textures (G/B/R respectively) or the scalar fallback.</li>
 </ul>
 <h2>Shadow Mapping</h2>
 <p>The rasterizer supports directional (sun) shadow mapping on both backends. A depth-only pass renders the scene from the sun's point of view into a 4096×4096 shadow map, which the main shading pass samples to determine whether each surface point is lit or in shadow. Soft shadows are produced by a PCF 3×3 kernel, and the shadow frustum is fitted tightly to the scene geometry so no texel resolution is wasted. Getting the bias right is the main challenge — the engine uses a combination of three complementary techniques that together eliminate both acne and peter-panning across a wide range of sun angles. A Normal Bias slider and an inline shadow map debug view are exposed directly in the Sun inspector.</p>
@@ -397,6 +400,13 @@
 <details>
 <summary>BVH Acceleration</summary>
 <p>The BVH is built with <strong>binned Surface Area Heuristic (SAH)</strong>. The builder evaluates split candidates across binned intervals to produce a tree that minimises expected traversal cost. At query time, traversal is <strong>ordered</strong> — the closer child is visited first, improving early termination and reducing the number of intersection tests significantly.</p>
+</details>
+<details>
+<summary>Ray-Triangle Intersection Precision</summary>
+<p>The three software path tracers use <strong>Möller-Trumbore</strong> (MT) for ray-triangle intersection. MT computes the determinant <code>a = dot(edge1, cross(dir, edge2))</code>, which equals <code>−dot(dir, geoNormal) × 2 × area</code>. Two choices in the formulation directly affect numerical robustness at grazing angles.</p>
+<p><strong>Near-parallel epsilon</strong> — <code>a</code> approaching zero means the ray is nearly coplanar with the triangle. A naive absolute threshold rejects valid near-grazing intersections on small triangles because <code>|a| = sin(θ) × 2 × area</code>, so the effective minimum angle scales inversely with triangle size. The engine uses <code>1e-9</code>, well below the range where floating-point division becomes unstable but permissive enough for genuinely shallow hits. The t-threshold (self-intersection guard) is kept separate at <code>1e-7</code> since it operates in world-space distance rather than determinant scale.</p>
+<p><strong>Barycentric bounds tolerance</strong> — Once <code>a</code> passes the epsilon check, <code>f = 1/a</code> can still be large at shallow angles, amplifying rounding error in the subsequent dot products for <code>u</code> and <code>v</code>. A ray landing exactly on a triangle edge can compute slightly outside <code>[0, 1]</code>. Rather than a strict simplex test, the engine allows <code>1e-5</code> of outward slack on all three edges. This is not clamped before use: the interpolated attributes (normals, UVs, tangents) are computed with the raw coordinates, since a <code>1e-5</code> extrapolation past an edge is imperceptible and adjacent triangles share the same vertex data at their boundary anyway.</p>
+<p><strong>Limitations</strong> — Both tolerances are absolute rather than relative to triangle size. On large triangles the <code>1e-9</code> epsilon still rejects extreme grazing angles; on very small triangles the <code>1e-5</code> UV slack is a proportionally larger fraction of the triangle and could admit a hit in a gap at a non-manifold edge or T-junction.</p>
 </details>
 <details>
 <summary>Light Sources & Sampling</summary>
@@ -482,7 +492,7 @@
 </div>
 <h2>Materials and Textures</h2>
 <p>The engine supports a full <strong>PBR material pipeline</strong> built on the <strong>Cook-Torrance <a href="https://pbr-book.org/3ed-2018/Reflection_Models/Microfacet_Models">microfacet model</a></strong> with a <strong>GGX normal distribution</strong>. Three material types are supported — <strong>Microfacet</strong> for the general case, <strong>Mirror</strong> for perfect specular surfaces, and <strong>Dielectric</strong> for glass and other transmissive materials. All are loaded automatically from OBJ/MTL files and can be overridden per-object in the Inspector.</p>
-<p>Textures can drive any surface property spatially: <strong>base color</strong>, <strong>normal</strong>, <strong>emissive</strong>, <strong>roughness</strong> and <strong>metallic</strong> maps are all supported, loaded from the standard MTL fields. When no texture is present, the scalar material value is used as fallback.</p>
+<p>Textures can drive any surface property spatially: <strong>base color</strong>, <strong>normal</strong>, <strong>emissive</strong>, <strong>roughness</strong>, <strong>metallic</strong>, and <strong>ambient occlusion</strong> maps are all supported. OBJ/MTL files use separate per-channel greyscale maps; glTF files typically pack roughness, metallic, and AO into a single <strong>ARM texture</strong> (R=AO, G=Roughness, B=Metallic). The engine handles both formats uniformly — ARM maps are deduped at the <code>shared_ptr</code> level so all three slots reference the same GPU texture object. When no texture is present, the scalar material value is used as fallback.</p>
 <p>Every material property is <strong>live-editable in the Inspector</strong> without reloading the scene. A <strong>base color tint</strong> multiplies on top of the vertex or texture color — useful for quick color variations. An <strong>emissive strength</strong> multiplier scales the emissive contribution independently of the map, so you can dial a glowing surface from off to extremely bright at any time. <strong>Alpha clip</strong> can be toggled per-submesh. For Dielectric materials, an IOR preset popup offers one-click values for common materials (water, glass, crystal, diamond). Each texture slot shows a small inline thumbnail in the inspector, and hovering over one shows a proportionally-scaled preview — making it easy to verify which map is loaded without opening a file browser.</p>
 <details>
 <summary>Material Types (from OBJ/MTL illum)</summary>
@@ -537,19 +547,34 @@
 </thead>
 <tbody>
 <tr>
+<td>Pr</td>
+<td>roughness</td>
+<td>PBR scalar (0–1); used directly when present</td>
+</tr>
+<tr>
 <td>Ns (shininess)</td>
 <td>roughness</td>
-<td><code>clamp(sqrt(2 / (max(Ns,0) + 2)), 0, 1)</code> — maps Blinn-Phong lobe width to GGX</td>
+<td>Fallback: <code>clamp(1 - sqrt(max(Ns,0) / 1000), 0, 1)</code> — inverts Blender's export formula <code>Ns = (1−r)²×1000</code></td>
+</tr>
+<tr>
+<td>map_Pr</td>
+<td>roughness texture</td>
+<td>Preferred; expected in 0–1 PBR range</td>
 </tr>
 <tr>
 <td>map_Ns</td>
 <td>roughness texture</td>
-<td>R channel, expected in 0–1 PBR range (not as Ns exponent)</td>
+<td>Fallback if map_Pr absent</td>
+</tr>
+<tr>
+<td>Pm</td>
+<td>metallic</td>
+<td>PBR scalar (0–1); used directly when present</td>
 </tr>
 <tr>
 <td>illum 3/5</td>
 <td>metallic</td>
-<td>1.0 (all other types default to 0.0)</td>
+<td>1.0 (overrides Pm for mirror materials)</td>
 </tr>
 <tr>
 <td>map_Pm</td>
@@ -564,7 +589,7 @@
 <tr>
 <td>Kd</td>
 <td>baseColor</td>
-<td>Vertex color (Ks for mirror, Tf for dielectric tint if set)</td>
+<td>Vertex color (Ks for mirror; ignored for dielectrics — refraction is always clear)</td>
 </tr>
 <tr>
 <td>d / Tr</td>
@@ -587,23 +612,33 @@
 <tbody>
 <tr>
 <td>0</td>
-<td>1.0</td>
-<td>Fully rough (pure diffuse look)</td>
+<td>1.00</td>
+<td>Fully rough</td>
 </tr>
 <tr>
 <td>10</td>
-<td>0.41</td>
-<td>Moderate roughness</td>
+<td>0.90</td>
+<td>Very rough</td>
 </tr>
 <tr>
 <td>100</td>
-<td>0.14</td>
+<td>0.68</td>
+<td>Moderately rough</td>
+</tr>
+<tr>
+<td>200</td>
+<td>0.55</td>
+<td>Semi-rough (typical Blender interior material)</td>
+</tr>
+<tr>
+<td>500</td>
+<td>0.29</td>
 <td>Fairly glossy</td>
 </tr>
 <tr>
 <td>1000</td>
-<td>0.045</td>
-<td>Near-mirror</td>
+<td>0.00</td>
+<td>Mirror-smooth</td>
 </tr>
 </tbody>
 </table>
@@ -613,9 +648,14 @@
 <ul>
 <li><strong>Mirror (type 1)</strong> — Always dispatches to the delta MirrorBSDF (set by illum 3/5 in MTL or manually in the Inspector). Roughness and metallic are ignored. The surface albedo tints the reflection.</li>
 <li><strong>Perfect mirror shortcut</strong> — Microfacet materials with <code>metallic &gt; 0.99</code> and <code>roughness &lt; 0.01</code> also dispatch to MirrorBSDF to avoid numerical issues at near-zero GGX alpha.</li>
-<li><strong>Dielectric (type 2)</strong> — Uses delta Fresnel reflect/refract (Snell's law). Rough dielectrics would need microfacet transmission — a separate feature.</li>
+<li><strong>Dielectric (type 2)</strong> — Uses delta Fresnel reflect/refract (Snell's law). Refraction transmits with full throughput — the surface has no absorption, giving perfectly clear glass. Tinted glass would require Beer-Lambert attenuation over distance, which is left to the volumetric system. Rough dielectrics would need microfacet transmission — a separate feature.</li>
 </ul>
 </details>
+<br>
+<div style="text-align:center; color:#888; font-size:0.85em;">
+      <img class="lb" src="/images/Engine_BistroInterior_Denoised.png" alt="Bistro interior path traced render" style="max-width:100%">
+<p>Scene: Nvidia <a href="https://developer.nvidia.com/orca/amazon-lumberyard-bistro">Amazon Lumberyard Bistro</a> (CC-BY 4.0)</p>
+</div>
 <h2>Resources</h2>
 <p>Some of the resources that influenced this project the most:</p>
 <ul>

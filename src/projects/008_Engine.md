@@ -9,6 +9,7 @@ images:
   - /images/Engine_002.png
   - /images/Engine_010.png
   - /images/Engine_011.png
+  - /images/Engine_BistroInterior_Denoised.png
   - /images/Engine_003.png
   - /images/Engine_004.png
   - /images/Engine_005.png
