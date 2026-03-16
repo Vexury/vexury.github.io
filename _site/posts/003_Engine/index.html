@@ -112,6 +112,7 @@
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Denoising
 <ul class="contains-task-list">
 <li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> OIDN (Intel Open Image Denoise, CPU)</li>
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> Auxiliary buffer denoising (albedo + normal feature inputs)</li>
 </ul>
 </li>
 <li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> Deferred rendering</li>
@@ -453,13 +454,14 @@
 <p>Even a well-optimised path tracer needs many samples before the image looks clean — at 1 SPP the noise is severe, and reaching a perceptually converged result can take hundreds of passes. Rather than waiting, the engine integrates <a href="https://www.openimagedenoise.org/">Intel Open Image Denoise (OIDN)</a> as a one-click post-process that runs on the CPU and produces a clean result in a fraction of a second.</p>
 <p>The integration works entirely on the CPU side and is backend-agnostic. A &quot;Denoise&quot; button appears in the Settings panel whenever samples have been accumulated; pressing it reads back the current accumulation buffer as <strong>linear HDR float RGB</strong> — before any tone mapping — feeds it into OIDN's RT filter, then applies the same exposure, ACES tone mapping and gamma correction as the live display. The result replaces the viewport image and accumulation is frozen. Moving the camera or changing any scene parameter immediately clears the denoised result and restarts accumulation from zero.</p>
 <p>For both Vulkan GPU path tracers (HW RT and compute) the readback copies the RGBA32F accumulation image from device memory to a CPU-side staging buffer via an immediate-submit command, divides out the per-pixel sample counter stored in the alpha channel, and passes the resulting linear HDR data directly to OIDN. For the CPU path tracer the accumulation buffer is already on the host, so no copy is needed.</p>
+<p>A second <strong>Denoise+</strong> mode feeds OIDN two additional <em>feature buffers</em> — <strong>first-hit albedo</strong> and <strong>first-hit world-space normal</strong> — alongside the noisy colour input. OIDN's RT filter uses these to separate lighting noise from surface texture and to respect geometric edges, dramatically improving denoising quality at very low sample counts where colour-only denoising struggles. Each backend captures the data at the primary ray hit: the GPU path tracers write it to dedicated <code>rgba32f</code> storage images at depth 0 in the shader; the CPU path tracer stores it in per-pixel auxiliary buffers filled on the first bounce. Both buffers are constant across samples (first-hit data is deterministic), so writing every frame incurs no overhead. The comparison below was captured at <strong>1 SPP</strong> — a single sample per pixel.</p>
 <div style="margin:1.5rem auto; width:100%">
   <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
-    <img class="ic-right" src="/images/Engine_Bistro_16_SPP_denoised.png" alt="OIDN denoised">
-    <img class="ic-left" src="/images/Engine_Bistro_16_SPP.png" alt="16 SPP raw">
+    <img class="ic-right" src="/images/Engine_BistroInterior_1_SPP_denoised_extra.png" alt="OIDN Denoise+ (albedo + normal)">
+    <img class="ic-left" src="/images/Engine_BistroInterior_1_SPP_raw.png" alt="1 SPP raw">
     <div class="ic-line"></div>
-    <span class="ic-label ic-label-left">16 SPP (raw)</span>
-    <span class="ic-label ic-label-right">OIDN denoised</span>
+    <span class="ic-label ic-label-left">1 SPP (raw)</span>
+    <span class="ic-label ic-label-right">Denoise+ (albedo + normal)</span>
   </div>
   <div style="text-align:center; color:#888; font-size:0.85em; margin-top:0.5rem">
 <p>Scene: Nvidia <a href="https://developer.nvidia.com/orca/amazon-lumberyard-bistro">Amazon Lumberyard Bistro</a> (CC-BY 4.0)</div></p>

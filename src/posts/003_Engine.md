@@ -92,6 +92,7 @@ Here is an overview of what is done and what I am planning to work on next:
 - [x] Debug visualization modes
 - [x] Denoising
     - [x] OIDN (Intel Open Image Denoise, CPU)
+    - [x] Auxiliary buffer denoising (albedo + normal feature inputs)
 - [ ] Deferred rendering
 - [ ] Bidirectional Path Tracing (BDPT)
 - [ ] Metropolis Light Transport (MLT)
@@ -438,13 +439,15 @@ The integration works entirely on the CPU side and is backend-agnostic. A "Denoi
 
 For both Vulkan GPU path tracers (HW RT and compute) the readback copies the RGBA32F accumulation image from device memory to a CPU-side staging buffer via an immediate-submit command, divides out the per-pixel sample counter stored in the alpha channel, and passes the resulting linear HDR data directly to OIDN. For the CPU path tracer the accumulation buffer is already on the host, so no copy is needed.
 
+A second **Denoise+** mode feeds OIDN two additional *feature buffers* — **first-hit albedo** and **first-hit world-space normal** — alongside the noisy colour input. OIDN's RT filter uses these to separate lighting noise from surface texture and to respect geometric edges, dramatically improving denoising quality at very low sample counts where colour-only denoising struggles. Each backend captures the data at the primary ray hit: the GPU path tracers write it to dedicated `rgba32f` storage images at depth 0 in the shader; the CPU path tracer stores it in per-pixel auxiliary buffers filled on the first bounce. Both buffers are constant across samples (first-hit data is deterministic), so writing every frame incurs no overhead. The comparison below was captured at **1 SPP** — a single sample per pixel.
+
 <div style="margin:1.5rem auto; width:100%">
   <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
-    <img class="ic-right" src="/images/Engine_Bistro_16_SPP_denoised.png" alt="OIDN denoised">
-    <img class="ic-left" src="/images/Engine_Bistro_16_SPP.png" alt="16 SPP raw">
+    <img class="ic-right" src="/images/Engine_BistroInterior_1_SPP_denoised_extra.png" alt="OIDN Denoise+ (albedo + normal)">
+    <img class="ic-left" src="/images/Engine_BistroInterior_1_SPP_raw.png" alt="1 SPP raw">
     <div class="ic-line"></div>
-    <span class="ic-label ic-label-left">16 SPP (raw)</span>
-    <span class="ic-label ic-label-right">OIDN denoised</span>
+    <span class="ic-label ic-label-left">1 SPP (raw)</span>
+    <span class="ic-label ic-label-right">Denoise+ (albedo + normal)</span>
   </div>
   <div style="text-align:center; color:#888; font-size:0.85em; margin-top:0.5rem">
 
