@@ -1,13 +1,14 @@
 ---
 title: ⚙️ VexEngine - Custom Rendering Engine
-date: 2026-02-14
+date: 2026-02-13
+ongoing: true
 summary: A C++ graphics engine built from scratch — path tracing, Cook-Torrance GGX, dual OpenGL/Vulkan backend, BVH acceleration, denoising and a full editor UI.
 preview_image: /images/thumbs/Engine_011.jpg
 ---
 
 # {{ title }}
 
-<p class="post-date">{{ date | date: "%B %d, %Y" }}</p>
+<p class="post-date">{{ date | date: "%B %d, %Y" }}{% if ongoing %} (ongoing){% endif %}</p>
 
 Links: [Source Code](https://github.com/Vexury/VexEngine) · [Rendered Images](/projects/)
 

@@ -22,7 +22,7 @@ title: Home
       <a href="{{ post.url }}">
         <div class="post-preview-content">
           <h3>{{ post.data.title }}</h3>
-          <span class="post-date">{{ post.data.date | date: "%B %d, %Y" }}</span>
+          <span class="post-date">{{ post.data.date | date: "%B %d, %Y" }}{% if post.data.ongoing %} (ongoing){% endif %}</span>
           {% if post.data.summary %}<span class="post-summary">{{ post.data.summary }}</span>{% endif %}
         </div>
         {% if post.data.preview_image %}
