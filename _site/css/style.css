@@ -686,16 +686,23 @@ details > .contains-task-list {
   object-fit: cover;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .hero {
     grid-template-columns: 1fr;
     min-height: unset;
   }
 
   .hero-render {
-    height: 220px;
     border-left: none;
     border-top: 2.5px solid #888888;
+    aspect-ratio: 16 / 7;
+  }
+
+  .hero-img {
+    position: static;
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 }
 
