@@ -660,11 +660,30 @@
 </div>
 <h2>Resources</h2>
 <p>Some of the resources that influenced this project the most:</p>
+<p><strong>Foundations</strong></p>
 <ul>
-<li><a href="https://www.pbr-book.org/">PBRT</a> — The reference book on physically based rendering</li>
+<li><a href="https://www.pbr-book.org/">PBRT</a> — The reference book on physically based rendering; covers BVH, microfacet theory, MIS, participating media, and more in full mathematical depth</li>
 <li><a href="https://raytracing.github.io/">Ray Tracing in One Weekend</a> — The classic starting point for writing a path tracer</li>
-<li><a href="https://learnopengl.com/">LearnOpenGL</a> — Comprehensive OpenGL tutorials</li>
+<li><a href="https://www.scratchapixel.com/">Scratchapixel</a> — From-scratch derivations of ray tracing, Monte Carlo integration, and volume rendering math</li>
+</ul>
+<p><strong>BVH &amp; Acceleration</strong></p>
+<ul>
+<li><a href="https://jacco.ompf2.com/2022/04/13/how-to-build-a-bvh-part-1-basics/">How to Build a BVH — Jacco Bikker</a> — Hands-on multi-part series covering binned SAH construction and ordered traversal</li>
+</ul>
+<p><strong>Microfacet Theory &amp; Sampling</strong></p>
+<ul>
+<li><a href="https://jcgt.org/published/0003/02/03/">Understanding the Masking-Shadowing Function in Microfacet-Based BRDFs — Heitz 2014</a> — The mathematical foundation behind the GGX distribution and Cook-Torrance BSDF</li>
+<li><a href="https://jcgt.org/published/0007/04/01/paper.pdf">Sampling the GGX Distribution of Visible Normals — Heitz 2018</a> — The VNDF sampling paper used for the specular lobe</li>
+</ul>
+<p><strong>Vulkan &amp; Hardware Ray Tracing</strong></p>
+<ul>
 <li><a href="https://vkguide.dev/">vkguide.dev</a> — Practical, modern Vulkan tutorial</li>
+<li><a href="https://nvpro-samples.github.io/vk_raytracing_tutorial_KHR/">Nvidia Vulkan Ray Tracing Tutorial</a> — Step-by-step guide to <code>VK_KHR_ray_tracing_pipeline</code>, rgen/rmiss/rchit shaders, and TLAS/BLAS setup</li>
+<li><a href="https://learnopengl.com/">LearnOpenGL</a> — Comprehensive OpenGL tutorials</li>
+</ul>
+<p><strong>Advanced Ray Tracing</strong></p>
+<ul>
+<li><a href="https://www.realtimerendering.com/raytracinggems/">Ray Tracing Gems I &amp; II</a> — Free books with in-depth chapters on sampling, denoising, participating media, and hardware ray tracing</li>
 </ul>
 <p>This engine is an ongoing project — the roadmap above shows where it is headed. It covers the full stack from low-level GPU API work and acceleration structures to physically based shading and editor tooling, with every component built and understood by me.</p>
 <div class="lightbox" id="lightbox"><img id="lightbox-img"></div>

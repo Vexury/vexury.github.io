@@ -557,10 +557,25 @@ The dispatch also treats Microfacet materials with `metallic > 0.99` and `roughn
 
 Some of the resources that influenced this project the most:
 
-- [PBRT](https://www.pbr-book.org/) — The reference book on physically based rendering
+**Foundations**
+- [PBRT](https://www.pbr-book.org/) — The reference book on physically based rendering; covers BVH, microfacet theory, MIS, participating media, and more in full mathematical depth
 - [Ray Tracing in One Weekend](https://raytracing.github.io/) — The classic starting point for writing a path tracer
-- [LearnOpenGL](https://learnopengl.com/) — Comprehensive OpenGL tutorials
+- [Scratchapixel](https://www.scratchapixel.com/) — From-scratch derivations of ray tracing, Monte Carlo integration, and volume rendering math
+
+**BVH & Acceleration**
+- [How to Build a BVH — Jacco Bikker](https://jacco.ompf2.com/2022/04/13/how-to-build-a-bvh-part-1-basics/) — Hands-on multi-part series covering binned SAH construction and ordered traversal
+
+**Microfacet Theory & Sampling**
+- [Understanding the Masking-Shadowing Function in Microfacet-Based BRDFs — Heitz 2014](https://jcgt.org/published/0003/02/03/) — The mathematical foundation behind the GGX distribution and Cook-Torrance BSDF
+- [Sampling the GGX Distribution of Visible Normals — Heitz 2018](https://jcgt.org/published/0007/04/01/paper.pdf) — The VNDF sampling paper used for the specular lobe
+
+**Vulkan & Hardware Ray Tracing**
 - [vkguide.dev](https://vkguide.dev/) — Practical, modern Vulkan tutorial
+- [Nvidia Vulkan Ray Tracing Tutorial](https://nvpro-samples.github.io/vk_raytracing_tutorial_KHR/) — Step-by-step guide to `VK_KHR_ray_tracing_pipeline`, rgen/rmiss/rchit shaders, and TLAS/BLAS setup
+- [LearnOpenGL](https://learnopengl.com/) — Comprehensive OpenGL tutorials
+
+**Advanced Ray Tracing**
+- [Ray Tracing Gems I & II](https://www.realtimerendering.com/raytracinggems/) — Free books with in-depth chapters on sampling, denoising, participating media, and hardware ray tracing
 
 This engine is an ongoing project — the roadmap above shows where it is headed. It covers the full stack from low-level GPU API work and acceleration structures to physically based shading and editor tooling, with every component built and understood by me.
 
