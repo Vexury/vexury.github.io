@@ -15,6 +15,9 @@ module.exports = function(eleventyConfig) {
   // Copy files (resume, etc.)
   eleventyConfig.addPassthroughCopy("src/files");
 
+  // Copy self-hosted fonts
+  eleventyConfig.addPassthroughCopy("src/fonts");
+
   // Projects collection sorted by filename (descending)
   eleventyConfig.addCollection("projects", function(collectionApi) {
     return collectionApi.getFilteredByTag("projects").sort((a, b) => {

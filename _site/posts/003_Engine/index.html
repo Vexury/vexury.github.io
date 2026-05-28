@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>⚙️ VexEngine - Custom Rendering Engine</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
 
 </head>
@@ -163,7 +160,7 @@
       <img class="lb" src="/images/Engine_002.png" alt="Full editor layout" style="max-width:100%">
 <p>Scene: Nvidia <a href="https://developer.nvidia.com/orca/amazon-lumberyard-bistro">Amazon Lumberyard Bistro</a> (CC-BY 4.0)</p>
 </div>
-<p>The editor is built around five panels. The <strong>Scene Hierarchy</strong> is a free n-level tree: every node can be parented under any other by drag-and-drop, and the hierarchy updates immediately. OBJ files with multiple named objects are imported as a root node with one child per object name. Clicking a node selects it and syncs the viewport highlight. The <strong>Inspector</strong> exposes the selected node's local transform and material properties — base color tint, roughness, metallic, emissive strength, IOR — and lets you edit them live across all render backends. Each texture slot shows an inline thumbnail; hovering it pops up a larger preview so you can identify maps at a glance without leaving the inspector. The <strong>Console</strong> captures all engine output in real time, the <strong>Viewport</strong> is the main rendering view, and <strong>Performance Metrics</strong> track frame time, FPS and draw call counts.</p>
+<p>The editor is built around five panels. The <strong>Scene Hierarchy</strong> is a free n-level tree: every node can be parented under any other by drag-and-drop, and the hierarchy updates immediately. OBJ files with multiple named objects are imported as a root node with one child per object name. Clicking a node selects it and syncs the viewport highlight. The <strong>Inspector</strong> exposes the selected node's local transform and material properties — base color tint, roughness, metallic, emissive strength, IOR — and lets you edit them live across all render backends. Each texture slot shows an inline thumbnail; hovering it pops up a larger preview so you can identify maps at a glance without leaving the inspector. The <strong>Console</strong> captures all engine output in real time, the <strong>Viewport</strong> is the main rendering view, and <strong>Stats</strong> shows a live dashboard: FPS, frame time, VSync toggle, current render mode, path tracer sample count and samples/sec, scene geometry counts (nodes, submeshes, triangles, vertices, textures, lights, emissive meshes, volumes), BVH node count and SAH cost, viewport resolution, and — on Vulkan — a per-category GPU memory breakdown (textures, geometry, framebuffers, ray tracing) against the driver's reported VRAM budget.</p>
 <p>Navigating the scene feels like Blender: scroll to zoom, middle-mouse to pan, click-drag to orbit around a focus point. Meshes can be loaded at runtime via file dialog — OBJ via <a href="https://github.com/tinyobjloader/tinyobjloader">tinyobjloader</a>, and glTF via <a href="https://github.com/syoyo/tinygltf">tinygltf</a>. glTF imports preserve the full node hierarchy from the file, creating one SceneNode per GLTF node under a named root. Materials are imported with full PBR data: ARM-packed <code>metallicRoughnessTexture</code> maps are automatically split across the AO (R), Roughness (G), and Metallic (B) slots with no redundant GPU copies.</p>
 <details>
 <summary>OBJ Import Performance</summary>
@@ -784,7 +781,7 @@
     </main>
     
     <footer>
-      <p>Moritz Grauer © 2026</p>
+      <p>Moritz Grauer © 2026 · <a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutz</a></p>
     </footer>
   </div>
   <script>
