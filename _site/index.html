@@ -5,25 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
   <link rel="stylesheet" href="/css/style.css">
-
 </head>
 <body>
-  <div class="container">
-    <header>
-      <nav>
-        <a href="/" class="active">/ Home</a>
-        <a href="/projects/" class="">/ Projects</a>
+  <div class="site-wrapper">
+    <header class="site-header">
+      <nav class="site-nav">
+        <a href="/" class="nav-wordmark">vexury</a>
+        <div class="nav-links">
+          <a href="/" class="nav-link active">/&nbsp;home</a>
+          <a href="/projects/" class="nav-link">/&nbsp;projects</a>
+          <a href="https://github.com/Vexury" class="nav-icon-btn" title="GitHub" aria-label="GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+          </a>
+        </div>
       </nav>
     </header>
-    
-    <main>
+
+    <main class="site-main">
       
 <div class="hero">
   <div class="hero-text">
-    <h1> Hi! I'm Moritz &#x1F44B;</h1>
-    <p class="hero-role">Graphics Programmer &#xB7; Game Developer</p>
-    <p class="hero-bio">I build rendering systems and research ray tracing. In my spare time, I develop and play games. When I'm not coding, I'm either doing sports or strumming the guitar.</p>
-    <p class="hero-links"><a href="mailto:vexury.dev@gmail.com">vexury.dev@gmail.com</a> &#xB7; <a href="/files/CV.pdf">CV (PDF)</a></p>
+    <div class="hero-intro">
+      <p class="hero-greeting">hi, i'm</p>
+      <h1>Moritz Grauer</h1>
+      <p class="hero-role">Graphics Programmer · Game Developer</p>
+    </div>
+    <p class="hero-bio">I build rendering systems and research ray tracing. In my spare time I make and play games. Off the keyboard: sports and guitar.</p>
+    <div class="link-row">
+      <a href="https://github.com/Vexury" class="link-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        <span>GitHub</span>
+      </a>
+      <a href="https://vexury.itch.io" class="link-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="9" width="20" height="11" rx="5"/>
+          <path d="M7 12h2m-1-1v2"/>
+          <circle cx="16" cy="13.5" r="0.8" fill="currentColor" stroke="none"/>
+          <circle cx="14" cy="11.5" r="0.8" fill="currentColor" stroke="none"/>
+        </svg>
+        <span>itch.io</span>
+      </a>
+      <a href="mailto:vexury.dev@gmail.com" class="link-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+        <span>email</span>
+      </a>
+      <a href="/files/CV.pdf" class="link-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="12" y1="18" x2="12" y2="12"/>
+          <polyline points="9 15 12 18 15 15"/>
+        </svg>
+        <span>CV</span>
+      </a>
+    </div>
   </div>
   <div class="hero-render">
     <img src="/images/thumbs/large/Engine_Hero.jpg" class="hero-img" alt="VexEngine path traced render">
@@ -31,10 +73,41 @@
   </div>
 </div>
 
+<section class="renders-section">
+  <p class="section-label">renders</p>
+  <div class="renders-strip" id="renders-strip">
+    <div class="render-item" data-full="/images/Engine_010.png">
+      <img src="/images/thumbs/large/Engine_010.jpg" alt="VexEngine render" loading="lazy">
+    </div>
+    <div class="render-item" data-full="/images/Engine_BistroInterior_Denoised.png">
+      <img src="/images/thumbs/large/Engine_BistroInterior_Denoised.jpg" alt="VexEngine Bistro interior render" loading="lazy">
+    </div>
+    <div class="render-item" data-full="/images/Engine_ChessSet_Emissive.png">
+      <img src="/images/thumbs/large/Engine_ChessSet_Emissive.jpg" alt="VexEngine chess set emissive render" loading="lazy">
+    </div>
+    <div class="render-item" data-full="/images/Engine_009.png">
+      <img src="/images/thumbs/large/Engine_009.jpg" alt="VexEngine render" loading="lazy">
+    </div>
+    <div class="render-item" data-full="/images/Engine_008.png">
+      <img src="/images/thumbs/large/Engine_008.jpg" alt="VexEngine render" loading="lazy">
+    </div>
+    <div class="render-item" data-full="/images/Engine_002.png">
+      <img src="/images/thumbs/large/Engine_002.jpg" alt="VexEngine render" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<div class="renders-lightbox" id="renders-lightbox">
+  <button class="rlb-close" id="rlb-close" aria-label="Close">&#x2715;</button>
+  <button class="rlb-prev" id="rlb-prev" aria-label="Previous">&#8592;</button>
+  <img id="rlb-img" src="" alt="Render full size">
+  <button class="rlb-next" id="rlb-next" aria-label="Next">&#8594;</button>
+</div>
+
 <div class="tabs">
-  <button class="tab-button active" onclick="switchTab('posts')">Posts</button>
-  <button class="tab-button" onclick="switchTab('life')">Life</button>
-  <button class="tab-button" onclick="switchTab('teaching')">Teaching</button>
+  <button class="tab-button active" onclick="switchTab('posts', this)">Posts</button>
+  <button class="tab-button" onclick="switchTab('life', this)">Life</button>
+  <button class="tab-button" onclick="switchTab('teaching', this)">Teaching</button>
 </div>
 
 <div id="posts-tab" class="tab-content active">
@@ -89,54 +162,50 @@
   <div class="timeline">
     <div class="timeline-item">
       <div class="role">&#x1F52C; Computer Graphics Researcher</div>
-      <div class="date">Karlsruhe Institute of Technology (KIT) &#xB7; Feb 2022 - Apr 2026</div>
+      <div class="date">Karlsruhe Institute of Technology (KIT) &middot; Feb 2022 – Apr 2026</div>
       <p>Published research on ray tracing memory optimization. Developed custom rendering engine with ray/path tracing support. Supervised Bachelor/Master theses and organized Computer Graphics lectures/exercises.</p>
     </div>
-
     <div class="timeline-item">
       <div class="role">&#x1F393; M.Sc. Informatics</div>
-      <div class="date">Karlsruhe Institute of Technology (KIT) &#xB7; 2018 - 2021</div>
-      <p>Specialization: Computer Graphics & AI. Exchange semester at Chalmers University, Gothenburg, Sweden (2018-2019).</p>
+      <div class="date">Karlsruhe Institute of Technology (KIT) &middot; 2018 – 2021</div>
+      <p>Specialization: Computer Graphics &amp; AI. Exchange semester at Chalmers University, Gothenburg, Sweden (2018–2019).</p>
     </div>
-
     <div class="timeline-item">
       <div class="role">&#x1F3AE; QA Engineer</div>
-      <div class="date">Gameforge (Internship + Working Student) &#xB7; Oct 2020 - Sep 2021</div>
+      <div class="date">Gameforge (Internship + Working Student) &middot; Oct 2020 – Sep 2021</div>
       <p>Tested gameplay functionality and quest systems across multiple MMO titles. Collaborated with dev teams on quality standards and bug resolution.</p>
     </div>
-
     <div class="timeline-item">
       <div class="role">&#x1F468;&#x200D;&#x1F3EB; Programming Tutor</div>
-      <div class="date">Karlsruhe Institute of Technology (KIT) &#xB7; Oct 2016 - Jul 2019</div>
+      <div class="date">Karlsruhe Institute of Technology (KIT) &middot; Oct 2016 – Jul 2019</div>
       <p>Mentored CS students in programming and algorithms.</p>
     </div>
-
     <div class="timeline-item">
       <div class="role">&#x1F393; B.Sc. Informatics</div>
-      <div class="date">Karlsruhe Institute of Technology (KIT) &#xB7; 2015 - 2018</div>
-      <p>Studienstiftung des deutschen Volkes scholarship recipient (2018-2021).</p>
+      <div class="date">Karlsruhe Institute of Technology (KIT) &middot; 2015 – 2018</div>
+      <p>Studienstiftung des deutschen Volkes scholarship recipient (2018–2021).</p>
     </div>
   </div>
 </div>
 
 <div id="teaching-tab" class="tab-content">
-  <p>At KIT I maintained programming frameworks and ran exercises for three Computer Graphics courses, and supervised Bachelor's and Master's theses &#x2014; mostly on acceleration structures, GPU rendering, and global illumination.</p>
+  <p>At KIT I maintained programming frameworks and ran exercises for three Computer Graphics courses, and supervised Bachelor's and Master's theses &mdash; mostly on acceleration structures, GPU rendering, and global illumination.</p>
 
   <h3>Courses &amp; Frameworks</h3>
   <div class="timeline">
     <div class="timeline-item">
       <div class="role">&#x2728; Photorealistic Image Synthesis</div>
-      <div class="date">Summer 2022 &#xB7; Summer 2023 &#xB7; Winter 2024/25</div>
+      <div class="date">Summer 2022 &middot; Summer 2023 &middot; Winter 2024/25</div>
       <p>Maintained a GUI framework for the photorealistic rendering course covering path tracing, photon mapping, microfacet BRDFs, sampling strategies, Next Event Estimation, and Multiple Importance Sampling.</p>
     </div>
     <div class="timeline-item">
       <div class="role">&#x1F5A5;&#xFE0F; Computer Graphics 2</div>
-      <div class="date">Summer 2024 &#xB7; Summer 2025</div>
+      <div class="date">Summer 2024 &middot; Summer 2025</div>
       <p>Maintained a GUI framework for the advanced course covering numerical integration, microfacet models, path tracing, GPU matrix multiplication, signed distance fields, quaternions, and animation.</p>
     </div>
     <div class="timeline-item">
       <div class="role">&#x1F4D0; Computer Graphics</div>
-      <div class="date">Winter 2022/23 &#xB7; Winter 2025/26</div>
+      <div class="date">Winter 2022/23 &middot; Winter 2025/26</div>
       <p>Maintained a student-facing GUI framework covering ray tracing, Monte Carlo methods, BVH construction, textures, shadow mapping, and shaders. Students implement each feature step by step.</p>
     </div>
     <div class="timeline-item">
@@ -165,28 +234,89 @@
 </div>
 
 <script>
-function switchTab(tabName) {
-  // Hide all tabs
-  const tabs = document.querySelectorAll('.tab-content');
-  tabs.forEach(tab => tab.classList.remove('active'));
-  
-  // Remove active from all buttons
-  const buttons = document.querySelectorAll('.tab-button');
-  buttons.forEach(btn => btn.classList.remove('active'));
-  
-  // Show selected tab
+function switchTab(tabName, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
   document.getElementById(tabName + '-tab').classList.add('active');
-  
-  // Mark button as active
-  event.target.classList.add('active');
+  btn.classList.add('active');
 }
+
+// Renders lightbox
+(function () {
+  const strip = document.getElementById('renders-strip');
+  const lightbox = document.getElementById('renders-lightbox');
+  const img = document.getElementById('rlb-img');
+  const closeBtn = document.getElementById('rlb-close');
+  const prevBtn = document.getElementById('rlb-prev');
+  const nextBtn = document.getElementById('rlb-next');
+
+  const items = Array.from(strip.querySelectorAll('.render-item'));
+  let current = 0;
+
+  function open(index) {
+    current = index;
+    img.src = items[current].dataset.full;
+    lightbox.classList.add('active');
+    prevBtn.hidden = items.length <= 1;
+    nextBtn.hidden = items.length <= 1;
+  }
+
+  function close() {
+    lightbox.classList.remove('active');
+    img.src = '';
+  }
+
+  items.forEach((item, i) => item.addEventListener('click', () => open(i)));
+  closeBtn.addEventListener('click', (e) => { e.stopPropagation(); close(); });
+  prevBtn.addEventListener('click', (e) => { e.stopPropagation(); open((current - 1 + items.length) % items.length); });
+  nextBtn.addEventListener('click', (e) => { e.stopPropagation(); open((current + 1) % items.length); });
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox || e.target === img) close(); });
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') open((current - 1 + items.length) % items.length);
+    if (e.key === 'ArrowRight') open((current + 1) % items.length);
+  });
+})();
 </script>
+
     </main>
-    
-    <footer>
-      <p>Moritz Grauer © 2026 · <a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutz</a></p>
+
+    <footer class="site-footer">
+      <div class="footer-icon-links">
+        <a href="https://github.com/Vexury" class="footer-icon-btn" title="GitHub" aria-label="GitHub">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+        </a>
+        <a href="https://vexury.itch.io" class="footer-icon-btn" title="itch.io" aria-label="itch.io">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="9" width="20" height="11" rx="5"/>
+            <path d="M7 12h2m-1-1v2"/>
+            <circle cx="16" cy="13.5" r="0.8" fill="currentColor" stroke="none"/>
+            <circle cx="14" cy="11.5" r="0.8" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+        <a href="mailto:vexury.dev@gmail.com" class="footer-icon-btn" title="Email" aria-label="Email">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </a>
+        <a href="/files/CV.pdf" class="footer-icon-btn" title="CV (PDF)" aria-label="Download CV">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <polyline points="9 15 12 18 15 15"/>
+          </svg>
+        </a>
+      </div>
+      <p class="footer-legal">Moritz Grauer © 2026 · <a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutz</a></p>
     </footer>
   </div>
+
   <script>
     document.querySelectorAll('a[href^="http"], a[href$=".pdf"]').forEach(a => {
       if (!a.hostname || a.hostname !== location.hostname || a.href.endsWith('.pdf')) {
