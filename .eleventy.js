@@ -16,42 +16,34 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/fonts");
 
   // ── Image shortcode ───────────────────────────────────────────────────────
-  // Usage: {% thumb "/images/Foo.png", 400 %}  → returns URL string
-  // Width > 600 goes to /images/thumbs/large/, otherwise /images/thumbs/
-  eleventyConfig.addAsyncShortcode("thumb", async function(src, width = 400) {
+  // Shared thumb generator — used by both the shortcode and the filter
+  async function generateThumb(src, width = 400) {
     if (!src) return "";
-
     const isLarge = width > 600;
-    const outputDir = isLarge
-      ? "./_site/images/thumbs/large/"
-      : "./_site/images/thumbs/";
-    const urlPath = isLarge
-      ? "/images/thumbs/large/"
-      : "/images/thumbs/";
-
+    const outputDir = isLarge ? "./_site/images/thumbs/large/" : "./_site/images/thumbs/";
+    const urlPath   = isLarge ? "/images/thumbs/large/"        : "/images/thumbs/";
     const inputPath = `./src${src}`;
-
-    let metadata;
     try {
-      metadata = await Image(inputPath, {
+      const metadata = await Image(inputPath, {
         widths: [width],
-        formats: ["jpeg"],
+        formats: ["webp"],
         outputDir,
         urlPath,
-        sharpJpegOptions: { quality: 88 },
-        filenameFormat: function(_id, src) {
-          return path.basename(src, path.extname(src)) + ".jpg";
-        },
+        sharpWebpOptions: { quality: 88 },
+        filenameFormat: (_id, src) => path.basename(src, path.extname(src)) + ".webp",
       });
+      return metadata.webp[0].url;
     } catch (e) {
       console.warn(`[thumb] Could not process ${inputPath}: ${e.message}`);
-      // Fall back to old thumb path so broken images don't break the build
-      const base = path.basename(src, path.extname(src));
-      return `${urlPath}${base}.jpg`;
+      return `${urlPath}${path.basename(src, path.extname(src))}.webp`;
     }
+  }
 
-    return metadata.jpeg[0].url;
-  });
+  // {% thumb "/images/Foo.png", 400 %}  — for use with string literals in templates
+  eleventyConfig.addAsyncShortcode("thumb", generateThumb);
+
+  // {{ someVar | thumbUrl: 400 }}  — for use with Liquid variables in loops
+  eleventyConfig.addFilter("thumbUrl", generateThumb);
 
   // ── Collections ───────────────────────────────────────────────────────────
   eleventyConfig.addCollection("projects", function(collectionApi) {

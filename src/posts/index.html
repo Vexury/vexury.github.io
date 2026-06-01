@@ -15,7 +15,7 @@ eleventyExcludeFromCollections: true
       </div>
       {% if post.data.preview_image %}
       <div class="post-preview-img">
-        <img src="{% thumb post.data.preview_image, 300 %}" alt="" loading="lazy">
+        <img src="{{ post.data.preview_image | thumbUrl: 300 }}" alt="" loading="lazy">
       </div>
       {% endif %}
     </a>
