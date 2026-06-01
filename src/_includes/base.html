@@ -35,11 +35,8 @@
           </svg>
         </a>
         <a href="https://vexury.itch.io" class="footer-icon-btn" title="itch.io" aria-label="itch.io">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="2" y="9" width="20" height="11" rx="5"/>
-            <path d="M7 12h2m-1-1v2"/>
-            <circle cx="16" cy="13.5" r="0.8" fill="currentColor" stroke="none"/>
-            <circle cx="14" cy="11.5" r="0.8" fill="currentColor" stroke="none"/>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 245.371 220.736" fill="currentColor" aria-hidden="true">
+            <path d="M31.99 1.365C21.287 7.72.2 31.945 0 38.298v10.516C0 62.144 12.46 73.86 23.773 73.86c13.584 0 24.902-11.258 24.902-24.775 0 13.516 10.97 24.775 24.554 24.775 13.585 0 24.29-11.258 24.29-24.775 0 13.516 11.622 24.775 25.207 24.775h.575c13.585 0 25.207-11.258 25.207-24.775 0 13.516 10.704 24.775 24.29 24.775 13.585 0 24.554-11.258 24.554-24.775 0 13.516 11.32 24.775 24.903 24.775 11.313 0 23.773-11.714 23.773-25.031V38.298c-.2-6.353-21.287-30.578-31.988-36.933C180.118.197 157.056 0 122.685 0 88.314 0 65.252.197 31.99 1.365zm64.194 66.217c-5.906 0-10.88-3.956-12.783-9.69H108.967c-1.903 5.734-6.877 9.69-12.783 9.69zm49.744 0c-5.906 0-10.88-3.956-12.783-9.69h29.565c-1.904 5.734-6.877 9.69-12.782 9.69zM16.035 89.044c-2.667 39.607-.91 76.921 3.17 99.78 1.547 8.534 8.3 14.426 16.57 14.712 29.88 1.031 64.395 2.47 87.282 2.47 22.886 0 57.401-1.44 87.28-2.47 8.27-.286 15.024-6.178 16.57-14.712 4.08-22.859 5.837-60.173 3.17-99.78H16.035zm67.455 18.4h78.392v14.094H131.65v35.85H113.12v-35.85H83.49V107.444zm0 53.944h78.392v14.094H83.49v-14.094z"/>
           </svg>
         </a>
         <a href="mailto:vexury.dev@gmail.com" class="footer-icon-btn" title="Email" aria-label="Email">
@@ -68,6 +65,20 @@
         a.rel = 'noopener noreferrer';
       }
     });
+
+    (function () {
+      var btn = document.createElement('button');
+      btn.className = 'back-to-top';
+      btn.textContent = '↑ top';
+      btn.setAttribute('aria-label', 'Back to top');
+      btn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      document.body.appendChild(btn);
+      window.addEventListener('scroll', function () {
+        btn.classList.toggle('visible', window.scrollY > 400);
+      }, { passive: true });
+    })();
   </script>
   <script data-goatcounter="https://vexury.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>

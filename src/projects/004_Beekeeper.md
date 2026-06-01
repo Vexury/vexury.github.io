@@ -4,11 +4,11 @@ tags: projects
 title: Cozy Beekeeping Simulator
 emoji: "\U0001F3AE"
 images: 
+  - /images/Beekeepers_006.jpg
   - /images/Beekeepers_010.png
   - /images/Beekeepers_002.jpg
   - /images/Beekeepers_004.jpg
   - /images/Beekeepers_005.jpg
-  - /images/Beekeepers_006.jpg
   - /images/Beekeepers_007.jpg
   - /images/Beekeepers_008.jpg
   - /images/Beekeepers_009.jpg

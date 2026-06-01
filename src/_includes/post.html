@@ -68,17 +68,5 @@ layout: base.html
 
   headings.forEach(function (h) { observer.observe(h); });
 
-  /* Back-to-top button */
-  var btn = document.createElement('button');
-  btn.className = 'back-to-top';
-  btn.textContent = '↑ top';
-  btn.addEventListener('click', function () {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-  document.body.appendChild(btn);
-
-  window.addEventListener('scroll', function () {
-    btn.classList.toggle('visible', window.scrollY > 400);
-  }, { passive: true });
 })();
 </script>
