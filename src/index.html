@@ -49,13 +49,13 @@ title: Home
 </div>
 
 <section class="renders-section">
-  <p class="section-label">renders</p>
-  <div class="renders-strip" id="renders-strip">
+  <div class="renders-label-row">
+    <p class="section-label">featured renders</p>
+    <a href="/projects/" class="engine-badge" title="See VexEngine project">rendered with VexEngine</a>
+  </div>
+  <div class="renders-grid" id="renders-strip">
     <div class="render-item" data-full="/images/Engine_010.png">
       <img src="{% thumb '/images/Engine_010.png', 900 %}" alt="VexEngine render" loading="lazy">
-    </div>
-    <div class="render-item" data-full="/images/Engine_BistroInterior_Denoised.png">
-      <img src="{% thumb '/images/Engine_BistroInterior_Denoised.png', 900 %}" alt="VexEngine Bistro interior render" loading="lazy">
     </div>
     <div class="render-item" data-full="/images/Engine_ChessSet_Emissive.png">
       <img src="{% thumb '/images/Engine_ChessSet_Emissive.png', 900 %}" alt="VexEngine chess set emissive render" loading="lazy">
@@ -65,9 +65,6 @@ title: Home
     </div>
     <div class="render-item" data-full="/images/Engine_008.png">
       <img src="{% thumb '/images/Engine_008.png', 900 %}" alt="VexEngine render" loading="lazy">
-    </div>
-    <div class="render-item" data-full="/images/Engine_002.png">
-      <img src="{% thumb '/images/Engine_002.png', 900 %}" alt="VexEngine render" loading="lazy">
     </div>
   </div>
 </section>
@@ -79,27 +76,6 @@ title: Home
   <button class="rlb-next" id="rlb-next" aria-label="Next">&#8594;</button>
 </div>
 
-<section class="home-section">
-  <p class="section-label">posts</p>
-  <ul class="post-list">
-    {% for post in collections.posts %}
-    <li>
-      <a href="{{ post.url }}">
-        <div class="post-preview-content">
-          <h3>{{ post.data.title }}</h3>
-          <span class="post-date">{{ post.data.date | date: "%B %d, %Y" }}{% if post.data.ongoing %} (ongoing){% endif %}</span>
-          {% if post.data.summary %}<span class="post-summary">{{ post.data.summary }}</span>{% endif %}
-        </div>
-        {% if post.data.preview_image %}
-        <div class="post-preview-img">
-          <img src="{% thumb post.data.preview_image, 300 %}" alt="" loading="lazy">
-        </div>
-        {% endif %}
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
-</section>
 
 <div class="about-grid">
 

@@ -60,10 +60,10 @@ module.exports = function(eleventyConfig) {
     });
   });
 
-  eleventyConfig.addCollection("posts", function(collectionApi) {
-    return collectionApi.getFilteredByTag("posts").sort((a, b) => {
-      return b.inputPath.localeCompare(a.inputPath);
-    });
+  eleventyConfig.addCollection("postsSorted", function(collectionApi) {
+    return collectionApi.getFilteredByTag("posts")
+      .filter(p => !p.data.eleventyExcludeFromCollections)
+      .sort((a, b) => b.date - a.date);
   });
 
   // ── Filters ───────────────────────────────────────────────────────────────

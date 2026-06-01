@@ -1,0 +1,24 @@
+---
+layout: base.html
+title: Posts
+eleventyExcludeFromCollections: true
+---
+
+<ul class="post-list">
+  {% for post in collections.postsSorted %}
+  <li>
+    <a href="{{ post.url }}">
+      <div class="post-preview-content">
+        <h3>{{ post.data.title }}</h3>
+        <span class="post-date">{{ post.data.date | date: "%B %d, %Y" }}{% if post.data.ongoing %} &middot; ongoing{% endif %}</span>
+        {% if post.data.summary %}<span class="post-summary">{{ post.data.summary }}</span>{% endif %}
+      </div>
+      {% if post.data.preview_image %}
+      <div class="post-preview-img">
+        <img src="{% thumb post.data.preview_image, 300 %}" alt="" loading="lazy">
+      </div>
+      {% endif %}
+    </a>
+  </li>
+  {% endfor %}
+</ul>
