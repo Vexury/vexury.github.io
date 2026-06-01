@@ -281,7 +281,7 @@ pre code {
 
 .hero {
   display: grid;
-  grid-template-columns: 1fr 1.1fr;
+  grid-template-columns: 1fr 1.3fr;
   margin-bottom: 1.75rem;
   background: var(--card-bg);
   border: 2px solid var(--border-mid);
@@ -289,6 +289,13 @@ pre code {
   overflow: hidden;
   min-height: 350px;
   box-shadow: var(--shadow);
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+
+.hero:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
 }
 
 .hero-text {
@@ -835,7 +842,7 @@ pre code {
 }
 
 .post-preview-img {
-  width: 140px;
+  width: 200px;
   flex-shrink: 0;
 }
 
