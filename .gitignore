@@ -1,2 +1,5 @@
+_site/
 src/images/thumbs/
+.cache/
+node_modules/
 .claude/

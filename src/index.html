@@ -46,7 +46,7 @@ title: Home
     </div>
   </div>
   <div class="hero-render">
-    <img src="/images/thumbs/large/Engine_Hero.jpg" class="hero-img" alt="VexEngine path traced render">
+    <img src="{% thumb '/images/Engine_Hero.png', 900 %}" class="hero-img" alt="VexEngine path traced render">
     <span class="hero-caption">Rendered with VexEngine &middot; <a href="https://developer.nvidia.com/orca/amazon-lumberyard-bistro" target="_blank" rel="noopener">Bistro scene</a></span>
   </div>
 </div>
@@ -55,22 +55,22 @@ title: Home
   <p class="section-label">renders</p>
   <div class="renders-strip" id="renders-strip">
     <div class="render-item" data-full="/images/Engine_010.png">
-      <img src="/images/thumbs/large/Engine_010.jpg" alt="VexEngine render" loading="lazy">
+      <img src="{% thumb '/images/Engine_010.png', 900 %}" alt="VexEngine render" loading="lazy">
     </div>
     <div class="render-item" data-full="/images/Engine_BistroInterior_Denoised.png">
-      <img src="/images/thumbs/large/Engine_BistroInterior_Denoised.jpg" alt="VexEngine Bistro interior render" loading="lazy">
+      <img src="{% thumb '/images/Engine_BistroInterior_Denoised.png', 900 %}" alt="VexEngine Bistro interior render" loading="lazy">
     </div>
     <div class="render-item" data-full="/images/Engine_ChessSet_Emissive.png">
-      <img src="/images/thumbs/large/Engine_ChessSet_Emissive.jpg" alt="VexEngine chess set emissive render" loading="lazy">
+      <img src="{% thumb '/images/Engine_ChessSet_Emissive.png', 900 %}" alt="VexEngine chess set emissive render" loading="lazy">
     </div>
     <div class="render-item" data-full="/images/Engine_009.png">
-      <img src="/images/thumbs/large/Engine_009.jpg" alt="VexEngine render" loading="lazy">
+      <img src="{% thumb '/images/Engine_009.png', 900 %}" alt="VexEngine render" loading="lazy">
     </div>
     <div class="render-item" data-full="/images/Engine_008.png">
-      <img src="/images/thumbs/large/Engine_008.jpg" alt="VexEngine render" loading="lazy">
+      <img src="{% thumb '/images/Engine_008.png', 900 %}" alt="VexEngine render" loading="lazy">
     </div>
     <div class="render-item" data-full="/images/Engine_002.png">
-      <img src="/images/thumbs/large/Engine_002.jpg" alt="VexEngine render" loading="lazy">
+      <img src="{% thumb '/images/Engine_002.png', 900 %}" alt="VexEngine render" loading="lazy">
     </div>
   </div>
 </section>
@@ -100,7 +100,7 @@ title: Home
         </div>
         {% if post.data.preview_image %}
         <div class="post-preview-img">
-          <img src="{{ post.data.preview_image }}" alt="">
+          <img src="{% thumb post.data.preview_image, 300 %}" alt="" loading="lazy">
         </div>
         {% endif %}
       </a>

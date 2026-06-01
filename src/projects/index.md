@@ -7,8 +7,9 @@ title: Projects
   {% for project in collections.projects %}
   <div class="project-card{% if project.data.featured %} featured{% endif %}">
     {% if project.data.images %}
+    {% if project.data.featured %}{% assign tw = 900 %}{% else %}{% assign tw = 400 %}{% endif %}
     <div class="slideshow">
-      {% for img in project.data.images %}{% if img contains '.mp4' or img contains '.webm' %}<video src="{{ img }}" muted playsinline preload="none" {% if forloop.first %}class="active"{% endif %}></video>{% else %}{% if project.data.featured %}{% assign thumbsDir = '/images/thumbs/large/' %}{% else %}{% assign thumbsDir = '/images/thumbs/' %}{% endif %}{% assign base = img | split: '.' | first %}<img src="{{ base | replace: '/images/', thumbsDir }}.jpg" data-full="{{ img }}" alt="{{ project.data.title }}" loading="lazy" {% if forloop.first %}class="active"{% endif %}>{% endif %}{% endfor %}
+      {% for img in project.data.images %}{% if img contains '.mp4' or img contains '.webm' %}<video src="{{ img }}" muted playsinline preload="none" {% if forloop.first %}class="active"{% endif %}></video>{% else %}<img src="{% thumb img, tw %}" data-full="{{ img }}" alt="{{ project.data.title }}" loading="lazy" {% if forloop.first %}class="active"{% endif %}>{% endif %}{% endfor %}
       <div class="slideshow-dots"><div class="slideshow-dots-inner">{% for img in project.data.images %}<span class="dot {% if forloop.first %}active{% endif %}"></span>{% endfor %}</div></div>
     </div>
     {% elsif project.data.image %}<img src="{{ project.data.image }}" alt="{{ project.data.title }}">{% endif %}
