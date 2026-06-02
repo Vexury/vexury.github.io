@@ -34,7 +34,7 @@ On my end, the most interesting technical work was the VFX: the traction beam an
 
 <div style="text-align: center; margin: 1.5rem 0">
   <video autoplay loop muted playsinline style="max-width:80%">
-    <source src="/images/Necrocure_VFX.mp4" type="video/mp4">
+    <source src="/images/Necrocure/Necrocure_VFX.mp4" type="video/mp4">
   </video>
 </div>
 
