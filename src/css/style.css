@@ -366,8 +366,9 @@ pre code {
   position: absolute;
   bottom: 0.5rem;
   right: 0.6rem;
-  font-size: 0.62rem;
-  color: rgba(255,255,255,0.55);
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.72);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.55);
   pointer-events: none;
   user-select: none;
 }
