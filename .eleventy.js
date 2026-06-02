@@ -48,6 +48,8 @@ module.exports = function(eleventyConfig) {
   // ── Collections ───────────────────────────────────────────────────────────
   eleventyConfig.addCollection("projects", function(collectionApi) {
     return collectionApi.getFilteredByTag("projects").sort((a, b) => {
+      if (a.data.pinned && !b.data.pinned) return -1;
+      if (!a.data.pinned && b.data.pinned) return 1;
       return b.inputPath.localeCompare(a.inputPath);
     });
   });
