@@ -3,7 +3,7 @@ title: ⚙️ VexEngine - Custom Rendering Engine
 date: 2026-02-13
 ongoing: true
 summary: A C++ graphics engine built from scratch — path tracing, Cook-Torrance GGX, dual OpenGL/Vulkan backend, BVH acceleration, denoising and a full editor UI.
-preview_image: /images/Engine_011.png
+preview_image: /images/Engine/Engine_011.png
 ---
 
 # {{ title }}
@@ -17,7 +17,7 @@ preview_image: /images/Engine_011.png
 VexEngine is a C++ graphics engine I built from scratch — featuring a progressive path tracer with CPU and GPU backends, Cook-Torrance GGX materials, BVH acceleration, denoising and a dockable editor UI. It supports both OpenGL and Vulkan through an abstracted rendering interface.
 
 <div style="text-align:center; color:#888; font-size:0.85em;">
-      <img class="lb" src="{% thumb '/images/Engine_011.png', 1100 %}" alt="Full editor layout" style="max-width:100%" loading="lazy">
+      <img class="lb" src="{% thumb '/images/Engine/Engine_011.png', 1100 %}" alt="Full editor layout" style="max-width:100%" loading="lazy">
 
       Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
 </div>
@@ -144,7 +144,7 @@ Some of the features are further discussed below.
 The foundation is [GLFW](https://www.glfw.org/) for window creation and input handling, with [Dear ImGui](https://github.com/ocornut/imgui) (docking branch) on top for the UI. Since ImGui is immediate-mode, the entire editor is just code — no widget trees, no event callbacks, just describe what you want each frame and move on. Every panel can be freely docked, undocked and resized.
 
 <div style="text-align:center; color:#888; font-size:0.85em;">
-      <img class="lb" src="{% thumb '/images/Engine_002.png', 1100 %}" alt="Full editor layout" style="max-width:100%" loading="lazy">
+      <img class="lb" src="{% thumb '/images/Engine/Engine_002.png', 1100 %}" alt="Full editor layout" style="max-width:100%" loading="lazy">
 
       Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
 </div>
@@ -184,7 +184,7 @@ The remaining ~5 s are tinyobjloader parsing (2.3 s) and SSBO/BVH packing (3.2 s
 Clicking an object in the viewport highlights it with a **screen-space outline**: the selected geometry is rendered as a solid silhouette into an offscreen mask, which the tone-map pass then dilates with a 5×5 kernel and composites as an orange ring over the final image.
 
 <div style="text-align:center; color:#888; font-size:0.85em;">
-      <img class="lb" src="{% thumb '/images/Engine_Selection.png', 1100 %}" alt="Full editor layout" style="max-width:100%" loading="lazy">
+      <img class="lb" src="{% thumb '/images/Engine/Engine_Selection.png', 1100 %}" alt="Full editor layout" style="max-width:100%" loading="lazy">
 
       Scene: [Chess Set](https://polyhaven.com/a/chess_set) (CC0)
 </div>
@@ -251,8 +251,8 @@ OpenGL is the simpler backend and makes iteration fast: shader hot-reload works 
 
 <div style="margin:1.5rem auto; width:100%">
   <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
-    <img class="ic-right" src="{% thumb '/images/Engine_Compare_PT.png', 1100 %}" alt="Vulkan hardware ray tracing" loading="lazy">
-    <img class="ic-left" src="{% thumb '/images/Engine_Compare_Rast.png', 1100 %}" alt="OpenGL rasterizer" loading="lazy">
+    <img class="ic-right" src="{% thumb '/images/Engine/Engine_Compare_PT.png', 1100 %}" alt="Vulkan hardware ray tracing" loading="lazy">
+    <img class="ic-left" src="{% thumb '/images/Engine/Engine_Compare_Rast.png', 1100 %}" alt="OpenGL rasterizer" loading="lazy">
     <div class="ic-line"></div>
     <span class="ic-label ic-label-left">Rasterizer (OpenGL)</span>
     <span class="ic-label ic-label-right">Path Tracer (Vulkan)</span>
@@ -270,27 +270,27 @@ On top of the standard shaded view, several **debug visualization modes** can be
 
 <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:0.5rem; margin:1.5rem 0">
     <figure style="margin:0">
-      <img class="lb" src="{% thumb '/images/Engine_Debug_Shaded.png', 600 %}" style="width:100%; border-radius:4px" alt="Shaded" loading="lazy">
+      <img class="lb" src="{% thumb '/images/Engine/Engine_Debug_Shaded.png', 600 %}" style="width:100%; border-radius:4px" alt="Shaded" loading="lazy">
       <figcaption style="text-align:center; color:#888; font-size:0.8em; margin-top:0.3rem">Shaded</figcaption>
     </figure>
     <figure style="margin:0">
-      <img class="lb" src="{% thumb '/images/Engine_Debug_Wireframe.png', 600 %}" style="width:100%; border-radius:4px" alt="Wireframe" loading="lazy">
+      <img class="lb" src="{% thumb '/images/Engine/Engine_Debug_Wireframe.png', 600 %}" style="width:100%; border-radius:4px" alt="Wireframe" loading="lazy">
       <figcaption style="text-align:center; color:#888; font-size:0.8em; margin-top:0.3rem">Wireframe</figcaption>
     </figure>
     <figure style="margin:0">
-      <img class="lb" src="{% thumb '/images/Engine_Debug_Normals.png', 600 %}" style="width:100%; border-radius:4px" alt="Normals" loading="lazy">
+      <img class="lb" src="{% thumb '/images/Engine/Engine_Debug_Normals.png', 600 %}" style="width:100%; border-radius:4px" alt="Normals" loading="lazy">
       <figcaption style="text-align:center; color:#888; font-size:0.8em; margin-top:0.3rem">Normals</figcaption>
     </figure>
     <figure style="margin:0">
-      <img class="lb" src="{% thumb '/images/Engine_Debug_Albedo.png', 600 %}" style="width:100%; border-radius:4px" alt="Albedo" loading="lazy">
+      <img class="lb" src="{% thumb '/images/Engine/Engine_Debug_Albedo.png', 600 %}" style="width:100%; border-radius:4px" alt="Albedo" loading="lazy">
       <figcaption style="text-align:center; color:#888; font-size:0.8em; margin-top:0.3rem">Albedo</figcaption>
     </figure>
     <figure style="margin:0">
-      <img class="lb" src="{% thumb '/images/Engine_Debug_UVs.png', 600 %}" style="width:100%; border-radius:4px" alt="UVs" loading="lazy">
+      <img class="lb" src="{% thumb '/images/Engine/Engine_Debug_UVs.png', 600 %}" style="width:100%; border-radius:4px" alt="UVs" loading="lazy">
       <figcaption style="text-align:center; color:#888; font-size:0.8em; margin-top:0.3rem">UVs</figcaption>
     </figure>
     <figure style="margin:0">
-      <img class="lb" src="{% thumb '/images/Engine_Debug_MatID.png', 600 %}" style="width:100%; border-radius:4px" alt="Material ID" loading="lazy">
+      <img class="lb" src="{% thumb '/images/Engine/Engine_Debug_MatID.png', 600 %}" style="width:100%; border-radius:4px" alt="Material ID" loading="lazy">
       <figcaption style="text-align:center; color:#888; font-size:0.8em; margin-top:0.3rem">Material ID</figcaption>
     </figure>
     
@@ -310,8 +310,8 @@ The rasterizer supports directional (sun) shadow mapping on both backends. A dep
 
 <div style="margin:1.5rem auto; width:100%">
   <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
-    <img class="ic-right" src="{% thumb '/images/Engine_Chess_SM.png', 1100 %}" alt="PCF shadow mapping" loading="lazy">
-    <img class="ic-left" src="{% thumb '/images/Engine_Chess_NoSM.png', 1100 %}" alt="No shadows" loading="lazy">
+    <img class="ic-right" src="{% thumb '/images/Engine/Engine_Chess_SM.png', 1100 %}" alt="PCF shadow mapping" loading="lazy">
+    <img class="ic-left" src="{% thumb '/images/Engine/Engine_Chess_NoSM.png', 1100 %}" alt="No shadows" loading="lazy">
     <div class="ic-line"></div>
     <span class="ic-label ic-label-left">Shadows off</span>
     <span class="ic-label ic-label-right">PCF shadow mapping</span>
@@ -339,10 +339,10 @@ Getting the bias right requires balancing two artifacts: too little causes self-
 The engine's main rendering mode is a **progressive path tracer** displayed in the viewport via a fullscreen quad. It accumulates samples silently in the background — the longer the scene sits still, the cleaner the image gets. Any change to the camera, geometry, or settings immediately resets the accumulation and starts fresh.
 
 <div style="display:grid; grid-template-columns: repeat(4, 1fr); margin:1.5rem auto; width:100%; overflow:hidden">
-  <div style="overflow:hidden; border-right:1px solid var(--border)"><img src="{% thumb '/images/Engine_Split_1_SPP.png', 1100 %}" style="width:400%; height:100%; display:block" alt="1 SPP" loading="lazy"></div>
-  <div style="overflow:hidden; border-right:1px solid var(--border)"><img src="{% thumb '/images/Engine_Split_16_SPP.png', 1100 %}" style="width:400%; height:100%; display:block; transform:translateX(-25%)" alt="16 SPP" loading="lazy"></div>
-  <div style="overflow:hidden; border-right:1px solid var(--border)"><img src="{% thumb '/images/Engine_Split_64_SPP.png', 1100 %}" style="width:400%; height:100%; display:block; transform:translateX(-50%)" alt="64 SPP" loading="lazy"></div>
-  <div style="overflow:hidden"><img src="{% thumb '/images/Engine_Split_512_SPP.png', 1100 %}" style="width:400%; height:100%; display:block; transform:translateX(-75%)" alt="512 SPP" loading="lazy"></div>
+  <div style="overflow:hidden; border-right:1px solid var(--border)"><img src="{% thumb '/images/Engine/Engine_Split_1_SPP.png', 1100 %}" style="width:400%; height:100%; display:block" alt="1 SPP" loading="lazy"></div>
+  <div style="overflow:hidden; border-right:1px solid var(--border)"><img src="{% thumb '/images/Engine/Engine_Split_16_SPP.png', 1100 %}" style="width:400%; height:100%; display:block; transform:translateX(-25%)" alt="16 SPP" loading="lazy"></div>
+  <div style="overflow:hidden; border-right:1px solid var(--border)"><img src="{% thumb '/images/Engine/Engine_Split_64_SPP.png', 1100 %}" style="width:400%; height:100%; display:block; transform:translateX(-50%)" alt="64 SPP" loading="lazy"></div>
+  <div style="overflow:hidden"><img src="{% thumb '/images/Engine/Engine_Split_512_SPP.png', 1100 %}" style="width:400%; height:100%; display:block; transform:translateX(-75%)" alt="512 SPP" loading="lazy"></div>
   <div style="text-align:center; color:#888; padding:0.3rem 0; border-right:1px solid var(--border)">1 SPP</div>
   <div style="text-align:center; color:#888; padding:0.3rem 0; border-right:1px solid var(--border)">16 SPP</div>
   <div style="text-align:center; color:#888; padding:0.3rem 0; border-right:1px solid var(--border)">64 SPP</div>
@@ -415,7 +415,7 @@ The algorithm is the same across all four backends — the difference is where i
 - **GPU (Vulkan HW RT)** — Uses **hardware ray tracing** (`VK_KHR_ray_tracing_pipeline`) with dedicated RT cores for BVH traversal and ray-triangle intersection. The algorithm spans five shader stages (rgen, rmiss, shadow rmiss, rchit, rahit) with an iterative loop in the ray generation shader to stay within a recursion depth of one.
 
 <div style="text-align:center; color:#888; font-size:0.85em;">
-      <img class="lb" src="{% thumb '/images/Engine_010.png', 1100 %}" alt="Full editor layout" style="max-width:100%" loading="lazy">
+      <img class="lb" src="{% thumb '/images/Engine/Engine_010.png', 1100 %}" alt="Full editor layout" style="max-width:100%" loading="lazy">
 
       Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
 </div>
@@ -429,7 +429,7 @@ The implementation is fully analytical — no additional geometry, BVH nodes, or
 Anisotropy (*g*) shapes the scattering lobe: *g* = 0 gives isotropic fog, *g* → +1 concentrates scattering forward and produces glowing halos around lights visible through haze, and *g* < 0 scatters back toward the source.
 
 <div style="text-align:center; color:#888; font-size:0.85em;">
-      <img class="lb" src="{% thumb '/images/Engine_Bistro_Fog.png', 1100 %}" alt="Volumetric fog in the Bistro scene" style="max-width:100%" loading="lazy">
+      <img class="lb" src="{% thumb '/images/Engine/Engine_Bistro_Fog.png', 1100 %}" alt="Volumetric fog in the Bistro scene" style="max-width:100%" loading="lazy">
 
       Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
 </div>
@@ -446,8 +446,8 @@ A second **Denoise+** mode feeds OIDN two additional *feature buffers* — **fir
 
 <div style="margin:1.5rem auto; width:100%">
   <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
-    <img class="ic-right" src="{% thumb '/images/Engine_BistroInterior_1_SPP_denoised_extra.png', 1100 %}" alt="OIDN Denoise+ (albedo + normal)" loading="lazy">
-    <img class="ic-left" src="{% thumb '/images/Engine_BistroInterior_1_SPP_raw.png', 1100 %}" alt="1 SPP raw" loading="lazy">
+    <img class="ic-right" src="{% thumb '/images/Engine/Engine_BistroInterior_1_SPP_denoised_extra.png', 1100 %}" alt="OIDN Denoise+ (albedo + normal)" loading="lazy">
+    <img class="ic-left" src="{% thumb '/images/Engine/Engine_BistroInterior_1_SPP_raw.png', 1100 %}" alt="1 SPP raw" loading="lazy">
     <div class="ic-line"></div>
     <span class="ic-label ic-label-left">1 SPP (raw)</span>
     <span class="ic-label ic-label-right">Denoise+ (albedo + normal)</span>
@@ -473,8 +473,8 @@ One complication arises with the GPU path tracers: the accumulation buffer store
 
 <div style="margin:1.5rem auto; width:100%">
   <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
-    <img class="ic-right" src="{% thumb '/images/Engine_Compare_Bloom.png', 1100 %}" alt="Bloom on" loading="lazy">
-    <img class="ic-left" src="{% thumb '/images/Engine_Compare_NoBloom.png', 1100 %}" alt="Bloom off" loading="lazy">
+    <img class="ic-right" src="{% thumb '/images/Engine/Engine_Compare_Bloom.png', 1100 %}" alt="Bloom on" loading="lazy">
+    <img class="ic-left" src="{% thumb '/images/Engine/Engine_Compare_NoBloom.png', 1100 %}" alt="Bloom off" loading="lazy">
     <div class="ic-line"></div>
     <span class="ic-label ic-label-left">Bloom off</span>
     <span class="ic-label ic-label-right">Bloom on</span>
@@ -550,7 +550,7 @@ The dispatch also treats Microfacet materials with `metallic > 0.99` and `roughn
 </details>
 <br>
 <div style="text-align:center; color:#888; font-size:0.85em;">
-      <img class="lb" src="{% thumb '/images/Engine_BistroInterior_Denoised.png', 1100 %}" alt="Bistro interior path traced render" style="max-width:100%" loading="lazy">
+      <img class="lb" src="{% thumb '/images/Engine/Engine_BistroInterior_Denoised.png', 1100 %}" alt="Bistro interior path traced render" style="max-width:100%" loading="lazy">
 
       Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
 </div>
