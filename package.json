@@ -5,7 +5,8 @@
   "scripts": {
     "start": "eleventy --serve",
     "build": "eleventy",
-    "export-cv": "eleventy && node scripts/export-cv.js"
+    "export-cv": "eleventy && node scripts/export-cv.js",
+    "export-cover-letters": "eleventy && node scripts/export-cover-letters.js"
   },
   "repository": {
     "type": "git",

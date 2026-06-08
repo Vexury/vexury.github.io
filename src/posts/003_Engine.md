@@ -338,18 +338,20 @@ Getting the bias right requires balancing two artifacts: too little causes self-
 
 The engine's main rendering mode is a **progressive path tracer** displayed in the viewport via a fullscreen quad. It accumulates samples silently in the background — the longer the scene sits still, the cleaner the image gets. Any change to the camera, geometry, or settings immediately resets the accumulation and starts fresh.
 
-<div style="display:grid; grid-template-columns: repeat(4, 1fr); margin:1.5rem auto; width:100%; overflow:hidden">
-  <div style="overflow:hidden; border-right:1px solid var(--border)"><img src="{% thumb '/images/Engine/Engine_Split_1_SPP.png', 1100 %}" style="width:400%; height:100%; display:block" alt="1 SPP" loading="lazy"></div>
-  <div style="overflow:hidden; border-right:1px solid var(--border)"><img src="{% thumb '/images/Engine/Engine_Split_16_SPP.png', 1100 %}" style="width:400%; height:100%; display:block; transform:translateX(-25%)" alt="16 SPP" loading="lazy"></div>
-  <div style="overflow:hidden; border-right:1px solid var(--border)"><img src="{% thumb '/images/Engine/Engine_Split_64_SPP.png', 1100 %}" style="width:400%; height:100%; display:block; transform:translateX(-50%)" alt="64 SPP" loading="lazy"></div>
-  <div style="overflow:hidden"><img src="{% thumb '/images/Engine/Engine_Split_512_SPP.png', 1100 %}" style="width:400%; height:100%; display:block; transform:translateX(-75%)" alt="512 SPP" loading="lazy"></div>
-  <div style="text-align:center; color:#888; padding:0.3rem 0; border-right:1px solid var(--border)">1 SPP</div>
-  <div style="text-align:center; color:#888; padding:0.3rem 0; border-right:1px solid var(--border)">16 SPP</div>
-  <div style="text-align:center; color:#888; padding:0.3rem 0; border-right:1px solid var(--border)">64 SPP</div>
-  <div style="text-align:center; color:#888; padding:0.3rem 0">512 SPP</div>
-  <div style="grid-column:1/-1; text-align:center; color:#888; font-size:0.85em; padding:0.3rem 0">
-  
-  Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)</div>
+<div style="margin:1.5rem 0">
+  <div style="display:flex">
+    <div style="flex:1; aspect-ratio:249/685; background-image:url('{% thumb '/images/Engine/Engine_Split_1_SPP.png', 1100 %}'); background-size:400% auto; background-position:0% 0%; border-right:1px solid var(--border)"></div>
+    <div style="flex:1; aspect-ratio:249/685; background-image:url('{% thumb '/images/Engine/Engine_Split_16_SPP.png', 1100 %}'); background-size:400% auto; background-position:33.33% 0%; border-right:1px solid var(--border)"></div>
+    <div style="flex:1; aspect-ratio:249/685; background-image:url('{% thumb '/images/Engine/Engine_Split_64_SPP.png', 1100 %}'); background-size:400% auto; background-position:66.67% 0%; border-right:1px solid var(--border)"></div>
+    <div style="flex:1; aspect-ratio:249/685; background-image:url('{% thumb '/images/Engine/Engine_Split_512_SPP.png', 1100 %}'); background-size:400% auto; background-position:100% 0%"></div>
+  </div>
+  <div style="display:flex">
+    <div style="flex:1; text-align:center; color:#888; padding:0.3rem 0; border-right:1px solid var(--border)">1 SPP</div>
+    <div style="flex:1; text-align:center; color:#888; padding:0.3rem 0; border-right:1px solid var(--border)">16 SPP</div>
+    <div style="flex:1; text-align:center; color:#888; padding:0.3rem 0; border-right:1px solid var(--border)">64 SPP</div>
+    <div style="flex:1; text-align:center; color:#888; padding:0.3rem 0">512 SPP</div>
+  </div>
+  <div style="text-align:center; color:#888; font-size:0.85em; padding:0.3rem 0">Scene: Nvidia <a href="https://developer.nvidia.com/orca/amazon-lumberyard-bistro" target="_blank" rel="noopener">Amazon Lumberyard Bistro</a> (CC-BY 4.0)</div>
 </div>
 
 Ray-scene intersection is accelerated by a **BVH** built with binned SAH. The path tracer supports four light types — emissive geometry, emissive textures, point/directional lights, and an environment map — all sampled with **Next Event Estimation (NEE)** and **Multiple Importance Sampling (MIS)** to keep variance low. Path depth is managed by **Russian Roulette**, the specular lobe uses **VNDF sampling** [(Heitz 2018)](https://jcgt.org/published/0007/04/01/paper.pdf), and **depth of field** is modelled with a thin-lens camera. Anti-aliasing comes for free via jittered primary rays, and firefly clamping suppresses extreme outliers during early convergence.

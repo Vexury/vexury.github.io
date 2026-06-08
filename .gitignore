@@ -3,3 +3,6 @@ src/images/thumbs/
 .cache/
 node_modules/
 .claude/
+src/cover_letters/
+scripts/export-cover-letters.js
+export

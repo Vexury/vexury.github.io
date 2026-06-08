@@ -1,0 +1,971 @@
+---
+title: ShaderGraph Viewer
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShaderGraph Viewer — vexury</title>
+  <script>
+    (function () {
+      var t = localStorage.getItem('theme');
+      if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+      if (window.self !== window.top) {
+        document.documentElement.classList.add('sg-embedded');
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="sg-body">
+  <div class="sg-chrome">
+    <header class="site-header">
+      <nav class="site-nav">
+        <a href="/" class="nav-wordmark">/&nbsp;vexury</a>
+        <div class="nav-links">
+          <a href="/" class="nav-link">/&nbsp;home</a>
+          <div class="nav-group">
+            <a href="/projects/" class="nav-link active">/&nbsp;projects</a>
+            <a href="/projects/shadergraph/" class="nav-link nav-link-sub active">shaders</a>
+          </div>
+          <a href="/posts/" class="nav-link">/&nbsp;posts</a>
+          <a href="/cv/" class="nav-link">/&nbsp;cv</a>
+          <div class="nav-icons">
+            <a href="https://github.com/Vexury" class="nav-icon-btn" title="GitHub" aria-label="GitHub">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+              </svg>
+            </a>
+            <a href="https://vexury.itch.io" class="nav-icon-btn" title="itch.io" aria-label="itch.io">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 245.371 220.736" fill="currentColor" aria-hidden="true">
+                <path d="M31.99 1.365C21.287 7.72.2 31.945 0 38.298v10.516C0 62.144 12.46 73.86 23.773 73.86c13.584 0 24.902-11.258 24.902-24.775 0 13.516 10.97 24.775 24.554 24.775 13.585 0 24.29-11.258 24.29-24.775 0 13.516 11.622 24.775 25.207 24.775h.575c13.585 0 25.207-11.258 25.207-24.775 0 13.516 10.704 24.775 24.29 24.775 13.585 0 24.554-11.258 24.554-24.775 0 13.516 11.32 24.775 24.903 24.775 11.313 0 23.773-11.714 23.773-25.031V38.298c-.2-6.353-21.287-30.578-31.988-36.933C180.118.197 157.056 0 122.685 0 88.314 0 65.252.197 31.99 1.365zm64.194 66.217c-5.906 0-10.88-3.956-12.783-9.69H108.967c-1.903 5.734-6.877 9.69-12.783 9.69zm49.744 0c-5.906 0-10.88-3.956-12.783-9.69h29.565c-1.904 5.734-6.877 9.69-12.782 9.69zM16.035 89.044c-2.667 39.607-.91 76.921 3.17 99.78 1.547 8.534 8.3 14.426 16.57 14.712 29.88 1.031 64.395 2.47 87.282 2.47 22.886 0 57.401-1.44 87.28-2.47 8.27-.286 15.024-6.178 16.57-14.712 4.08-22.859 5.837-60.173 3.17-99.78H16.035zm67.455 18.4h78.392v14.094H131.65v35.85H113.12v-35.85H83.49V107.444zm0 53.944h78.392v14.094H83.49v-14.094z"/>
+              </svg>
+            </a>
+            <a href="mailto:vexury.dev@gmail.com" class="nav-icon-btn" title="Email" aria-label="Email">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </a>
+            <a href="https://discord.com/users/vexury" class="nav-icon-btn" title="Discord: vexury" aria-label="Discord">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="sg-main">
+      <div class="sg-page">
+        <div class="sg-toolbar">
+          <span class="sg-toolbar-title" id="sg-title">shadergraph viewer</span>
+          <div class="sg-toolbar-controls">
+            <button class="sg-btn" id="sg-fit" title="Fit graph to view">fit</button>
+            <button class="sg-btn" id="sg-zoom-out" title="Zoom out">−</button>
+            <span class="sg-zoom-label" id="sg-zoom-label">100%</span>
+            <button class="sg-btn" id="sg-zoom-in" title="Zoom in">+</button>
+          </div>
+        </div>
+        <div class="sg-canvas" id="sg-canvas">
+          <div class="sg-transform" id="sg-transform">
+            <svg id="sg-edges" class="sg-edges" width="1" height="1"></svg>
+          </div>
+          <div class="sg-legend">
+            <div class="sg-legend-item"><span class="sg-legend-dot" style="background:#7AE0E0"></span>Float</div>
+            <div class="sg-legend-item"><span class="sg-legend-dot" style="background:#7AC87A"></span>Vector2</div>
+            <div class="sg-legend-item"><span class="sg-legend-dot" style="background:#E6D87A"></span>Vector3</div>
+            <div class="sg-legend-item"><span class="sg-legend-dot" style="background:#E67AA8"></span>Vector4</div>
+            <div class="sg-legend-item"><span class="sg-legend-dot" style="background:#FFA833"></span>Texture</div>
+            <div class="sg-legend-item"><span class="sg-legend-dot" style="background:#B87AE6"></span>Boolean</div>
+            <div class="sg-legend-item"><span class="sg-legend-dot" style="background:#E6CFFF"></span>Sampler</div>
+            <div class="sg-legend-item"><span class="sg-legend-dot" style="background:#c8b4f0"></span>Gradient</div>
+          </div>
+          <div class="sg-overlay" id="sg-overlay">
+            <div class="sg-overlay-label" id="sg-overlay-label">loading…</div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      // ─── Constants ──────────────────────────────────────────
+      var HEADER_H  = 32;
+      var PORT_H    = 22;
+      var PORT_PAD  = 4;
+      var NODE_MIN_W = 130;
+      var GRID_SIZE  = 24;
+
+      // Format a slot's constant value for display on unconnected input ports
+      function fmtNum(n) {
+        if (!isFinite(n)) return '0';
+        if (n === Math.round(n)) return String(Math.round(n));
+        return parseFloat(n.toPrecision(4)).toString();
+      }
+
+      function slotValueLabel(slot) {
+        var v = slot.m_Value;
+        if (v === null || v === undefined) return null;
+        var mType = (slot.m_Type || '').split(',')[0];
+        var d = mType.lastIndexOf('.'); if (d !== -1) mType = mType.slice(d + 1);
+        if (typeof v === 'number') return fmtNum(v);
+        if (typeof v === 'boolean') return v ? '1' : '0';
+        if (mType.indexOf('Boolean') !== -1) return v ? '1' : '0';
+        if (mType.indexOf('Color') !== -1) {
+          if (typeof v.r !== 'undefined')
+            return '(' + fmtNum(v.r) + ', ' + fmtNum(v.g||0) + ', ' + fmtNum(v.b||0) + ')';
+        }
+        if (typeof v.x !== 'undefined') {
+          var isScalar = mType.indexOf('Vector1') !== -1 || mType.indexOf('Dynamic') !== -1;
+          if (isScalar) return fmtNum(v.x);
+          if (mType.indexOf('Vector2') !== -1) return '(' + fmtNum(v.x) + ', ' + fmtNum(v.y) + ')';
+          if (mType.indexOf('Vector3') !== -1) return '(' + fmtNum(v.x) + ', ' + fmtNum(v.y) + ', ' + fmtNum(v.z) + ')';
+          if (mType.indexOf('Vector4') !== -1) return '(' + fmtNum(v.x) + ', ' + fmtNum(v.y) + ', ' + fmtNum(v.z) + ', ' + fmtNum(v.w) + ')';
+          return fmtNum(v.x);
+        }
+        if (typeof v.r !== 'undefined')
+          return '(' + fmtNum(v.r) + ', ' + fmtNum(v.g||0) + ', ' + fmtNum(v.b||0) + ')';
+        return null;
+      }
+
+      // Derive wire/port color from slot's C# class name
+      function slotColor(mType) {
+        if (!mType) return '#8a8580';
+        var n = mType.split(',')[0];
+        var d = n.lastIndexOf('.'); if (d !== -1) n = n.slice(d + 1);
+        if (n.indexOf('Vector4') !== -1) return '#E67AA8';
+        if (n.indexOf('Color') !== -1 && n.indexOf('ColorRGB') === -1) return '#E67AA8';
+        if (n.indexOf('ColorRGB') !== -1 || n.indexOf('Vector3') !== -1 || n.indexOf('Position') !== -1 || n.indexOf('Normal') !== -1 || n.indexOf('Tangent') !== -1) return '#E6D87A';
+        if (n.indexOf('Vector2') !== -1) return '#7AC87A';
+        if (n.indexOf('Vector1') !== -1 || n.indexOf('DynamicVector') !== -1 || n.indexOf('DynamicValue') !== -1) return '#7AE0E0';
+        if (n.indexOf('Texture2D') !== -1 || n.indexOf('Texture3D') !== -1 || n.indexOf('Cubemap') !== -1) return '#FFA833';
+        if (n.indexOf('Boolean') !== -1) return '#B87AE6';
+        if (n.indexOf('SamplerState') !== -1) return '#E6CFFF';
+        if (n.indexOf('Gradient') !== -1) return '#c8b4f0';
+        return '#8a8580';
+      }
+
+      // ─── Parser ─────────────────────────────────────────────
+      function collectObjects(val, map) {
+        if (!val || typeof val !== 'object') return;
+        if (Array.isArray(val)) {
+          for (var i = 0; i < val.length; i++) collectObjects(val[i], map);
+          return;
+        }
+        if (typeof val.m_ObjectId === 'string') {
+          map[val.m_ObjectId] = val;
+        }
+        var keys = Object.keys(val);
+        for (var k = 0; k < keys.length; k++) collectObjects(val[keys[k]], map);
+      }
+
+      var SPACE_NAMES = { 0: 'Object', 1: 'View', 2: 'World', 3: 'Tangent', 4: 'Absolute World' };
+
+      function getNodeLabel(obj, objMap) {
+        if (obj.m_FunctionName) return obj.m_FunctionName;
+        if (obj.m_Property && obj.m_Property.m_Id) {
+          var prop = objMap[obj.m_Property.m_Id];
+          if (prop && prop.m_Name) return prop.m_Name;
+        }
+        var base;
+        if (obj.m_Name && obj.m_Name !== 'Node' && obj.m_Name !== '') base = obj.m_Name;
+        else {
+          var t = (obj.m_Type || '').split(',')[0].trim();
+          var dot = t.lastIndexOf('.'); if (dot !== -1) t = t.slice(dot + 1);
+          if (t.length > 4 && t.slice(-4) === 'Node') t = t.slice(0, -4);
+          base = t || 'Node';
+        }
+        if (typeof obj.m_Space === 'number' && SPACE_NAMES[obj.m_Space]) {
+          base += ' (' + SPACE_NAMES[obj.m_Space] + ')';
+        }
+        return base;
+      }
+
+      function buildNode(obj, slotMap, objMap, autoIdx, connectedOutSlots) {
+        var dp  = obj.m_DrawState && obj.m_DrawState.m_Position;
+        var pos = dp || { x: 0, y: 0, width: 0, height: 0 };
+        var expanded = !(obj.m_DrawState && obj.m_DrawState.m_Expanded === false);
+        // Source nodes show only their connected outputs regardless of expanded flag
+        var isSourceNode = obj.m_Type && /TimeNode/.test(obj.m_Type);
+        if (isSourceNode) expanded = true;
+
+        // m_Slots contains GUID references — resolve to actual slot objects
+        var slotRefs = obj.m_Slots || [];
+        var resolved = [];
+        for (var i = 0; i < slotRefs.length; i++) {
+          var s = slotMap[slotRefs[i].m_Id];
+          if (s) resolved.push(s);
+        }
+
+        var nodeConnected = (connectedOutSlots && connectedOutSlots[obj.m_ObjectId]) || {};
+        var ins  = expanded ? resolved.filter(function(s) { return s.m_SlotType === 0; }) : [];
+        var outs = expanded ? resolved.filter(function(s) {
+          if (s.m_SlotType !== 1) return false;
+          return isSourceNode ? nodeConnected[s.m_Id] === true : true;
+        }) : [];
+
+        var rows   = Math.max(ins.length, outs.length);
+        var height = HEADER_H + (expanded && rows > 0 ? PORT_PAD * 2 + rows * PORT_H : 0);
+        var width  = Math.max(pos.width || 0, NODE_MIN_W);
+
+        var x = pos.x || 0, y = pos.y || 0;
+        if (autoIdx >= 0 && x === 0 && y === 0) {
+          x = (autoIdx % 4) * 270;
+          y = Math.floor(autoIdx / 4) * 230;
+        }
+
+        var mType = obj.m_Type || '';
+        var isMaster = mType.indexOf('MasterNode') !== -1
+          || mType.indexOf('Target') !== -1
+          || mType.indexOf('Output') !== -1;
+
+        var mTypeLower = mType.toLowerCase();
+        var customFn = mTypeLower.indexOf('customfunction') !== -1 ? {
+          name: obj.m_FunctionName || 'CustomFunction',
+          body: obj.m_FunctionBody || '',
+          sourceType: obj.m_SourceType || 0,
+        } : null;
+        var subGraph = mTypeLower.indexOf('subgraph') !== -1 && !obj.m_SerializedDescriptor ? {
+          name: obj.m_Name || 'SubGraph',
+        } : null;
+
+        return {
+          id: obj.m_ObjectId,
+          label: getNodeLabel(obj, objMap),
+          isMaster: isMaster,
+          customFn: customFn,
+          subGraph: subGraph,
+          groupId: (obj.m_Group && obj.m_Group.m_Id) || null,
+          x: x, y: y,
+          width: width, height: height,
+          expanded: expanded,
+          ins: ins, outs: outs, allSlots: resolved,
+        };
+      }
+
+      function parseGraph(wrapper) {
+        var objMap = {};
+        collectObjects(wrapper, objMap);
+
+        // Find graph root (has m_Edges and m_Nodes arrays)
+        var root = null;
+        var ids = Object.keys(objMap);
+        for (var i = 0; i < ids.length; i++) {
+          var o = objMap[ids[i]];
+          if (Array.isArray(o.m_Edges) && Array.isArray(o.m_Nodes)) { root = o; break; }
+        }
+        if (!root) throw new Error('Graph root not found');
+
+        // Build slot map: slot objects have integer m_Id and m_SlotType
+        // keyed by their m_ObjectId (GUID) so nodes can resolve references
+        var slotMap = {};
+        for (var j = 0; j < ids.length; j++) {
+          var so = objMap[ids[j]];
+          if (typeof so.m_SlotType !== 'undefined' && typeof so.m_Id === 'number') {
+            slotMap[so.m_ObjectId] = so;
+          }
+        }
+
+        // Collect node objects (have m_DrawState + m_Slots ref array)
+        var allNodeObjs = [];
+        for (var k = 0; k < ids.length; k++) {
+          var no = objMap[ids[k]];
+          if (no.m_DrawState && Array.isArray(no.m_Slots)) allNodeObjs.push(no);
+        }
+
+        // Separate BlockNodes (output pins) from regular nodes
+        var blockNodeObjs = allNodeObjs.filter(function(o) { return o.m_SerializedDescriptor; });
+        var regularNodeObjs = allNodeObjs.filter(function(o) { return !o.m_SerializedDescriptor; });
+
+        var atOrigin = regularNodeObjs.filter(function(o) {
+          var p = o.m_DrawState && o.m_DrawState.m_Position;
+          return !p || (p.x === 0 && p.y === 0);
+        }).length;
+        var needsAuto = atOrigin > regularNodeObjs.length * 0.8;
+
+        // Pre-compute which output slots are actually connected (nodeId -> {slotId: true})
+        var connectedOutSlots = {};
+        var rawEdges = root.m_Edges || [];
+        for (var ce = 0; ce < rawEdges.length; ce++) {
+          var re = rawEdges[ce];
+          var enid = re.m_OutputSlot && re.m_OutputSlot.m_Node && re.m_OutputSlot.m_Node.m_Id;
+          var esid = re.m_OutputSlot && re.m_OutputSlot.m_SlotId;
+          if (enid !== undefined && esid !== undefined) {
+            if (!connectedOutSlots[enid]) connectedOutSlots[enid] = {};
+            connectedOutSlots[enid][esid] = true;
+          }
+        }
+
+        var nodes = regularNodeObjs.map(function(o, i) {
+          return buildNode(o, slotMap, objMap, needsAuto ? i : -1, connectedOutSlots);
+        });
+
+        // Build Vertex + Fragment composite nodes from BlockNodes
+        var BLOCK_LABELS = {
+          'VertexDescription.Position': 'Position',
+          'VertexDescription.Normal': 'Normal',
+          'VertexDescription.Tangent': 'Tangent',
+          'SurfaceDescription.BaseColor': 'Base Color',
+          'SurfaceDescription.NormalTS': 'Normal (Tangent Space)',
+          'SurfaceDescription.Metallic': 'Metallic',
+          'SurfaceDescription.Smoothness': 'Smoothness',
+          'SurfaceDescription.Emission': 'Emission',
+          'SurfaceDescription.Occlusion': 'Ambient Occlusion',
+          'SurfaceDescription.Alpha': 'Alpha',
+          'SurfaceDescription.AlphaClipThreshold': 'Alpha Clip Threshold',
+          'SurfaceDescription.Specular': 'Specular Color',
+          'SurfaceDescription.CoatMask': 'Coat Mask',
+          'SurfaceDescription.CoatSmoothness': 'Coat Smoothness',
+        };
+        var VERTEX_ORDER   = ['VertexDescription.Position','VertexDescription.Normal','VertexDescription.Tangent'];
+        var FRAGMENT_ORDER = [
+          'SurfaceDescription.BaseColor','SurfaceDescription.NormalTS',
+          'SurfaceDescription.Metallic','SurfaceDescription.Smoothness',
+          'SurfaceDescription.Emission','SurfaceDescription.Occlusion',
+          'SurfaceDescription.Alpha','SurfaceDescription.AlphaClipThreshold',
+          'SurfaceDescription.Specular','SurfaceDescription.CoatMask','SurfaceDescription.CoatSmoothness',
+        ];
+        function sortByOrder(arr, order) {
+          return arr.slice().sort(function(a, b) {
+            var ai = order.indexOf(a.m_SerializedDescriptor); if (ai < 0) ai = 999;
+            var bi = order.indexOf(b.m_SerializedDescriptor); if (bi < 0) bi = 999;
+            return ai - bi;
+          });
+        }
+        var vertexBlocks   = sortByOrder(blockNodeObjs.filter(function(o) { return o.m_SerializedDescriptor.indexOf('VertexDescription.')   === 0; }), VERTEX_ORDER);
+        var fragmentBlocks = sortByOrder(blockNodeObjs.filter(function(o) { return o.m_SerializedDescriptor.indexOf('SurfaceDescription.') === 0; }), FRAGMENT_ORDER);
+
+        // X: place composites to the right of all regular nodes
+        var rightEdge = -Infinity;
+        nodes.forEach(function(n) { rightEdge = Math.max(rightEdge, n.x + n.width); });
+        var blockX = isFinite(rightEdge) ? rightEdge + 60 : 1200;
+
+        var minY = Infinity, maxY = -Infinity;
+        nodes.forEach(function(n) { minY = Math.min(minY, n.y); maxY = Math.max(maxY, n.y + n.height); });
+        if (!isFinite(minY)) { minY = 0; maxY = 600; }
+
+        var COMP_W = 215;
+        function buildComposite(compId, label, blocks, x, y) {
+          var ports = blocks.map(function(blk) {
+            var ref = blk.m_Slots && blk.m_Slots[0];
+            var sl  = ref ? slotMap[ref.m_Id] : null;
+            return {
+              blockNodeId:  blk.m_ObjectId,
+              displayName:  BLOCK_LABELS[blk.m_SerializedDescriptor] || blk.m_SerializedDescriptor.split('.')[1],
+              slotId:       sl ? sl.m_Id : 0,
+              slotMType:    sl ? sl.m_Type : null,
+            };
+          });
+          var h = HEADER_H + PORT_PAD * 2 + ports.length * PORT_H;
+          return { id: compId, label: label, isMaster: true, isComposite: true,
+                   x: x, y: y, width: COMP_W, height: h,
+                   expanded: true, ins: [], outs: [], allSlots: [],
+                   compositePorts: ports };
+        }
+
+        var COMP_GAP = 20;
+        var vH = vertexBlocks.length   > 0 ? HEADER_H + PORT_PAD * 2 + vertexBlocks.length   * PORT_H : 0;
+        var fH = fragmentBlocks.length > 0 ? HEADER_H + PORT_PAD * 2 + fragmentBlocks.length * PORT_H : 0;
+        var totalH = vH + (vH > 0 && fH > 0 ? COMP_GAP : 0) + fH;
+        var compY  = Math.round(minY + (maxY - minY) / 2 - totalH / 2);
+
+        if (vertexBlocks.length > 0) {
+          var vc = buildComposite('__vertex__', 'Vertex', vertexBlocks, blockX, compY);
+          nodes.push(vc);
+          compY += vH + COMP_GAP;
+        }
+        if (fragmentBlocks.length > 0) {
+          nodes.push(buildComposite('__fragment__', 'Fragment', fragmentBlocks, blockX, compY));
+        }
+
+        var nodeMap = {};
+        nodes.forEach(function(n) { nodeMap[n.id] = n; });
+
+        // Build edges
+        var edges = [];
+        var raw = root.m_Edges || [];
+        for (var e = 0; e < raw.length; e++) {
+          var re = raw[e];
+          try {
+            var outNId = re.m_OutputSlot && re.m_OutputSlot.m_Node && re.m_OutputSlot.m_Node.m_Id;
+            var outSId = re.m_OutputSlot && re.m_OutputSlot.m_SlotId;
+            var inNId  = re.m_InputSlot  && re.m_InputSlot.m_Node  && re.m_InputSlot.m_Node.m_Id;
+            var inSId  = re.m_InputSlot  && re.m_InputSlot.m_SlotId;
+            if (outNId && inNId && outSId !== undefined && inSId !== undefined) {
+              edges.push({ outNId: outNId, outSId: outSId, inNId: inNId, inSId: inSId });
+            }
+          } catch (ex) {}
+        }
+
+        // Collect GroupData objects (separate JSON objects, membership is on each node via m_Group.m_Id)
+        var groupTitles = {};
+        for (var g = 0; g < ids.length; g++) {
+          var go = objMap[ids[g]];
+          if (go.m_Type && go.m_Type.indexOf('GroupData') !== -1 && typeof go.m_Title === 'string') {
+            groupTitles[go.m_ObjectId] = go.m_Title;
+          }
+        }
+
+        // Compute bounding boxes from member nodes
+        var GRPAD = 24, GROUP_HDR = 36;
+        var groupBounds = {};
+        nodes.forEach(function(n) {
+          if (!n.groupId || !groupTitles[n.groupId]) return;
+          var b = groupBounds[n.groupId] || (groupBounds[n.groupId] = { minX: Infinity, minY: Infinity, maxX: -Infinity, maxY: -Infinity });
+          b.minX = Math.min(b.minX, n.x - GRPAD);
+          b.minY = Math.min(b.minY, n.y - GROUP_HDR - GRPAD);
+          b.maxX = Math.max(b.maxX, n.x + n.width + GRPAD);
+          b.maxY = Math.max(b.maxY, n.y + n.height + GRPAD);
+        });
+        var groups = Object.keys(groupBounds).map(function(gid) {
+          var b = groupBounds[gid];
+          return { title: groupTitles[gid], x: b.minX, y: b.minY, w: b.maxX - b.minX, h: b.maxY - b.minY };
+        });
+
+        return { nodes: nodes, edges: edges, nodeMap: nodeMap, groups: groups };
+      }
+
+      // ─── Renderer ───────────────────────────────────────────
+      var portPos = {}; // "nodeId:slotId" -> {x, y}
+      var connectedInputs = {};
+      var currentNodes = [];
+
+      function createPortEl(slot, isOut, valueStr) {
+        var div = document.createElement('div');
+        div.className = 'sg-port' + (isOut ? ' sg-port-out' : '');
+
+        var dot = document.createElement('span');
+        dot.className = 'sg-port-dot';
+        var c = slotColor(slot.m_Type);
+        dot.style.color = c;
+        dot.style.borderColor = c;
+
+        var lbl = document.createElement('span');
+        lbl.textContent = slot.m_DisplayName || slot.m_ShaderOutputName || '';
+
+        div.appendChild(dot);
+        if (!isOut && valueStr != null) {
+          var val = document.createElement('span');
+          val.className = 'sg-port-value';
+          val.textContent = valueStr;
+          div.appendChild(val);
+        }
+        div.appendChild(lbl);
+        return div;
+      }
+
+      var hlslCache = {};
+
+      function createNodeEl(node) {
+        var el = document.createElement('div');
+        var cls = 'sg-node';
+        if (node.isMaster)  cls += ' sg-node-master';
+        if (node.customFn)  cls += ' sg-node-fn';
+        if (node.subGraph)  cls += ' sg-node-subgraph';
+        el.className = cls;
+        el.style.left   = node.x + 'px';
+        el.style.top    = node.y + 'px';
+        el.style.width  = node.width + 'px';
+
+        var hdr = document.createElement('div');
+        hdr.className   = 'sg-node-header';
+        hdr.textContent = node.label;
+        el.appendChild(hdr);
+
+        if (node.customFn) {
+          hdr.title = 'Click to expand HLSL code';
+          hdr.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+          var codeEl = null;
+          hdr.addEventListener('click', function() {
+            if (codeEl) { el.removeChild(codeEl); codeEl = null; return; }
+            codeEl = document.createElement('pre');
+            codeEl.className = 'sg-node-code';
+            codeEl.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+            codeEl.textContent = 'loading…';
+            el.appendChild(codeEl);
+            var fnName = node.customFn.name;
+            if (hlslCache[fnName]) { codeEl.textContent = hlslCache[fnName]; return; }
+            fetch('/files/shaders/' + encodeURIComponent(fnName) + '.hlsl')
+              .then(function(r) { return r.ok ? r.text() : Promise.reject(); })
+              .then(function(t) { hlslCache[fnName] = t; if (codeEl) codeEl.textContent = t; })
+              .catch(function() {
+                var fb = node.customFn.body;
+                hlslCache[fnName] = fb || '(not found)';
+                if (codeEl) codeEl.textContent = hlslCache[fnName];
+              });
+          });
+        }
+
+        if (node.subGraph) {
+          hdr.title = 'Click to open subgraph';
+          hdr.addEventListener('mousedown', function(e) { e.stopPropagation(); });
+          hdr.addEventListener('click', function() {
+            var p = new URLSearchParams(window.location.search);
+            var cur = p.get('file') || '';
+            var nav = p.get('nav') || '';
+            var stack = nav ? nav.split('|') : [];
+            var newNav = stack.concat([cur]).filter(Boolean).join('|');
+            window.location.href = '?file=' + encodeURIComponent(node.subGraph.name) +
+              (newNav ? '&nav=' + encodeURIComponent(newNav) : '');
+          });
+        }
+
+        if (node.isComposite) {
+          // Composite Vertex / Fragment node — ports keyed by original blockNodeId
+          var cbody = document.createElement('div');
+          cbody.className = 'sg-node-body';
+          var cpIn = document.createElement('div');
+          cpIn.className = 'sg-ports-in';
+          node.compositePorts.forEach(function(port, i) {
+            cpIn.appendChild(createPortEl({ m_Type: port.slotMType, m_DisplayName: port.displayName }, false));
+            portPos[port.blockNodeId + ':' + port.slotId] = {
+              x: node.x,
+              y: node.y + HEADER_H + PORT_PAD + i * PORT_H + PORT_H / 2
+            };
+          });
+          cbody.appendChild(cpIn);
+          el.appendChild(cbody);
+        } else if (node.expanded && (node.ins.length > 0 || node.outs.length > 0)) {
+          var body = document.createElement('div');
+          body.className = 'sg-node-body';
+
+          var pIn = document.createElement('div');
+          pIn.className = 'sg-ports-in';
+          node.ins.forEach(function(slot, i) {
+            var val = connectedInputs[node.id + ':' + slot.m_Id] ? null : slotValueLabel(slot);
+            pIn.appendChild(createPortEl(slot, false, val));
+            portPos[node.id + ':' + slot.m_Id] = {
+              x: node.x,
+              y: node.y + HEADER_H + PORT_PAD + i * PORT_H + PORT_H / 2
+            };
+          });
+
+          var pOut = document.createElement('div');
+          pOut.className = 'sg-ports-out';
+          node.outs.forEach(function(slot, i) {
+            pOut.appendChild(createPortEl(slot, true));
+            portPos[node.id + ':' + slot.m_Id] = {
+              x: node.x + node.width,
+              y: node.y + HEADER_H + PORT_PAD + i * PORT_H + PORT_H / 2
+            };
+          });
+
+          body.appendChild(pIn);
+          body.appendChild(pOut);
+          el.appendChild(body);
+        }
+        return el;
+      }
+
+      function bezier(x1, y1, x2, y2) {
+        var stub = 60;
+        return 'M ' + x1 + ' ' + y1 +
+               ' C ' + (x1 + stub) + ' ' + y1 +
+               ', '  + (x2 - stub) + ' ' + y2 +
+               ', '  + x2 + ' ' + y2;
+      }
+
+      function renderGraph(data, fileName) {
+        portPos = {};
+        connectedInputs = {};
+        data.edges.forEach(function(e) { connectedInputs[e.inNId + ':' + e.inSId] = true; });
+        currentNodes = data.nodes;
+
+        var transform = document.getElementById('sg-transform');
+        var svg = document.getElementById('sg-edges');
+        if (svg.parentNode) svg.parentNode.removeChild(svg);
+        transform.innerHTML = '';
+
+        // Groups (behind nodes)
+        var gFrag = document.createDocumentFragment();
+        data.groups.forEach(function(g) {
+          var el = document.createElement('div');
+          el.className = 'sg-group';
+          el.style.left   = g.x + 'px';
+          el.style.top    = g.y + 'px';
+          el.style.width  = g.w + 'px';
+          el.style.height = g.h + 'px';
+          if (g.title) {
+            var lbl = document.createElement('div');
+            lbl.className   = 'sg-group-label';
+            lbl.textContent = g.title;
+            el.appendChild(lbl);
+          }
+          gFrag.appendChild(el);
+        });
+        transform.appendChild(gFrag);
+
+        // Nodes
+        var nFrag = document.createDocumentFragment();
+        data.nodes.forEach(function(n) { nFrag.appendChild(createNodeEl(n)); });
+        transform.appendChild(nFrag);
+
+        // SVG back
+        transform.appendChild(svg);
+
+        // Edges
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+        // Build incoming-edge map for dynamic type resolution
+        var nodeInEdges = {};
+        data.edges.forEach(function(e) {
+          (nodeInEdges[e.inNId] = nodeInEdges[e.inNId] || []).push(e);
+        });
+
+        function typeDim(mType) {
+          var n = (mType || '').split(',')[0].split('.').pop();
+          if (n.indexOf('Vector4') !== -1 || (n.indexOf('Color') !== -1 && n.indexOf('ColorRGB') === -1)) return 4;
+          if (n.indexOf('ColorRGB') !== -1 || n.indexOf('Vector3') !== -1 || n.indexOf('Position') !== -1 || n.indexOf('Normal') !== -1 || n.indexOf('Tangent') !== -1) return 3;
+          if (n.indexOf('Vector2') !== -1) return 2;
+          return 0;
+        }
+
+        function resolveColor(edge, depth) {
+          var outNode = data.nodeMap[edge.outNId];
+          if (!outNode) return '#8a8580';
+          var slot = outNode.allSlots.filter(function(s) { return s.m_Id === edge.outSId; })[0];
+          if (!slot) return '#8a8580';
+          var typeName = (slot.m_Type || '').split(',')[0].split('.').pop();
+          if (typeName.indexOf('Dynamic') !== -1 && depth < 4) {
+            var upstream = nodeInEdges[edge.outNId] || [];
+            var minDim = Infinity, minType = null, scalarFallback = null;
+            for (var i = 0; i < upstream.length; i++) {
+              var upEdge = upstream[i];
+              var upNode = data.nodeMap[upEdge.outNId];
+              if (!upNode) continue;
+              var upSlot = upNode.allSlots.filter(function(s) { return s.m_Id === upEdge.outSId; })[0];
+              if (!upSlot) continue;
+              var upName = (upSlot.m_Type || '').split(',')[0].split('.').pop();
+              var isScalarOrDynamic = upName.indexOf('Dynamic') !== -1 || upName.indexOf('Vector1') !== -1;
+              if (!isScalarOrDynamic) {
+                var dim = typeDim(upSlot.m_Type);
+                if (dim > 0 && dim < minDim) { minDim = dim; minType = upSlot.m_Type; }
+              } else {
+                if (!scalarFallback) scalarFallback = resolveColor(upEdge, depth + 1);
+              }
+            }
+            if (minType) return slotColor(minType);
+            if (scalarFallback) return scalarFallback;
+          }
+          return slotColor(slot.m_Type);
+        }
+
+        data.edges.forEach(function(edge) {
+          var op = portPos[edge.outNId + ':' + edge.outSId];
+          var ip = portPos[edge.inNId  + ':' + edge.inSId];
+          if (!op || !ip) return;
+
+          var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          path.setAttribute('class', 'sg-edge');
+          path.setAttribute('d', bezier(op.x, op.y, ip.x, ip.y));
+          path.setAttribute('stroke', resolveColor(edge, 0));
+          svg.appendChild(path);
+        });
+
+        // Connector line between Vertex and Fragment composite boxes
+        var vc = data.nodeMap['__vertex__'];
+        var fc = data.nodeMap['__fragment__'];
+        if (vc && fc) {
+          var cx  = vc.x + vc.width / 2;
+          var ly1 = vc.y + vc.height;
+          var ly2 = fc.y;
+          var ln  = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          ln.setAttribute('x1', cx); ln.setAttribute('y1', ly1);
+          ln.setAttribute('x2', cx); ln.setAttribute('y2', ly2);
+          ln.setAttribute('stroke', '#3d3830');
+          ln.setAttribute('stroke-width', '2');
+          svg.appendChild(ln);
+        }
+
+        // Title breadcrumb
+        var titleEl = document.getElementById('sg-title');
+        titleEl.innerHTML = '';
+        var navParam = new URLSearchParams(window.location.search).get('nav') || '';
+        var navStack = navParam ? navParam.split('|') : [];
+
+        var rootLink = document.createElement('a');
+        rootLink.href = '/projects/shadergraph/';
+        rootLink.textContent = 'shadergraph';
+        rootLink.className = 'sg-breadcrumb-link';
+        titleEl.appendChild(rootLink);
+
+        navStack.forEach(function(name, i) {
+          titleEl.appendChild(document.createTextNode(' / '));
+          var a = document.createElement('a');
+          var parentNav = navStack.slice(0, i).join('|');
+          a.href = '?file=' + encodeURIComponent(name) + (parentNav ? '&nav=' + encodeURIComponent(parentNav) : '');
+          a.textContent = name;
+          a.className = 'sg-breadcrumb-link';
+          titleEl.appendChild(a);
+        });
+
+        titleEl.appendChild(document.createTextNode(' / '));
+        var cur = document.createElement('strong');
+        cur.textContent = fileName || 'graph';
+        titleEl.appendChild(cur);
+
+        fit();
+        hideOverlay();
+      }
+
+      // ─── Pan / Zoom ──────────────────────────────────────────
+      var tx = 0, ty = 0, sc = 1;
+      var dragging = false, dsx = 0, dsy = 0;
+      var pinchDist0 = 0, pinchSc0 = 1, pinchTx0 = 0, pinchTy0 = 0;
+
+      function applyTx() {
+        document.getElementById('sg-transform').style.transform =
+          'translate(' + tx + 'px,' + ty + 'px) scale(' + sc + ')';
+        var gs = GRID_SIZE * sc;
+        var canvas = document.getElementById('sg-canvas');
+        canvas.style.backgroundSize     = gs + 'px ' + gs + 'px';
+        canvas.style.backgroundPosition = (tx % gs) + 'px ' + (ty % gs) + 'px';
+        document.getElementById('sg-zoom-label').textContent = Math.round(sc * 100) + '%';
+      }
+
+      function fit() {
+        var nodes = currentNodes;
+        if (!nodes.length) return;
+        var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        nodes.forEach(function(n) {
+          minX = Math.min(minX, n.x);
+          minY = Math.min(minY, n.y);
+          maxX = Math.max(maxX, n.x + n.width);
+          maxY = Math.max(maxY, n.y + n.height);
+        });
+        var pad = 80;
+        var gw = maxX - minX + pad * 2;
+        var gh = maxY - minY + pad * 2;
+        var canvas = document.getElementById('sg-canvas');
+        var cw = canvas.clientWidth, ch = canvas.clientHeight;
+        sc = Math.min(cw / gw, ch / gh, 1.5);
+        tx = (cw - (maxX - minX) * sc) / 2 - minX * sc;
+        ty = (ch - (maxY - minY) * sc) / 2 - minY * sc;
+        applyTx();
+      }
+
+      function zoomAt(mx, my, factor) {
+        var ns = Math.max(0.05, Math.min(6, sc * factor));
+        tx = mx - (mx - tx) * (ns / sc);
+        ty = my - (my - ty) * (ns / sc);
+        sc = ns;
+        applyTx();
+      }
+
+      function initEvents() {
+        var canvas = document.getElementById('sg-canvas');
+
+        canvas.addEventListener('mousedown', function(e) {
+          if (e.button !== 0) return;
+          dragging = true;
+          dsx = e.clientX - tx;
+          dsy = e.clientY - ty;
+          canvas.classList.add('dragging');
+          e.preventDefault();
+        });
+        window.addEventListener('mousemove', function(e) {
+          if (!dragging) return;
+          tx = e.clientX - dsx;
+          ty = e.clientY - dsy;
+          applyTx();
+        });
+        window.addEventListener('mouseup', function() {
+          if (dragging) { dragging = false; canvas.classList.remove('dragging'); }
+        });
+        canvas.addEventListener('wheel', function(e) {
+          e.preventDefault();
+          var r = canvas.getBoundingClientRect();
+          zoomAt(e.clientX - r.left, e.clientY - r.top, e.deltaY < 0 ? 1.1 : 1 / 1.1);
+        }, { passive: false });
+
+        canvas.addEventListener('touchstart', function(e) {
+          if (e.touches.length === 1) {
+            dragging = true;
+            dsx = e.touches[0].clientX - tx;
+            dsy = e.touches[0].clientY - ty;
+          } else if (e.touches.length === 2) {
+            dragging = false;
+            pinchDist0 = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY);
+            pinchSc0 = sc; pinchTx0 = tx; pinchTy0 = ty;
+          }
+          e.preventDefault();
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', function(e) {
+          if (e.touches.length === 1 && dragging) {
+            tx = e.touches[0].clientX - dsx;
+            ty = e.touches[0].clientY - dsy;
+            applyTx();
+          } else if (e.touches.length === 2) {
+            var d = Math.hypot(
+              e.touches[0].clientX - e.touches[1].clientX,
+              e.touches[0].clientY - e.touches[1].clientY);
+            var ns = Math.max(0.05, Math.min(6, pinchSc0 * d / pinchDist0));
+            var r  = canvas.getBoundingClientRect();
+            var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+            var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+            tx = mx - (mx - pinchTx0) * (ns / pinchSc0);
+            ty = my - (my - pinchTy0) * (ns / pinchSc0);
+            sc = ns;
+            applyTx();
+          }
+          e.preventDefault();
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', function() { dragging = false; });
+      }
+
+      // ─── Overlay ────────────────────────────────────────────
+      function showOverlay(msg, isError) {
+        var overlay = document.getElementById('sg-overlay');
+        var lbl     = document.getElementById('sg-overlay-label');
+        lbl.textContent = msg;
+        lbl.className   = 'sg-overlay-label' + (isError ? ' sg-error' : '');
+        overlay.classList.remove('sg-hidden');
+      }
+      function hideOverlay() {
+        document.getElementById('sg-overlay').classList.add('sg-hidden');
+      }
+      function renderFileList(files) {
+        var lbl = document.getElementById('sg-overlay-label');
+        lbl.className = 'sg-overlay-label';
+        lbl.innerHTML = '';
+        document.getElementById('sg-overlay').classList.remove('sg-hidden');
+
+        var shaders    = files.filter(function(f) { return f.ext === 'shadergraph'; });
+        var subshaders = files.filter(function(f) { return f.ext === 'shadersubgraph'; });
+
+        function makeGroup(title, items) {
+          var wrap = document.createElement('div');
+          var h = document.createElement('div');
+          h.className = 'sg-file-heading';
+          h.textContent = title;
+          wrap.appendChild(h);
+          var grid = document.createElement('div');
+          grid.className = 'sg-file-grid';
+          items.forEach(function(f) {
+            var a = document.createElement('a');
+            a.href = '?file=' + encodeURIComponent(f.name);
+            a.className = 'sg-file-card' + (f.ext === 'shadersubgraph' ? ' sg-file-subgraph' : '');
+            a.textContent = f.name;
+            grid.appendChild(a);
+          });
+          wrap.appendChild(grid);
+          lbl.appendChild(wrap);
+        }
+
+        if (shaders.length)    makeGroup('shaders', shaders);
+        if (subshaders.length) makeGroup('sub graphs', subshaders);
+      }
+
+      // ─── Multi-object JSON splitter ─────────────────────────
+      function splitJsonObjects(text) {
+        var results = [];
+        var depth = 0, start = -1, inStr = false, escape = false;
+        for (var i = 0; i < text.length; i++) {
+          var c = text[i];
+          if (escape) { escape = false; continue; }
+          if (c === '\\' && inStr) { escape = true; continue; }
+          if (c === '"') { inStr = !inStr; continue; }
+          if (!inStr) {
+            if (c === '{') { if (depth === 0) start = i; depth++; }
+            else if (c === '}') {
+              depth--;
+              if (depth === 0 && start !== -1) {
+                results.push(text.slice(start, i + 1));
+                start = -1;
+              }
+            }
+          }
+        }
+        return results;
+      }
+
+      // ─── Boot ────────────────────────────────────────────────
+      initEvents();
+
+      document.getElementById('sg-fit').addEventListener('click', fit);
+      document.getElementById('sg-zoom-in').addEventListener('click', function() {
+        var c = document.getElementById('sg-canvas');
+        zoomAt(c.clientWidth / 2, c.clientHeight / 2, 1.25);
+      });
+      document.getElementById('sg-zoom-out').addEventListener('click', function() {
+        var c = document.getElementById('sg-canvas');
+        zoomAt(c.clientWidth / 2, c.clientHeight / 2, 1 / 1.25);
+      });
+
+      var params   = new URLSearchParams(window.location.search);
+      var fileName = params.get('file');
+
+      if (!fileName) {
+        showOverlay('loading…');
+        fetch('/shaders-index.json')
+          .then(function(r) { return r.ok ? r.json() : []; })
+          .then(renderFileList)
+          .catch(function() { showOverlay('no shaders found', true); });
+      } else {
+        showOverlay('loading…');
+        var base  = '/files/shaders/' + encodeURIComponent(fileName);
+        var baseNS = '/files/shaders/' + encodeURIComponent(fileName.replace(/\s+/g, ''));
+        function tryFetch(urls) {
+          return fetch(urls[0]).then(function(r) {
+            if (r.ok) return r.text();
+            if (urls.length > 1) return tryFetch(urls.slice(1));
+            throw new Error('HTTP ' + r.status);
+          });
+        }
+        tryFetch([
+          base   + '.shadergraph',
+          base   + '.shadersubgraph',
+          baseNS + '.shadergraph',
+          baseNS + '.shadersubgraph',
+        ])
+          .then(function(text) {
+            // Unity writes multiple JSON objects per file — split and collect all
+            var wrapper = {};
+            splitJsonObjects(text).forEach(function(chunk, i) {
+              try { wrapper['_' + i] = JSON.parse(chunk); } catch (e) {}
+            });
+            renderGraph(parseGraph(wrapper), fileName);
+          })
+          .catch(function(err) {
+            showOverlay('failed to load — ' + err.message, true);
+          });
+      }
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var html = document.documentElement;
+      var btn  = document.createElement('button');
+      btn.className = 'theme-toggle';
+      btn.setAttribute('aria-label', 'Toggle dark mode');
+      var moonSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+      var sunSvg  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+      function updateLabel() {
+        var dark = html.getAttribute('data-theme') === 'dark';
+        btn.innerHTML = (dark ? sunSvg : moonSvg) + (dark ? ' light' : ' dark');
+      }
+      updateLabel();
+      btn.addEventListener('click', function() {
+        var dark = html.getAttribute('data-theme') === 'dark';
+        if (dark) { html.removeAttribute('data-theme'); localStorage.setItem('theme', 'light'); }
+        else      { html.setAttribute('data-theme', 'dark'); localStorage.setItem('theme', 'dark'); }
+        updateLabel();
+      });
+      document.body.appendChild(btn);
+    })();
+  </script>
+  <script data-goatcounter="https://vexury.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

@@ -26,7 +26,10 @@
         <a href="/" class="nav-wordmark">/&nbsp;vexury</a>
         <div class="nav-links">
           <a href="/" class="nav-link{% if page.url == '/' %} active{% endif %}">/&nbsp;home</a>
-          <a href="/projects/" class="nav-link{% if page.url contains '/projects' %} active{% endif %}">/&nbsp;projects</a>
+          <div class="nav-group">
+            <a href="/projects/" class="nav-link{% if page.url contains '/projects' %} active{% endif %}">/&nbsp;projects</a>
+            <a href="/projects/shadergraph/" class="nav-link nav-link-sub{% if page.url contains '/shadergraph' %} active{% endif %}">shaders</a>
+          </div>
           <a href="/posts/" class="nav-link{% if page.url contains '/posts' %} active{% endif %}">/&nbsp;posts</a>
           <a href="/cv/" class="nav-link{% if page.url contains '/cv' %} active{% endif %}">/&nbsp;cv</a>
           <div class="nav-icons">

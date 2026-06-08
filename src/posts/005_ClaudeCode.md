@@ -1,7 +1,7 @@
 ---
 title: "🤖 Getting started with Claude Code"
 date: 2026-06-03
-summary: "How I configured Claude Code for my workflow: global and project-level CLAUDE.md files, and writing a custom skill."
+summary: "How I configured Claude Code for my workflow: CLAUDE.md files, skills, hooks, MCP, and multi-agent documentation."
 ---
 
 # {{ title }}
@@ -44,13 +44,40 @@ One thing worth being specific about: the site has a custom Eleventy shortcode (
 
 Beyond the instruction files, Claude Code supports custom skills: Markdown files at `.claude/skills/<name>/SKILL.md` that describe a repeatable task in enough detail that no further explanation is needed.
 
-I wrote one for this exact use case: creating a new blog post. The skill captures things that are easy to get wrong from the CLAUDE.md alone:
+I maintain a library of reusable Unity scripts that I want available in every new project. Manually copying folders and resolving what goes where is the kind of thing that is easy to get wrong and tedious to repeat. So I wrote a skill called `deploy-library` that knows where the library lives, how the target project is structured, which scripts to copy, and how to handle conflicts.
 
-- The exact filename pattern and how to find the current highest number
-- The difference between posts with a link-row and posts with a plain date line
-- The `{% thumb %}` shortcode with correct widths per use case
-- The checklist at the end (create file, add images, update project card, test locally)
+Because this task is not specific to any one project, I made the skill global, placing it in `~/.claude/skills/` rather than inside a repo. That means I can open any new Unity project, type `/deploy-library`, and it runs without any setup in that project first.
 
-To use a skill I just type `/new-post` and Claude reads the skill file before doing anything. No repeated explanations across sessions.
+To use a skill I just type the slash command and Claude reads the skill file before doing anything. No repeated explanations across sessions.
 
-The general workflow is: CLAUDE.md for always-on context about the project, skills for specific multi-step tasks that have enough nuance to warrant their own reference document. Together they turn what would be a "re-explain everything" conversation into a one-liner.
+The general rule is: CLAUDE.md for always-on context about the project, skills for specific multi-step tasks that have enough nuance to warrant their own reference document. Skills that apply to one project live in that repo; skills that apply everywhere live in the global `~/.claude/skills/` folder. Together they turn what would be a "re-explain everything" conversation into a one-liner.
+
+## Hooks
+
+Claude Code supports hooks: shell commands that run automatically in response to events like tool calls. I added one that fires every time Claude uses a tool and appends a line to a log file:
+
+```
+2026-06-08T02:18:23+02:00 | Edit  | file: C:\Projects\MyGame\Scripts\PlayerController.cs
+```
+
+Each session gets its own log file. If Claude edits twenty files across a refactor, I can scan the log rather than reconstruct the sequence from memory. I find it moderately useful in practice, but it feels good to have. When something unexpected happens, the log is already there.
+
+Hooks are configured in `settings.json`, not in CLAUDE.md, which is the right separation: CLAUDE.md is instructions for Claude, `settings.json` is configuration for the harness that runs it.
+
+## MCP
+
+MCP (Model Context Protocol) is the standard for connecting external tools and data sources to a model. Claude Code acts as an MCP client, meaning you can give it access to things beyond the local filesystem.
+
+I connected the GitHub MCP server so Claude can read issues from my repositories inside a session. The use case is simple: instead of switching to the browser to check whether a repo has open issues, I can ask and get the answer in context. It is not a dramatic change, just the removal of a small context switch. Most of the time there are no issues, which is fine. The point is not having to go look.
+
+The broader value of MCP is that the same session reading your code can also read your issue tracker, a calendar, or any other system that has a server. The context stays in one place.
+
+## Agent teams
+
+The most involved thing I set up is a multi-agent workflow for documenting VexEngine, my custom C++ renderer. Documenting a codebase like that is tedious because different subsystems are largely independent: the public API, the rendering pipeline, and the shader system each require focused reading of completely different parts of the code.
+
+The solution is a master agent that spawns three sub-agents in parallel, each responsible for one section. The API agent reads headers and produces the public interface documentation. The rendering agent traces the frame loop. The shader agent covers the GLSL and SPIRV pipeline. When all three finish, the master assembles their output into a single structured document.
+
+I registered this as a skill under `/docs-master`, so when I am working inside the engine directory and type that command, the whole thing runs from a single prompt. One invocation, three agents working in parallel, one combined result.
+
+This is where the multi-agent model actually earns its overhead. A single agent doing the same task would have to context-switch between subsystems, accumulate a very long context window, and serialize work that is naturally parallel. Separate agents each stay focused on their section and finish faster. The master agent only needs to understand structure, not content.
