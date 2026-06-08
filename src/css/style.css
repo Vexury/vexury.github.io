@@ -908,13 +908,16 @@ pre code {
 .post-preview-img {
   width: 200px;
   flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
 }
 
 .post-preview-img img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
 .post-list a:hover {

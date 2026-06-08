@@ -2,6 +2,7 @@
 title: 📖 About this site
 date: 2026-01-10
 summary: I finally built my own website!
+preview_image: /images/11ty_logo.png
 ---
 
 # {{ title }}
