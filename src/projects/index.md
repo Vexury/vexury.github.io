@@ -3,9 +3,16 @@ layout: base.html
 title: Projects
 ---
 
+<div class="project-filters">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="rendering">Rendering</button>
+  <button class="filter-btn" data-filter="game-jams">Game Jams</button>
+  <button class="filter-btn" data-filter="games">Games</button>
+</div>
+
 <div class="project-grid">
   {% for project in collections.projects %}
-  <div class="project-card{% if project.data.featured %} featured{% endif %}{% if project.data.pinned %} pinned{% endif %}">
+  <div class="project-card{% if project.data.featured %} featured{% endif %}{% if project.data.pinned %} pinned{% endif %}" data-category="{{ project.data.category }}">
     {% if project.data.images %}
     {% if project.data.featured %}{% assign tw = 900 %}{% else %}{% assign tw = 400 %}{% endif %}
     <div class="slideshow">
@@ -29,6 +36,19 @@ title: Projects
 </div>
 
 <script>
+const filterBtns = document.querySelectorAll('.filter-btn');
+const projectCards = document.querySelectorAll('.project-card');
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cat = btn.dataset.filter;
+    projectCards.forEach(card => {
+      card.style.display = (cat === 'all' || card.dataset.category === cat) ? '' : 'none';
+    });
+  });
+});
+
 document.querySelectorAll('.project-card').forEach(card => {
   const slideshow = card.querySelector('.slideshow');
   if (!slideshow) return;

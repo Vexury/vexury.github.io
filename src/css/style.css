@@ -984,13 +984,50 @@ pre code {
   line-height: 1.5;
 }
 
+/* ─── Project filters ────────────────────────────────────────────────────── */
+
+.project-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.8rem;
+  background: var(--bg);
+  border: 2px solid var(--border-mid);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.filter-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
 /* ─── Project grid ───────────────────────────────────────────────────────── */
 
 .project-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
-  margin-top: 1.25rem;
+  margin-top: 0.85rem;
   width: 100%;
   opacity: 0;
   transition: opacity 0.3s;

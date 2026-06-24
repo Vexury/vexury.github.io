@@ -1,6 +1,7 @@
 ---
 permalink: false
 tags: projects
+category: game-jams
 title: "Mini Jame Gam #55: Necrocure"
 emoji: "🧟"
 images:

@@ -1,6 +1,7 @@
 ---
 permalink: false
 tags: projects
+category: rendering
 featured: true
 pinned: true
 title: VexEngine - Custom Rendering Engine

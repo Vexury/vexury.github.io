@@ -1,6 +1,7 @@
 ---
 permalink: false
 tags: projects
+category: games
 title: Hexgrid Autobattler
 emoji: "\U0001F3AE"
 images: 

@@ -1,6 +1,7 @@
 ---
 permalink: false
 tags: projects
+category: game-jams
 title: "Comfy Jam Summer 2026: Shrimp Away"
 emoji: "🦐"
 images:
@@ -12,5 +13,5 @@ links:
   - label: Game Page
     url: https://vexury.itch.io/shrimpaway
   - label: GitHub
-    url: https://github.com/Vexury/ComfyJamSummer2026
+    url: https://github.com/Vexury/ShrimpAway
 ---

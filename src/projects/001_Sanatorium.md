@@ -1,6 +1,7 @@
 ---
 permalink: false
 tags: projects
+category: games
 title: 2D Horror Story-driven Adventure
 emoji: "\U0001F3AE"
 images: 
