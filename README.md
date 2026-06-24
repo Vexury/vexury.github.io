@@ -8,7 +8,7 @@ Built with [11ty](https://www.11ty.dev/) and hosted on [GitHub Pages](https://pa
 
 - **11ty** — static site generator with Liquid templating
 - **CSS** — single stylesheet, Inconsolata monospace font, warm off-white palette, `#FFA833` accent, dark mode via `data-theme="dark"`
-- **sharp** — thumbnail generation via `scripts/thumbnails.js`
+- **@11ty/eleventy-img** — thumbnail generation (webp, 400px / 900px) during build
 - **GitHub Actions** — deploy to GitHub Pages on push to `main`
 
 ## Features
@@ -26,7 +26,7 @@ Install dependencies:
 npm install
 ```
 
-Start local dev server (generates thumbnails + live reload):
+Start local dev server (live reload, thumbnails generated on demand):
 ```
 npm start
 ```
@@ -36,11 +36,16 @@ Build for production:
 npm run build
 ```
 
+Export CV as PDF (light and dark):
+```
+npm run export-cv
+```
+
 Output goes to `_site/`.
 
 ## Content
 
 - `src/projects/*.md` — project cards (frontmatter only, `tags: projects`)
 - `src/posts/*.md` — blog posts
-- `src/images/` — source images; run `node scripts/thumbnails.js` to regenerate thumbs
+- `src/images/` — source images; thumbnails are regenerated automatically during build
 - `src/files/` — static files (CV, etc.)

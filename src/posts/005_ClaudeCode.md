@@ -1,5 +1,5 @@
 ---
-title: "🤖 Getting started with Claude Code"
+title: "🤖 Mastering Claude Code"
 date: 2026-06-03
 summary: "How I configured Claude Code for my workflow: CLAUDE.md files, skills, hooks, MCP, and multi-agent documentation."
 preview_image: /images/ClaudeCode_logo.png

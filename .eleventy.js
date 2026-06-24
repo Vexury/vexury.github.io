@@ -4,6 +4,11 @@ const path = require('node:path');
 
 module.exports = function(eleventyConfig) {
 
+  // Don't let .gitignore control what Eleventy builds. src/cover_letters/ is
+  // gitignored (kept out of the public repo) but still needs to be built
+  // locally for PDF export. See .eleventyignore for what Eleventy itself skips.
+  eleventyConfig.setUseGitIgnore(false);
+
   // ── Markdown ──────────────────────────────────────────────────────────────
   eleventyConfig.amendLibrary("md", mdLib => {
     mdLib.use(markdownItTaskLists);

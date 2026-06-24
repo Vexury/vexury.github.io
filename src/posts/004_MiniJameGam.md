@@ -21,6 +21,8 @@ Time for some classic "aliens-come-to-a-farm-and-adbduct-cows-who-couldn't-care-
   <img src="{% thumb '/images/Necrocure/Necrocure_001.png', 1100 %}" alt="Necrocure concept" style="max-width:80%" loading="lazy">
 </div>
 
+## The Concept
+
 The concept we landed on: A crazed farmer on Earth used necromancy to resurrect his dead cows. Resurrected cows still produce milk, and milk means profit. Meanwhile, you play an alien race and your home planet is dying, and that very same necro-milk turns out to be the cure. So you arrive in your UFO, hover over the farm, and get to work.
 
 The twist is that you can't just abduct any cow. You need to identify the *resurrected* ones among the herd and pull them up with your traction beam. Collect enough necro-milk and make it back to the portal before the three-minute timer runs out. Left-clicking makes the cows moo, which turned out to be both mechanically useful and extremely funny during playtesting.
@@ -28,6 +30,8 @@ The twist is that you can't just abduct any cow. You need to identify the *resur
 <div style="text-align: center; margin: 1.5rem 0">
   <img src="{% thumb '/images/Necrocure/Necrocure_002.png', 1100 %}" alt="Necrocure gameplay" style="max-width:80%" loading="lazy">
 </div>
+
+## Art and VFX
 
 Cxbane's art direction gave the game its identity immediately. The farm aesthetic against the alien visitor framing created exactly the absurd-but-coherent tone we were going for. 
 On my end, the most interesting technical work was the VFX: the traction beam and the space portal took me some time to create with Particle Systems (no Visual Effect Graph sadly because we needed to make a web build) and Shader Graph.
@@ -38,6 +42,8 @@ On my end, the most interesting technical work was the VFX: the traction beam an
   </video>
 </div>
 
+
+## Scoring and Retrospective
 
 The scoring system ended up simple: 10 milk to cure your planet (one star), 11 for two stars, 12 for three stars. Enough to make the run feel repeatable without overstaying its welcome. Most players really wanted to get three stars after returning with 10 milk in the first run.
 
