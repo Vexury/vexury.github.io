@@ -18,7 +18,7 @@ The [Comfy Jam Summer 2026](https://itch.io/jam/comfy-jam-summer-2026) had two c
 
 The lie is that you never will. The ocean is always ahead of you, and the instructions tell you to reach it, but you technically never move. The world moves instead, and a vertex shader makes that feel convincing.
 
-<div style="margin: 1.5rem 0; border: 1px dashed var(--border-mid); border-radius: 4px; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; background: var(--accent-soft); color: var(--text-muted); font-family: 'Inconsolata', monospace; font-size: 0.9rem; letter-spacing: 0.05em;">[ gameplay — image coming ]</div>
+<img src="{% thumb '/images/ShrimpAway/ShrimpAway_Screenshot_01.png', 1100 %}" alt="Shrimp Away gameplay screenshot" loading="lazy">
 
 ## The World Bend Shader
 
@@ -28,7 +28,9 @@ The fix is to curve the world. The vertex shader offsets every vertex's Y positi
 
 The important thing is that nothing in the game logic changes. Obstacles are still spawned at a fixed Z distance ahead, still move at a fixed speed toward Z = 0, and are despawned when they pass behind the player. The shader is purely visual. All the bending happens in the vertex stage; the actual world coordinates stay flat, so collisions and movement work without any correction.
 
-<div style="margin: 1.5rem 0; border: 1px dashed var(--border-mid); border-radius: 4px; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; background: var(--accent-soft); color: var(--text-muted); font-family: 'Inconsolata', monospace; font-size: 0.9rem; letter-spacing: 0.05em;">[ world bend — image coming ]</div>
+<video autoplay loop muted playsinline style="max-width:100%">
+  <source src="/images/ShrimpAway/ShrimpAway_WorldBend.mp4" type="video/mp4">
+</video>
 
 The curvature strength is a single parameter: the bend radius in world units. A large radius gives a subtle curve, a small radius bends aggressively. For a beach runner the setting is mild enough to feel natural but strong enough to hide the spawn distance cleanly.
 

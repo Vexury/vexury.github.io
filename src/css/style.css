@@ -1087,6 +1087,39 @@ pre code {
   line-height: 1.3;
 }
 
+.rank-strip {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-bottom: 0.5rem;
+  padding: 0.22rem 0.5rem;
+  border-left: 2px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0 3px 3px 0;
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.rank-strip .rank-num {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.rank-strip .rank-total,
+.rank-strip .rank-pill {
+  color: var(--text-muted);
+}
+
+.rank-strip .rank-pill {
+  white-space: nowrap;
+}
+
+.rank-strip .rank-sep {
+  color: var(--border-mid);
+  padding: 0 0.3rem;
+}
+
 .project-card > p {
   color: var(--text-muted);
   font-size: 0.85rem;
