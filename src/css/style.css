@@ -1642,6 +1642,19 @@ p.seal {
   margin-top: 1rem;
 }
 
+.footer-logo {
+  height: 4rem;
+  width: auto;
+  display: block;
+  margin: 0 auto 1.25rem;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.footer-logo:hover {
+  opacity: 1;
+}
+
 .footer-icon-links {
   display: flex;
   justify-content: center;
