@@ -462,6 +462,31 @@ title: ShaderGraph Viewer
 
       var hlslCache = {};
 
+      // ─── Shader index (name -> subfolder) ─────────────────────
+      var shaderIndexPromise = null;
+      function getShaderIndex() {
+        if (!shaderIndexPromise) {
+          shaderIndexPromise = fetch('/shaders-index.json')
+            .then(function(r) { return r.ok ? r.json() : []; })
+            .catch(function() { return []; });
+        }
+        return shaderIndexPromise;
+      }
+      function findIndexEntry(index, name, ext) {
+        var norm = name.replace(/\s+/g, '').toLowerCase();
+        for (var i = 0; i < index.length; i++) {
+          var e = index[i];
+          if (e.ext !== ext) continue;
+          if (e.name === name || e.name.replace(/\s+/g, '').toLowerCase() === norm) return e;
+        }
+        return null;
+      }
+      function shaderPath(entry, name, ext) {
+        var dir = entry ? entry.dir : '';
+        var base = (dir ? dir + '/' : '') + (entry ? entry.name : name);
+        return '/files/shaders/' + base.split('/').map(encodeURIComponent).join('/') + '.' + ext;
+      }
+
       function createNodeEl(node) {
         var el = document.createElement('div');
         var cls = 'sg-node';
@@ -491,7 +516,10 @@ title: ShaderGraph Viewer
             el.appendChild(codeEl);
             var fnName = node.customFn.name;
             if (hlslCache[fnName]) { codeEl.textContent = hlslCache[fnName]; return; }
-            fetch('/files/shaders/' + encodeURIComponent(fnName) + '.hlsl')
+            getShaderIndex().then(function(index) {
+              var entry = findIndexEntry(index, fnName, 'hlsl');
+              return fetch(shaderPath(entry, fnName, 'hlsl'));
+            })
               .then(function(r) { return r.ok ? r.text() : Promise.reject(); })
               .then(function(t) { hlslCache[fnName] = t; if (codeEl) codeEl.textContent = t; })
               .catch(function() {
@@ -913,8 +941,6 @@ title: ShaderGraph Viewer
           .catch(function() { showOverlay('no shaders found', true); });
       } else {
         showOverlay('loading…');
-        var base  = '/files/shaders/' + encodeURIComponent(fileName);
-        var baseNS = '/files/shaders/' + encodeURIComponent(fileName.replace(/\s+/g, ''));
         function tryFetch(urls) {
           return fetch(urls[0]).then(function(r) {
             if (r.ok) return r.text();
@@ -922,12 +948,20 @@ title: ShaderGraph Viewer
             throw new Error('HTTP ' + r.status);
           });
         }
-        tryFetch([
-          base   + '.shadergraph',
-          base   + '.shadersubgraph',
-          baseNS + '.shadergraph',
-          baseNS + '.shadersubgraph',
-        ])
+        getShaderIndex().then(function(index) {
+          var g  = findIndexEntry(index, fileName, 'shadergraph');
+          var sg = findIndexEntry(index, fileName, 'shadersubgraph');
+          var urls = [];
+          if (g)  urls.push(shaderPath(g, fileName, 'shadergraph'));
+          if (sg) urls.push(shaderPath(sg, fileName, 'shadersubgraph'));
+          if (!urls.length) {
+            // Fallback: assume flat layout at the shaders root
+            var base = '/files/shaders/' + encodeURIComponent(fileName);
+            var baseNS = '/files/shaders/' + encodeURIComponent(fileName.replace(/\s+/g, ''));
+            urls = [base + '.shadergraph', base + '.shadersubgraph', baseNS + '.shadergraph', baseNS + '.shadersubgraph'];
+          }
+          return tryFetch(urls);
+        })
           .then(function(text) {
             // Unity writes multiple JSON objects per file — split and collect all
             var wrapper = {};

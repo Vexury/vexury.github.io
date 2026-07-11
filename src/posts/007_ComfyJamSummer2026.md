@@ -26,6 +26,8 @@ An infinite runner where the camera is fixed and obstacles approach the player i
 
 The fix is to curve the world. The vertex shader offsets every vertex's Y position downward based on its Z distance from the player, bending the geometry along a cylindrical arc. Objects close to the player sit at normal height. Objects further away are progressively lower, tucking below the horizon so the surface appears to curve away. Combined with the beach visuals and the camera angle, it reads as rolling across a round surface toward a distant ocean.
 
+<a href="/projects/shadergraph/?file=WorldBend" class="sg-post-cta">View Shader Graph</a>
+
 The important thing is that nothing in the game logic changes. Obstacles are still spawned at a fixed Z distance ahead, still move at a fixed speed toward Z = 0, and are despawned when they pass behind the player. The shader is purely visual. All the bending happens in the vertex stage; the actual world coordinates stay flat, so collisions and movement work without any correction.
 
 <video autoplay loop muted playsinline style="max-width:100%">

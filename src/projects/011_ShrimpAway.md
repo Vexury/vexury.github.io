@@ -21,4 +21,6 @@ links:
     url: https://vexury.itch.io/shrimpaway
   - label: GitHub
     url: https://github.com/Vexury/ShrimpAway
+  - label: ShaderGraph
+    url: /projects/shadergraph/?file=WorldBend
 ---
