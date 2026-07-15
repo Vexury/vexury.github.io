@@ -25,7 +25,9 @@ I wrapped this logic in a reusable `DepthFadeRobust` subgraph. It samples the sc
 
 The 0–1 value from the subgraph feeds a lerp between `ShallowColor` and `DeepColor`, with `WaterDepth` controlling how many world units the transition spans. Getting a convincing result is mostly color-picking: shallow should be noticeably lighter and slightly desaturated relative to deep. The depth value is also reused by the foam and refraction systems, so it is the single most shared signal in the shader.
 
-<div style="margin: 1.5rem 0; border: 1px dashed var(--border-mid); border-radius: 4px; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; background: var(--accent-soft); color: var(--text-muted); font-family: 'Inconsolata', monospace; font-size: 0.9rem; letter-spacing: 0.05em;">[ depth color — video coming ]</div>
+<video autoplay loop muted playsinline preload="metadata" style="width:100%; margin:1.5rem 0; border-radius:4px; display:block;">
+  <source src="/images/URP_Water/Water_Color.mp4" type="video/mp4">
+</video>
 
 ## Shoreline Foam
 
@@ -35,7 +37,9 @@ Two separate noise layers produce the foam texture: a Gradient Noise layer and a
 
 Three parameters shape the final foam mask. `FoamCutoff` sets how deep from the shoreline foam extends. `FoamFade` controls how sharply the foam edge falls off — a Remap node maps the raw depth value to a 0–1 mask with a soft falloff at the outer edge. `FoamAmount` multiplies the final result to boost or soften the overall foam intensity. A `FoamColor` tint and a `FoamSpeed` scroll rate round out the controls.
 
-<div style="margin: 1.5rem 0; border: 1px dashed var(--border-mid); border-radius: 4px; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; background: var(--accent-soft); color: var(--text-muted); font-family: 'Inconsolata', monospace; font-size: 0.9rem; letter-spacing: 0.05em;">[ shoreline foam — video coming ]</div>
+<video autoplay loop muted playsinline preload="metadata" style="width:100%; margin:1.5rem 0; border-radius:4px; display:block;">
+  <source src="/images/URP_Water/Water_Foam.mp4" type="video/mp4">
+</video>
 
 ## Gerstner Waves
 
@@ -93,7 +97,9 @@ The steepness is also auto-clamped in the HLSL before use: `q = min(Steepness, 1
 
 Getting this right was the most involved part of the whole shader. The analytical normal gives correct lighting across the full steepness range, including at sharp crests where a noise-based normal map would give completely wrong surface orientation.
 
-<div style="margin: 1.5rem 0; border: 1px dashed var(--border-mid); border-radius: 4px; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; background: var(--accent-soft); color: var(--text-muted); font-family: 'Inconsolata', monospace; font-size: 0.9rem; letter-spacing: 0.05em;">[ Gerstner waves — video coming ]</div>
+<video autoplay loop muted playsinline preload="metadata" style="width:100%; margin:1.5rem 0; border-radius:4px; display:block;">
+  <source src="/images/URP_Water/Water_GerstnerWaves.mp4" type="video/mp4">
+</video>
 
 ## Screen-Space Refraction
 
@@ -105,7 +111,9 @@ The `RefractionScale` parameter controls the tiling of the noise (smaller values
 
 One edge case to handle: the refracted UV can land above the water surface and sample the sky. The depth check from `DepthFadeRobust` is used as a mask — refraction only applies where there is actual geometry behind the water, which keeps the edges of water bodies clean.
 
-<div style="margin: 1.5rem 0; border: 1px dashed var(--border-mid); border-radius: 4px; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; background: var(--accent-soft); color: var(--text-muted); font-family: 'Inconsolata', monospace; font-size: 0.9rem; letter-spacing: 0.05em;">[ screen-space refraction — video coming ]</div>
+<video autoplay loop muted playsinline preload="metadata" style="width:100%; margin:1.5rem 0; border-radius:4px; display:block;">
+  <source src="/images/URP_Water/Water_Refraction.mp4" type="video/mp4">
+</video>
 
 ## Parameters
 
