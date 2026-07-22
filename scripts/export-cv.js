@@ -1,4 +1,4 @@
-// Generates CV_light.pdf and CV_dark.pdf from the built site.
+// Generates export/CV_light.pdf and export/CV_dark.pdf from the built site.
 // Run: npm run export-cv  (builds first, then exports)
 // Requires: npm install  (installs puppeteer)
 
@@ -8,6 +8,7 @@ const fs        = require('fs');
 const path      = require('path');
 
 const SITE_DIR = path.join(__dirname, '../_site');
+const OUT_DIR  = path.join(__dirname, '../export');
 const PORT     = 4243;
 
 const HIDE_CHROME = `
@@ -36,6 +37,7 @@ const COMPACT = `
   .cvp-tags         { gap: 0.2rem !important; }
   .cvp-teach-grid   { gap: 0.4rem 1rem !important; }
   .cvp-proj-item    { padding-bottom: 0.5rem !important; margin-bottom: 0.5rem !important; }
+  .cvp-jam-section  { margin-top: 0.7rem !important; padding-top: 0.7rem !important; }
 `;
 
 function startServer() {
@@ -89,11 +91,12 @@ async function main() {
     process.exit(1);
   }
   console.log('Starting export...');
+  fs.mkdirSync(OUT_DIR, { recursive: true });
   const server  = await startServer();
   const browser = await puppeteer.launch({ headless: true });
   try {
-    await exportPDF(browser, 'CV_light.pdf', false);
-    await exportPDF(browser, 'CV_dark.pdf',  true);
+    await exportPDF(browser, path.join(OUT_DIR, 'CV_light.pdf'), false);
+    await exportPDF(browser, path.join(OUT_DIR, 'CV_dark.pdf'),  true);
   } finally {
     await browser.close();
     server.close();

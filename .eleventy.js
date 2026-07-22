@@ -19,6 +19,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/images");
   eleventyConfig.addPassthroughCopy("src/files");
   eleventyConfig.addPassthroughCopy("src/fonts");
+  eleventyConfig.addPassthroughCopy({ "src/favicon": "/" });
 
   // ── Image shortcode ───────────────────────────────────────────────────────
   // Shared thumb generator — used by both the shortcode and the filter
