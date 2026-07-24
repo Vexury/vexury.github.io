@@ -25,13 +25,16 @@ const COMPACT = `
   .cvp-name     { font-size: 1.75rem !important; }
   .cvp-header   { padding-bottom: 0.5rem !important; margin-bottom: 0.7rem !important; }
   .cvp-tagline  { margin: 0 !important; }
-  .cvp-about    { font-size: 0.82rem !important; line-height: 1.4 !important; }
-  .cvp-section  { padding-bottom: 0.65rem !important; margin-bottom: 0.65rem !important; }
+  .cvp-about    { font-size: 0.82rem !important; line-height: 1.35 !important; }
+  .cvp-section  { padding-bottom: 0.45rem !important; margin-bottom: 0.45rem !important; }
   .cvp-body     { gap: 2rem !important; }
   .cvp-skill-group  { margin-bottom: 0.45rem !important; }
   .section-label    { margin-bottom: 0.3rem !important; }
-  .cv-body          { padding-bottom: 0.5rem !important; }
-  .cvp-entry-desc   { margin-top: 0.2rem !important; line-height: 1.4 !important; }
+  .cv-body          { padding-bottom: 0.38rem !important; }
+  .cvp-pub-meta     { margin-bottom: 0.2rem !important; }
+  .cvp-entry-desc   { margin-top: 0.2rem !important; line-height: 1.32 !important; }
+  .cvp-proj-desc    { line-height: 1.35 !important; }
+  .cvp-jam-table    { gap: 0.18rem 0.9rem !important; }
   .cvp-contact-list { gap: 0.28rem !important; }
   .cvp-lang-list    { gap: 0.22rem !important; }
   .cvp-tags         { gap: 0.2rem !important; }
@@ -79,7 +82,7 @@ async function exportPDF(browser, outputPath, dark) {
     margin: { top: '0', right: '0', bottom: '0', left: '0' },
     printBackground: true,
     displayHeaderFooter: false,
-    scale: 0.81,
+    scale: 0.78,
   });
   await page.close();
   console.log(`  Saved ${outputPath}`);
