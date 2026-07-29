@@ -5,7 +5,10 @@ category: game-jams
 title: "Comfy Jam Summer 2026: Shrimp Away"
 emoji: "🦐"
 images:
+  - /images/ShrimpAway/ShrimpAway_Cover.png
   - /images/ShrimpAway/ShrimpAway_01.png
+  - /images/ShrimpAway/ShrimpAway_02.png
+  - /images/ShrimpAway/ShrimpAway_03.png
 ranking:
   place: 7
   total: 439
