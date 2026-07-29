@@ -3,7 +3,7 @@ title: "🦐 Comfy Jam Summer 2026: Shrimp Away"
 date: 2026-06-24
 summary: "A shrimp escaping to the sea in an infinite runner built around a world-bending vertex shader and a jam limitation that the player can never actually win."
 ongoing: true
-preview_image: /images/ShrimpAway/ShrimpAway_01.png
+preview_image: /images/ShrimpAway/ShrimpAway_Cover.png
 ---
 
 # {{ title }}
@@ -18,7 +18,7 @@ The [Comfy Jam Summer 2026](https://itch.io/jam/comfy-jam-summer-2026) had two c
 
 The lie is that you never will. The ocean is always ahead of you, and the instructions tell you to reach it, but you technically never move. The world moves instead, and a vertex shader makes that feel convincing.
 
-<img src="{% thumb '/images/ShrimpAway/ShrimpAway_Screenshot_01.png', 1100 %}" alt="Shrimp Away gameplay screenshot" loading="lazy">
+<img src="{% thumb '/images/ShrimpAway/ShrimpAway_01.png', 1100 %}" alt="Shrimp Away gameplay screenshot" loading="lazy">
 
 ## The World Bend Shader
 
