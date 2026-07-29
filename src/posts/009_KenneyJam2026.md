@@ -2,7 +2,7 @@
 title: "🤑 Kenney Jam 2026: Scaleton Inc."
 date: 2026-07-19
 summary: "Fifty hours, a team of three, and a jam where you are not allowed to make any art. What you can make is shaders."
-preview_image: /images/Scaleton/Scaleton_01.png
+preview_image: /images/Scaleton/Scaleton_Cover.png
 ---
 
 # {{ title }}
