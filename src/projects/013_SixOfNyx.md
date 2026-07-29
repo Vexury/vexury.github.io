@@ -5,6 +5,7 @@ category: game-jams
 title: "Juniper Dev Game Jam: Six of Nyx"
 emoji: "🔮"
 description: "A 3D puzzle game made for The Very Serious Juniper Dev Game Jam (theme: Spin to Win). You rotate a large glass sphere across platform levels to guide the marble inside it to three stars and the exit; a second view lets you switch to controlling the marble directly. Built with Cxbane; I handled all programming, shaders, VFX and systems, including a raymarching volumetric mist shader inside the sphere."
+duration: "8 days"
 focus: "Programming, Shaders, VFX"
 images:
   - /images/SixOfNyx/SixOfNyx_Cover.png
