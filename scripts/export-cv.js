@@ -67,6 +67,26 @@ function startServer() {
   });
 }
 
+// A4 at 96dpi. Chrome lays a PDF out at (paper size / scale), so the CSS
+// viewport that matches the print layout is A4_W / scale.
+const A4_W = 8.27 * 96;
+const A4_H = 11.69 * 96;
+const MAX_SCALE = 0.78;
+
+// .cvp-body is a flex container and Chrome will not fragment one across pages,
+// so a document even a few px too tall pushes the whole body onto page 2 and
+// leaves page 1 nearly blank. Solve for the scale that keeps it on one page.
+async function fitScale(page) {
+  let scale = MAX_SCALE;
+  for (let i = 0; i < 2; i++) {
+    await page.setViewport({ width: Math.round(A4_W / scale), height: 900 });
+    await new Promise(r => setTimeout(r, 150));
+    const height = await page.evaluate(() => document.documentElement.scrollHeight);
+    scale = Math.min(MAX_SCALE, (A4_H - 2) / height);
+  }
+  return scale;
+}
+
 async function exportPDF(browser, outputPath, dark) {
   const page = await browser.newPage();
   await page.setViewport({ width: 1280, height: 900 });
@@ -76,16 +96,17 @@ async function exportPDF(browser, outputPath, dark) {
   await page.addStyleTag({ content: HIDE_CHROME });
   await page.addStyleTag({ content: COMPACT });
   await new Promise(r => setTimeout(r, 400));
+  const scale = await fitScale(page);
   await page.pdf({
     path: outputPath,
     format: 'A4',
     margin: { top: '0', right: '0', bottom: '0', left: '0' },
     printBackground: true,
     displayHeaderFooter: false,
-    scale: 0.78,
+    scale,
   });
   await page.close();
-  console.log(`  Saved ${outputPath}`);
+  console.log(`  Saved ${outputPath} (scale ${scale.toFixed(4)})`);
 }
 
 async function main() {
