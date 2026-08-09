@@ -2,7 +2,6 @@
 title: "🌊 Customizable Unity URP Water Shader"
 date: 2026-06-09
 summary: "Building a stylized yet beautiful URP water shader in Unity Shader Graph, with Gerstner waves, depth-based color blending, shoreline foam, and screen-space refraction."
-ongoing: true
 preview_image: /images/URP_Water/Water_01.png
 ---
 
