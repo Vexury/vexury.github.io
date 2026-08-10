@@ -1,6 +1,7 @@
 ---
 layout: base.html
 title: Projects
+description: "Rendering and game projects: VexEngine, a custom C++ path tracer with OpenGL and Vulkan backends, Unity shaders, and games built at jams."
 ---
 
 <div class="project-filters">

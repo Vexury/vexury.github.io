@@ -67,12 +67,31 @@ module.exports = function(eleventyConfig) {
   });
 
   // ── Filters ───────────────────────────────────────────────────────────────
+  // Page titles double as on-page headings and carry a leading emoji. Strip it
+  // for <title> and social meta, where it just adds noise.
+  eleventyConfig.addFilter("stripEmoji", function(str) {
+    if (!str) return "";
+    return String(str)
+      .replace(/[\p{Extended_Pictographic}\u{FE0F}\u{200D}\u{20E3}]/gu, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  });
+
+  eleventyConfig.addFilter("absoluteUrl", function(url, base) {
+    if (!url) return "";
+    if (/^https?:\/\//.test(url)) return url;
+    return `${String(base).replace(/\/$/, "")}${url.startsWith("/") ? "" : "/"}${url}`;
+  });
+
   eleventyConfig.addFilter("date", function(date, format) {
     const d = new Date(date);
     const months = ["January", "February", "March", "April", "May", "June",
                     "July", "August", "September", "October", "November", "December"];
     if (format === "%B %d, %Y") {
       return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+    }
+    if (format === "%Y-%m-%d") {
+      return d.toISOString().slice(0, 10);
     }
     return date;
   });
