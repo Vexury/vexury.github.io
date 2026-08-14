@@ -47,9 +47,7 @@
 </head>
 <body>
   <script>
-    if (location.pathname === '/' && !sessionStorage.getItem('home-animated')) {
-      document.documentElement.classList.add('page-entering');
-    }
+    document.documentElement.classList.add('page-entering');
   </script>
   <div class="site-wrapper">
     <header class="site-header">
@@ -190,14 +188,11 @@
       document.body.appendChild(btn);
     })();
 
-    if (document.documentElement.classList.contains('page-entering')) {
-      requestAnimationFrame(function () {
-        setTimeout(function () {
-          document.documentElement.classList.remove('page-entering');
-          sessionStorage.setItem('home-animated', '1');
-        }, 0);
-      });
-    }
+    requestAnimationFrame(function () {
+      setTimeout(function () {
+        document.documentElement.classList.remove('page-entering');
+      }, 0);
+    });
 
     (function () {
       if (document.body.scrollHeight <= window.innerHeight + 80) return;

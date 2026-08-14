@@ -1851,35 +1851,25 @@ p.seal {
 
 /* ─── Entrance animation ─────────────────────────────────────────────────── */
 
-.site-header {
-  transition: opacity 0.35s ease-out, transform 0.35s ease-out;
-}
-
 .site-main {
-  transition: opacity 0.4s ease-out 0.18s, transform 0.4s ease-out 0.18s;
+  transition: opacity 0.28s ease-out, transform 0.28s ease-out;
 }
 
 .site-footer {
-  transition: opacity 0.4s ease-out 0.28s, transform 0.4s ease-out 0.28s;
-}
-
-.page-entering .site-header {
-  opacity: 0;
-  transform: translateY(-8px);
+  transition: opacity 0.28s ease-out 0.08s, transform 0.28s ease-out 0.08s;
 }
 
 .page-entering .site-main {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(8px);
 }
 
 .page-entering .site-footer {
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(8px);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .site-header,
   .site-main,
   .site-footer { transition: none; }
 }
