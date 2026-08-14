@@ -16,9 +16,9 @@
   "type": "commonjs",
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",
-    "@11ty/eleventy-img": "^6.0.4",
+    "@11ty/eleventy-img": "^7.0.0",
     "markdown-it-task-lists": "^2.1.1",
-    "puppeteer": "^24.0.0"
+    "puppeteer": "^25.7.0"
   },
   "dependencies": {
     "sharp": "^0.35.3"

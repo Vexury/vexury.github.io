@@ -1,6 +1,13 @@
 const markdownItTaskLists = require('markdown-it-task-lists');
-const Image = require('@11ty/eleventy-img');
 const path = require('node:path');
+
+// eleventy-img is ESM-only since v7, so it has to be imported dynamically.
+// Loaded once on first use and reused for every subsequent thumb.
+let imagePromise;
+function loadImage() {
+  if (!imagePromise) imagePromise = import('@11ty/eleventy-img').then(m => m.default);
+  return imagePromise;
+}
 
 module.exports = function(eleventyConfig) {
 
@@ -30,6 +37,7 @@ module.exports = function(eleventyConfig) {
     const urlPath   = isLarge ? "/images/thumbs/large/"        : "/images/thumbs/";
     const inputPath = `./src${src}`;
     try {
+      const Image = await loadImage();
       const metadata = await Image(inputPath, {
         widths: [width],
         formats: ["webp"],

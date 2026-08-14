@@ -2,7 +2,7 @@
 // Run: npm run export-cv  (builds first, then exports)
 // Requires: npm install  (installs puppeteer)
 
-const puppeteer = require('puppeteer');
+// puppeteer is ESM-only since v25, so it has to be imported dynamically here.
 const http      = require('http');
 const fs        = require('fs');
 const path      = require('path');
@@ -116,6 +116,7 @@ async function main() {
   }
   console.log('Starting export...');
   fs.mkdirSync(OUT_DIR, { recursive: true });
+  const { default: puppeteer } = await import('puppeteer');
   const server  = await startServer();
   const browser = await puppeteer.launch({ headless: true });
   try {
