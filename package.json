@@ -15,12 +15,12 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@11ty/eleventy": "^3.1.5",
+    "@11ty/eleventy": "^3.1.6",
     "@11ty/eleventy-img": "^6.0.4",
     "markdown-it-task-lists": "^2.1.1",
     "puppeteer": "^24.0.0"
   },
   "dependencies": {
-    "sharp": "^0.35.2"
+    "sharp": "^0.35.3"
   }
 }
