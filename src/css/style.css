@@ -210,6 +210,23 @@ body {
   pointer-events: auto;
 }
 
+/* Touch devices have no hover to open the group with, and a long press is
+   already the browser's own gesture. Leave the sub-links permanently open.
+   Keyed on the pointer, not the viewport, so a narrow desktop window keeps
+   the hover behaviour and a touch laptop in landscape does not. */
+@media (hover: none) {
+  .nav-link.nav-link-sub {
+    height: 1.6em;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    /* The negative margin above only holds while the links are hidden. Now
+       that they are always laid out, the group really is as wide as its
+       widest child. */
+    margin-right: 0;
+  }
+}
+
 .nav-link {
   text-decoration: none;
   border-bottom: none;
