@@ -1,0 +1,70 @@
+---
+layout: base.html
+title: Show Tracker
+description: "A personal log of horror, mystery, thriller and drama movies and shows: a hall of fame, a watchlist, and everything watched so far with ratings."
+---
+
+{%- assign hallOfFame = showtracker | where: "status", "hall_of_fame" | sortByRatingDesc -%}
+{%- assign watchlist  = showtracker | where: "status", "watchlist" | sortByReleaseDesc -%}
+{%- assign collection = showtracker | where_exp: "e", "e.status != 'watchlist'" | sortByRatingDesc -%}
+
+<div class="project-filters st-filters">
+  <button class="filter-btn active" type="button" data-filter="all">All</button>
+  <button class="filter-btn" type="button" data-filter="movie">Movies</button>
+  <button class="filter-btn" type="button" data-filter="show">Series</button>
+</div>
+
+<section class="st-section">
+  <h2>Hall of Fame <span class="st-count">{{ hallOfFame.size }}</span></h2>
+  <p class="st-lede">Horror, mystery, thriller and drama, rated out of ten.</p>
+  <div class="st-hof-grid">
+    {%- for e in hallOfFame %}{% render "st-card.html", e: e %}{% endfor %}
+  </div>
+</section>
+
+<section class="st-section">
+  <h2>Watchlist <span class="st-count">{{ watchlist.size }}</span></h2>
+  <p class="st-lede">Queued up, not watched yet.</p>
+  <div class="st-watch-grid">
+    {%- for e in watchlist %}{% render "st-card.html", e: e %}{% endfor %}
+  </div>
+</section>
+
+<section class="st-section">
+  <h2>Collection <span class="st-count">{{ collection.size }}</span></h2>
+  <p class="st-lede">Everything watched, hall of fame included. Amber frame marks a hall of fame entry.</p>
+  <div class="st-grid">
+    {%- for e in collection %}{% render "st-card.html", e: e %}{% endfor %}
+  </div>
+</section>
+
+<p class="st-credit">Poster artwork from <a href="https://www.themoviedb.org/">TMDB</a>. This page uses TMDB images but is not endorsed or certified by TMDB.</p>
+
+<script>
+(function () {
+  var btns = document.querySelectorAll('.st-filters .filter-btn');
+  var cards = document.querySelectorAll('.st-card');
+  var sections = document.querySelectorAll('.st-section');
+
+  function apply(filter) {
+    cards.forEach(function (c) {
+      c.hidden = !(filter === 'all' || c.dataset.type === filter);
+    });
+    // A section whose cards are all filtered out would otherwise leave a
+    // heading with a zero next to it, so hide the whole thing.
+    sections.forEach(function (sec) {
+      var shown = sec.querySelectorAll('.st-card:not([hidden])').length;
+      sec.querySelector('.st-count').textContent = shown;
+      sec.hidden = shown === 0;
+    });
+  }
+
+  btns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      btns.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      apply(btn.dataset.filter);
+    });
+  });
+})();
+</script>

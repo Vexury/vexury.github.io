@@ -1,0 +1,27 @@
+{%- assign months = "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec" | split: "," -%}
+{%- assign mi = e.releaseMonth | minus: 1 -%}
+<article class="st-card{% if e.status == 'hall_of_fame' %} is-hof{% endif %}" data-type="{{ e.type }}"{% if e.notes %} title="{{ e.notes | escape }}"{% endif %}>
+  <div class="st-poster">
+    {%- if e.image %}<img src="{{ e.image }}" alt="{{ e.title }} poster" loading="lazy" decoding="async">
+    {%- else %}<span class="st-poster-fallback">{{ e.title }}</span>{% endif %}
+  </div>
+  {%- if e.distributor or e.production %}
+  <div class="st-pills">
+    {%- if e.distributor %}<span class="st-pill">{{ e.distributor }}</span>{% endif %}
+    {%- for co in e.production %}<span class="st-pill st-pill-prod">{{ co }}</span>{% endfor %}
+  </div>
+  {%- endif %}
+  {%- if e.rating %}<span class="st-badge" title="Rated {{ e.rating }} out of 10">{{ e.rating }}</span>{% endif %}
+  <div class="st-scrim">
+    <h3>{{ e.title }}</h3>
+    <p class="st-sub">{{ months[mi] }} {{ e.releaseYear }} &middot;
+      {%- if e.type == 'movie' -%}
+        {%- assign h = e.runtimeMinutes | divided_by: 60 | floor -%}
+        {%- assign m = e.runtimeMinutes | modulo: 60 %}
+        {% if h > 0 %}{{ h }}h {% endif %}{{ m }}m
+      {%- else %}
+        {{ e.seasons }} season{% unless e.seasons == 1 %}s{% endunless %} &middot; {{ e.episodes }} ep
+      {%- endif -%}
+    </p>
+  </div>
+</article>

@@ -85,6 +85,18 @@ module.exports = function(eleventyConfig) {
       .trim();
   });
 
+  // Show tracker ordering. Liquid's own `sort` can't do a two-key sort and
+  // pushes null ratings to the top, so both orders live here instead.
+  eleventyConfig.addFilter("sortByRatingDesc", function(arr) {
+    return [...(arr || [])].sort((a, b) =>
+      (b.rating ?? -1) - (a.rating ?? -1) || a.title.localeCompare(b.title));
+  });
+
+  eleventyConfig.addFilter("sortByReleaseDesc", function(arr) {
+    return [...(arr || [])].sort((a, b) =>
+      (b.releaseYear - a.releaseYear) || (b.releaseMonth - a.releaseMonth));
+  });
+
   eleventyConfig.addFilter("absoluteUrl", function(url, base) {
     if (!url) return "";
     if (/^https?:\/\//.test(url)) return url;
