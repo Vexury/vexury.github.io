@@ -610,8 +610,8 @@
     "image": "https://image.tmdb.org/t/p/w342/AcKVlWaNVVVFQwro3nLXqPljcYA.jpg",
     "distributor": "Universal",
     "runtimeMinutes": 130,
-    "rating": null,
-    "status": "watchlist"
+    "rating": 6,
+    "status": "watched"
   },
   {
     "id": "backrooms",
@@ -915,8 +915,8 @@
       "Blumhouse"
     ],
     "runtimeMinutes": 110,
-    "rating": null,
-    "status": "watchlist"
+    "rating": 7,
+    "status": "watched"
   },
   {
     "id": "the-hole-in-the-ground",
