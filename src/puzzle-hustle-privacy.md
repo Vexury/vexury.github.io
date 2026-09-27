@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: September 25, 2026</p>
+<p class="post-date">Last updated: September 28, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -13,8 +13,10 @@ This policy covers the Puzzle Hustle app for Android and iOS, and the web versio
 
 ## The short version
 
-You can play every puzzle without an account, and there are no analytics and no crash reporting.
-Your progress, streaks, coins and settings stay on your device.
+You can play every puzzle without an account, and there is no crash reporting and no third-party
+analytics. Your progress, streaks, coins and settings stay on your device. The app does send
+anonymous usage statistics (how long puzzles take, where players stop) that carry no ID and cannot
+be linked to you or your device; you can switch them off in the Profile screen.
 
 Signing in is optional and only unlocks the social part: private groups where friends compare
 their Daily, Weekly and Monthly times. If you sign in, our server keeps an account ID from Google
@@ -41,6 +43,7 @@ The app saves the following on your device:
 - unfinished puzzles, so you can pick them up where you left off
 - settings such as the theme, your display name and your last chosen difficulty
 - if you are signed in, your session and any times still waiting to be sent
+- the day you first played, and any usage statistics still waiting to be sent (see below)
 
 On Android and iOS this lives in the app's local storage and in a backup copy in the app's own
 private preferences, so that clearing the app cache does not wipe your progress. If you have
@@ -73,8 +76,9 @@ device.
 
 ## What our server keeps
 
-The server exists only for groups and standings. Solving never waits for it, and no puzzle comes
-from it. If you are signed in, it stores:
+Apart from the anonymous usage statistics below, the server exists only for groups and
+standings. Solving never waits for it, and no puzzle comes from it. If you are signed in, it
+stores:
 
 - **Account:** a random player ID, the provider (Google or Apple) with its subject ID, and when
   the account was created.
@@ -108,8 +112,8 @@ at any time.
 The server is a Cloudflare Worker with a Cloudflare D1 database, run by Cloudflare, Inc., 101
 Townsend St, San Francisco, CA 94107, USA, which processes the data on our behalf under its data
 processing addendum. To answer requests and protect the service, Cloudflare processes technical
-data such as your IP address; the sign-in endpoint uses it to limit how often one address can
-try. We do not store IP addresses. Cloudflare may process data outside the European Union; it is
+data such as your IP address; the sign-in and statistics endpoints use it to limit how often one
+address can send requests. We do not store IP addresses. Cloudflare may process data outside the European Union; it is
 certified under the EU-U.S. Data Privacy Framework, and its data processing addendum includes the
 EU Standard Contractual Clauses. See the
 [Cloudflare Privacy Policy](https://www.cloudflare.com/privacypolicy/).
@@ -128,6 +132,34 @@ on the device is not affected.
 
 If you cannot use the app, write to vexury.dev@gmail.com with your display name and the name of a
 group you are in, and we will delete the account for you.
+
+## Anonymous usage statistics
+
+To find out which puzzles are too hard, too easy or confusing, the app sends short anonymous
+records to our server. There is one when you open the app on a day, one when you finish or skip
+the introduction, and one each time you leave or solve a puzzle. A record contains:
+
+- the calendar day (no time of day)
+- the platform (Android, iOS or web) and which build of the app
+- how long ago you started playing, in coarse steps (first day, second day, third day, 3 to 6
+  days, 1 to 2 weeks, 2 to 4 weeks, 1 to 3 months, longer)
+- for a puzzle: its type, difficulty, whether it was a Daily, Weekly, Monthly, level or random
+  puzzle and the level number, whether you solved or left it, the time, moves and hints, whether
+  you had played it before and whether it was your first puzzle of that type
+- for the introduction: which card you reached and whether you finished or skipped it
+
+A record contains no account ID, no device or advertising ID, no name and no IP address, and
+records are not linked to one another, so we cannot tell which records come from the same person.
+Records wait on your device until they can be sent, and they are sent whether or not you are
+signed in, but never together with your account. Our server keeps them for about 13 months and
+then deletes them. We look at them only as totals, such as the median time of a Daily.
+
+You can switch this off at any time under **Anonymous stats** in the Profile screen. Switching it
+off also deletes any records not yet sent.
+
+The legal basis is our legitimate interest in improving the puzzles (Art. 6(1)(f) GDPR). As
+nothing sent identifies you, the impact on you is minimal, and you can object at any time by
+switching the statistics off.
 
 ## Ads
 
@@ -185,8 +217,8 @@ no connection at all.
 
 It reaches the internet for these things, and only these:
 
-- talking to our server, only while you are signed in: standings, groups, your name and badge,
-  submitted times
+- talking to our server: while you are signed in for standings, groups, your name and badge and
+  submitted times, and, unless you switch it off, for the anonymous usage statistics
 - signing in with Google or Apple, when you choose to
 - fetching an ad when you have asked for one
 - asking Google Play or the App Store about the "Unlimited Hints" purchase
@@ -220,13 +252,13 @@ and ads are limited to the "General" content rating.
 Under the GDPR you have the right to access, correct, delete and port your data, to restrict or
 object to its processing, and to complain to a supervisory authority.
 
-If you never sign in, we hold nothing about you: everything the app saves sits on your device,
+If you never sign in, we hold nothing that identifies you: everything the app saves sits on your device,
 where the reset button in the Profile screen and uninstalling both clear it.
 
 If you do sign in, the data listed under "What our server keeps" is processed to provide the
 groups and standings you asked for (Art. 6(1)(b) GDPR). Handling reports and limiting sign-in
 attempts serve our legitimate interest in a fair service that is safe from abuse (Art. 6(1)(f)
-GDPR). You can change your name in the Profile screen, leave any group and delete the account
+GDPR). The anonymous usage statistics are described in their own section above. You can change your name in the Profile screen, leave any group and delete the account
 yourself as described above. For a copy of your data, or anything the app does not let you do
 yourself, write to us.
 
@@ -240,6 +272,7 @@ Questions go to vexury.dev@gmail.com and get an answer.
 
 This policy will be updated when the app changes in a way that affects it.
 
+- September 28, 2026: anonymous usage statistics, with a switch in the Profile screen.
 - September 25, 2026: optional sign-in with Google and Apple, private groups and standings, our
   server on Cloudflare, reports, account deletion, the iOS app and purchases through the App
   Store.
