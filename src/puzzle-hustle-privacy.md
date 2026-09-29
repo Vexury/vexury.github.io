@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: September 28, 2026</p>
+<p class="post-date">Last updated: September 29, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -122,8 +122,8 @@ EU Standard Contractual Clauses. See the
 
 In the app, open Profile, tap **Delete account** and confirm. On iOS, Apple's sign-in sheet opens
 once more so that the app can also revoke Puzzle Hustle's access to your Apple ID; if you close the
-sheet, nothing is deleted. A Google account can be deleted the same way in the web version at
-[puzzles.vexury.dev](https://puzzles.vexury.dev/) after signing in, without installing anything.
+sheet, nothing is deleted. Without installing anything, you can delete a Google or Apple account
+at [puzzles.vexury.dev/delete-account](https://puzzles.vexury.dev/delete-account) after signing in.
 
 Deleting removes your account, display name, badge, flair, all your submitted times, every report
 you made or that was made about you, and your group memberships, right away. A group you created
