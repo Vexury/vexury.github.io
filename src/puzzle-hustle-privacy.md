@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: September 29, 2026</p>
+<p class="post-date">Last updated: September 30, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -273,6 +273,7 @@ Questions go to vexury.dev@gmail.com and get an answer.
 
 This policy will be updated when the app changes in a way that affects it.
 
+- September 30, 2026: the Hustle level, shown to members of your groups.
 - September 28, 2026: anonymous usage statistics, with a switch in the Profile screen.
 - September 25, 2026: optional sign-in with Google and Apple, private groups and standings, our
   server on Cloudflare, reports, account deletion, the iOS app and purchases through the App
