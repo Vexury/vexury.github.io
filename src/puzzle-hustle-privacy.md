@@ -144,8 +144,8 @@ the introduction, and one each time you leave or solve a puzzle. A record contai
 - the platform (Android, iOS or web) and which build of the app
 - how long ago you started playing, in coarse steps (first day, second day, third day, 3 to 6
   days, 1 to 2 weeks, 2 to 4 weeks, 1 to 3 months, longer)
-- for a puzzle: its type, difficulty, whether it was a Daily, Weekly, Monthly, level or random
-  puzzle and the level number, whether you solved or left it, the time, moves and hints, whether
+- for a puzzle: its type, difficulty, whether it was a Daily, Weekly, Monthly, level, Hustle or
+  random puzzle and the level number or Hustle stage, whether you solved or left it, the time, moves and hints, whether
   you had played it before and whether it was your first puzzle of that type
 - for the introduction: which card you reached and whether you finished or skipped it
 
@@ -274,6 +274,7 @@ Questions go to vexury.dev@gmail.com and get an answer.
 This policy will be updated when the app changes in a way that affects it.
 
 - September 30, 2026: the Hustle level, shown to members of your groups.
+- September 30, 2026: usage statistics tell Hustle puzzles and their stage apart from random ones.
 - September 28, 2026: anonymous usage statistics, with a switch in the Profile screen.
 - September 25, 2026: optional sign-in with Google and Apple, private groups and standings, our
   server on Cloudflare, reports, account deletion, the iOS app and purchases through the App
