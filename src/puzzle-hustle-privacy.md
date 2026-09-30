@@ -16,7 +16,7 @@ This policy covers the Puzzle Hustle app for Android and iOS, and the web versio
 You can play every puzzle without an account, and there is no crash reporting and no third-party
 analytics. Your progress, streaks, coins and settings stay on your device. The app does send
 anonymous usage statistics (how long puzzles take, where players stop) that carry no ID and cannot
-be linked to you or your device; you can switch them off in the Profile screen.
+be linked to you or your device; you can switch them off under Profile, Account.
 
 Signing in is optional and only unlocks the social part: private groups where friends compare
 their Daily, Weekly and Monthly times. If you sign in, our server keeps an account ID from Google
@@ -51,13 +51,13 @@ device backups switched on, Android or iOS may include this data in your Google 
 that is between you and Google or Apple. We cannot see any of it, and we cannot restore it for
 you. Uninstalling the app deletes it from the device.
 
-The Profile screen has a reset button that erases your progress on the device on the spot. It does
+The Account page under Profile has a reset button that erases your progress on the device on the spot. It does
 not touch your account or the times you have already submitted; deleting the account does that.
 
 ## Signing in
 
 Signing in is optional. Without it every puzzle, level, hint and achievement works exactly the
-same. Only the Social tab needs an account.
+same. Only the Social page under Profile needs an account.
 
 - On Android and on the web you sign in with **Google**. On the web, Google's sign-in script is
   only loaded once you tap Sign in.
@@ -121,7 +121,7 @@ EU Standard Contractual Clauses. See the
 
 ### Deleting your account
 
-In the app, open Profile, tap **Delete account** and confirm. On iOS, Apple's sign-in sheet opens
+In the app, open Profile, then Account, tap **Delete account** and confirm. On iOS, Apple's sign-in sheet opens
 once more so that the app can also revoke Puzzle Hustle's access to your Apple ID; if you close the
 sheet, nothing is deleted. Without installing anything, you can delete a Google or Apple account
 at [puzzles.vexury.dev/delete-account](https://puzzles.vexury.dev/delete-account) after signing in.
@@ -155,7 +155,7 @@ Records wait on your device until they can be sent, and they are sent whether or
 signed in, but never together with your account. Our server keeps them for about 13 months and
 then deletes them. We look at them only as totals, such as the median time of a Daily.
 
-You can switch this off at any time under **Anonymous stats** in the Profile screen. Switching it
+You can switch this off at any time under **Anonymous stats** in Profile, Account. Switching it
 off also deletes any records not yet sent.
 
 The legal basis is our legitimate interest in improving the puzzles (Art. 6(1)(f) GDPR). As
@@ -254,7 +254,7 @@ Under the GDPR you have the right to access, correct, delete and port your data,
 object to its processing, and to complain to a supervisory authority.
 
 If you never sign in, we hold nothing that identifies you: everything the app saves sits on your device,
-where the reset button in the Profile screen and uninstalling both clear it.
+where the reset button under Profile, Account and uninstalling both clear it.
 
 If you do sign in, the data listed under "What our server keeps" is processed to provide the
 groups and standings you asked for (Art. 6(1)(b) GDPR). Handling reports and limiting sign-in
