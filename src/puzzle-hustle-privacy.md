@@ -20,7 +20,7 @@ be linked to you or your device; you can switch them off in the Profile screen.
 
 Signing in is optional and only unlocks the social part: private groups where friends compare
 their Daily, Weekly and Monthly times. If you sign in, our server keeps an account ID from Google
-or Apple, your display name, the badge and flair you show, your groups and the times you submit.
+or Apple, your display name, the badge and flair you show, your Hustle level, your groups and the times you submit.
 It never stores your email address. You can delete the account in the app at any time.
 
 The Android and iOS apps show rewarded video ads, which you only ever see after choosing to watch
@@ -87,6 +87,7 @@ stores:
   refused.
 - **Badge and flair:** the one badge and one flair you have equipped, as IDs from the app's fixed
   list. Your coins and what you own stay on your device.
+- **Hustle level:** the highest stage you have reached in Hustle mode, as a single number.
 - **Groups:** the groups you created or joined, their names and six-character invite codes, and
   when you joined. A player can be in at most 5 groups, and a group holds at most 50 players.
 - **Times:** for each Daily, Weekly and Monthly puzzle you solve while signed in, your time, hints,
@@ -94,7 +95,7 @@ stores:
   Level and random puzzles are never sent.
 - **Reports:** when you report a name, who reported whom, the reason and when.
 
-Other members of a group you are in see your display name, badge, flair, and your time and hints
+Other members of a group you are in see your display name, badge, flair, Hustle level, and your time and hints
 for each Daily, Weekly and Monthly. Nobody outside your groups sees your name. The standings also
 show how you did against everyone who solved the same puzzle, as an anonymous count.
 
@@ -125,7 +126,7 @@ once more so that the app can also revoke Puzzle Hustle's access to your Apple I
 sheet, nothing is deleted. Without installing anything, you can delete a Google or Apple account
 at [puzzles.vexury.dev/delete-account](https://puzzles.vexury.dev/delete-account) after signing in.
 
-Deleting removes your account, display name, badge, flair, all your submitted times, every report
+Deleting removes your account, display name, badge, flair, Hustle level, all your submitted times, every report
 you made or that was made about you, and your group memberships, right away. A group you created
 passes to its longest-standing member, or is deleted if you were the last one in it. Your progress
 on the device is not affected.
