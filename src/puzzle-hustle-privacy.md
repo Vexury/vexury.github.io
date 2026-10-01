@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: September 30, 2026</p>
+<p class="post-date">Last updated: October 2, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -20,7 +20,7 @@ be linked to you or your device; you can switch them off under Profile, Account.
 
 Signing in is optional and only unlocks the social part: private groups where friends compare
 their Daily, Weekly and Monthly times. If you sign in, our server keeps an account ID from Google
-or Apple, your display name, the badge and flair you show, your Hustle level, your groups and the times you submit.
+or Apple, your display name, the badges, flair and nameplate you show, your Hustle level, your groups and the times you submit.
 It never stores your email address. You can delete the account in the app at any time.
 
 The Android and iOS apps show rewarded video ads, which you only ever see after choosing to watch
@@ -39,10 +39,12 @@ The app saves the following on your device:
 
 - which puzzles you have solved, with time, moves and hints used
 - your streak, the days you have played and your achievements
-- your coins, the badges you bought and the flairs you earned
+- your coins and the badges, flairs, nameplates and theme packs you own, and what you put on show
+- the day you last used your free hint
 - unfinished puzzles, so you can pick them up where you left off
 - settings such as the theme, your display name and your last chosen difficulty
-- if you are signed in, your session and any times still waiting to be sent
+- if you are signed in, your session and any times still waiting to be sent; after signing out,
+  the last account's player ID and provider (Google or Apple), so the app can offer it first
 - the day you first played, and any usage statistics still waiting to be sent (see below)
 
 On Android and iOS this lives in the app's local storage and in a backup copy in the app's own
@@ -85,17 +87,18 @@ stores:
 - **Display name:** the name you choose, or a generated one such as "Player 4821" until you do.
   Names are 2 to 24 characters, may not contain links, and a short list of offensive words is
   refused.
-- **Badge and flair:** the one badge and one flair you have equipped, as IDs from the app's fixed
-  list. Your coins and what you own stay on your device.
+- **Badges, flair and nameplate:** up to four badges you put on show, and the one flair and one
+  nameplate you have equipped, as IDs from the app's fixed list. Your coins and what you own stay on your device.
 - **Hustle level:** the highest stage you have reached in Hustle mode, as a single number.
 - **Groups:** the groups you created or joined, their names and six-character invite codes, and
-  when you joined. A player can be in at most 5 groups, and a group holds at most 50 players.
+  when you joined, and, if a group's creator removed you, that you may not rejoin that group. A
+  player can be in at most 5 groups, and a group holds at most 50 players.
 - **Times:** for each Daily, Weekly and Monthly puzzle you solve while signed in, your time, hints,
   moves and when you solved it. Times you solved shortly before signing in are sent once you do.
   Level and random puzzles are never sent.
 - **Reports:** when you report a name, who reported whom, the reason and when.
 
-Other members of a group you are in see your display name, badge, flair, Hustle level, and your time and hints
+Other members of a group you are in see your display name, nameplate, badges, flair, Hustle level, and your time and hints
 for each Daily, Weekly and Monthly. Nobody outside your groups sees your name. The standings also
 show how you did against everyone who solved the same puzzle, as an anonymous count.
 
@@ -126,7 +129,7 @@ once more so that the app can also revoke Puzzle Hustle's access to your Apple I
 sheet, nothing is deleted. Without installing anything, you can delete a Google or Apple account
 at [puzzles.vexury.dev/delete-account](https://puzzles.vexury.dev/delete-account) after signing in.
 
-Deleting removes your account, display name, badge, flair, Hustle level, all your submitted times, every report
+Deleting removes your account, display name, badges, flair, nameplate, Hustle level, all your submitted times, every report
 you made or that was made about you, and your group memberships, right away. A group you created
 passes to its longest-standing member, or is deleted if you were the last one in it. Your progress
 on the device is not affected.
@@ -164,8 +167,8 @@ switching the statistics off.
 
 ## Ads
 
-Every puzzle gives you one hint for free. Beyond that a hint costs a short video or some of your
-coins, and the app asks first: the video only starts if you tap "Watch video". Declining costs you
+You get one free hint a day, across all puzzles. Beyond that a hint costs 20 coins or, in the
+Android and iOS apps, a short video, and the app asks first: the video only starts if you tap "Watch video". Declining costs you
 nothing, and if no ad can be delivered you get the hint anyway.
 
 The ads are served by Google AdMob (Google Ireland Limited, Gordon House, Barrow Street, Dublin 4,
@@ -198,9 +201,10 @@ withdraw at any time with effect for the future. How Google handles the data is 
 [Google Privacy Policy](https://policies.google.com/privacy) and in
 [How Google uses information from sites or apps that use our services](https://policies.google.com/technologies/partner-sites).
 
-## Unlimited Hints
+## No Ads · Free Hints
 
-The app offers one purchase, "Unlimited Hints", which removes the videos for good. On Android it
+The app offers one purchase, "No Ads · Free Hints", which makes every hint free, so no video is
+ever needed. On Android it
 is handled entirely by Google Play, on iOS entirely by Apple's App Store. Your payment details go
 to Google or Apple, never to us, and we never see your name, address or card.
 
@@ -218,11 +222,11 @@ no connection at all.
 
 It reaches the internet for these things, and only these:
 
-- talking to our server: while you are signed in for standings, groups, your name and badge and
-  submitted times, and, unless you switch it off, for the anonymous usage statistics
+- talking to our server: while you are signed in for standings, groups, your name, what you show and
+  your submitted times, and, unless you switch it off, for the anonymous usage statistics
 - signing in with Google or Apple, when you choose to
 - fetching an ad when you have asked for one
-- asking Google Play or the App Store about the "Unlimited Hints" purchase
+- asking Google Play or the App Store about the "No Ads · Free Hints" purchase
 
 The web version has to be delivered to your browser, and that is done by GitHub Pages. Like any
 web host, GitHub processes access data such as your IP address, the page requested and the time of
@@ -273,6 +277,9 @@ Questions go to vexury.dev@gmail.com and get an answer.
 
 This policy will be updated when the app changes in a way that affects it.
 
+- October 2, 2026: up to four badges on show and a nameplate, shown to members of your groups;
+  the hint rules (one free hint a day) and the purchase's new name "No Ads · Free Hints". Also listed now: what the app keeps on the device after you sign
+  out, and the note the server keeps when a group's creator removes you.
 - September 30, 2026: the Hustle level, shown to members of your groups.
 - September 30, 2026: usage statistics tell Hustle puzzles and their stage apart from random ones.
 - September 28, 2026: anonymous usage statistics, with a switch in the Profile screen.
