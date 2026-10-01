@@ -13,7 +13,7 @@ images:
   - /images/PuzzleHustle/PuzzleHustle_03.png
 links:
   - label: Play
-    url: https://puzzles.vexury.dev/
+    url: /projects/puzzle-hustle/
   - label: GitHub
     url: https://github.com/Vexury/puzzle-hustle
 ---

@@ -3000,3 +3000,39 @@ html.sg-embedded .site-header {
 @media (prefers-reduced-motion: reduce) {
   .st-card:hover .st-poster img { transform: none; }
 }
+
+/* Puzzle Hustle: the web app embedded in a phone-sized frame */
+.ph-embed {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.ph-intro p {
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.ph-device {
+  height: min(820px, calc(100vh - 6rem));
+  border: 2px solid var(--border-mid);
+  border-radius: 28px;
+  overflow: hidden;
+  background: #111110;
+  box-shadow: var(--shadow-hover);
+}
+
+.ph-device iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* On a phone the app gets the whole screen through the full screen link
+   instead; an app with its own bottom bar does not belong inside a page. */
+@media (max-width: 768px) {
+  .ph-embed { grid-template-columns: 1fr; }
+  .ph-device { display: none; }
+}
