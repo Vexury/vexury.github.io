@@ -24,7 +24,8 @@ or Apple, your display name, the badges, flair and nameplate you show, your Hust
 It never stores your email address. You can delete the account in the app at any time.
 
 The Android and iOS apps show rewarded video ads, which you only ever see after choosing to watch
-one in exchange for a hint. Those ads come from Google. The web version has no ads.
+one, either for a hint or to double the coins of a Daily, Weekly or Monthly you just solved. Those
+ads come from Google. The web version has no ads.
 
 ## Who is responsible
 
@@ -171,6 +172,11 @@ You get one free hint a day, across all puzzles. Beyond that a hint costs 20 coi
 Android and iOS apps, a short video, and the app asks first: the video only starts if you tap "Watch video". Declining costs you
 nothing, and if no ad can be delivered you get the hint anyway.
 
+After you solve a Daily, Weekly or Monthly, the result card in the Android and iOS apps can also
+offer "Watch video · double": the video only starts if you tap it, and when it has played the coins
+for that puzzle count twice. Declining costs you nothing. If no ad can be delivered, the coins are
+not doubled and you can try again later while that puzzle's day, week or month is running.
+
 The ads are served by Google AdMob (Google Ireland Limited, Gordon House, Barrow Street, Dublin 4,
 Ireland). To show and measure them, Google processes your device's **advertising ID** along with
 technical data such as your device type, operating system version, coarse location derived from
@@ -203,8 +209,8 @@ withdraw at any time with effect for the future. How Google handles the data is 
 
 ## No Ads · Free Hints
 
-The app offers one purchase, "No Ads · Free Hints", which makes every hint free, so no video is
-ever needed. On Android it
+The app offers one purchase, "No Ads · Free Hints", which makes every hint free and doubles the
+coins of every new Daily, Weekly and Monthly you solve, so no video is ever needed. On Android it
 is handled entirely by Google Play, on iOS entirely by Apple's App Store. Your payment details go
 to Google or Apple, never to us, and we never see your name, address or card.
 
@@ -212,7 +218,8 @@ At each start the app asks Google Play or the App Store whether this purchase ex
 store account, and stores only that yes or no on your device. Our server keeps no record of who
 bought anything. Refunds and payment questions go through Google Play or Apple.
 
-Coins are earned by solving and cannot be bought.
+Coins are earned by solving and cannot be bought directly; the purchase only doubles what new
+Daily, Weekly and Monthly solves earn. Which solves were doubled is stored on your device only.
 
 ## Network
 
