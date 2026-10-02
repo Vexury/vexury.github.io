@@ -87,7 +87,7 @@ stores:
 - **Display name:** the name you choose, or a generated one such as "Player 4821" until you do.
   Names are 2 to 14 characters, may not contain links, and a short list of offensive words is
   refused.
-- **Badges, flair and nameplate:** up to four badges you put on show, and the one flair and one
+- **Badges, flair and nameplate:** up to three badges you put on show, and the one flair and one
   nameplate you have equipped, as IDs from the app's fixed list. Your coins and what you own stay on your device.
 - **Hustle level:** the highest stage you have reached in Hustle mode, as a single number.
 - **Groups:** the groups you created or joined, their names and six-character invite codes, and
@@ -277,7 +277,7 @@ Questions go to vexury.dev@gmail.com and get an answer.
 
 This policy will be updated when the app changes in a way that affects it.
 
-- October 2, 2026: up to four badges on show and a nameplate, shown to members of your groups;
+- October 2, 2026: up to three badges on show and a nameplate, shown to members of your groups;
   the hint rules (one free hint a day) and the purchase's new name "No Ads · Free Hints". Names are now at most 14 characters. Also listed now: what the app keeps on the device after you sign
   out, and the note the server keeps when a group's creator removes you.
 - September 30, 2026: the Hustle level, shown to members of your groups.
