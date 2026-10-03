@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: October 2, 2026</p>
+<p class="post-date">Last updated: October 3, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -14,13 +14,13 @@ This policy covers the Puzzle Hustle app for Android and iOS, and the web versio
 ## The short version
 
 You can play every puzzle without an account, and there is no crash reporting and no third-party
-analytics. Your progress, streaks, coins and settings stay on your device. The app does send
+analytics. Settings and unfinished boards stay on your device; if you sign in, your progress, coins and equipped items are also kept on our server so they are the same on all your devices. The app does send
 anonymous usage statistics (how long puzzles take, where players stop) that carry no ID and cannot
 be linked to you or your device; you can switch them off under Profile, Account.
 
-Signing in is optional and only unlocks the social part: private groups where friends compare
-their Daily, Weekly and Monthly times. If you sign in, our server keeps an account ID from Google
-or Apple, your display name, the badges, flair and nameplate you show, your Hustle level, your groups and the times you submit.
+Signing in is optional. It unlocks private groups where friends compare their Daily, Weekly and
+Monthly times, and it keeps your progress in sync across your devices. If you sign in, our server keeps an account ID from Google
+or Apple, your display name, the badges, flair and nameplate you show, your Hustle level, your groups, the times you submit and a copy of your progress.
 It never stores your email address. You can delete the account in the app at any time.
 
 The Android and iOS apps show rewarded video ads, which you only ever see after choosing to watch
@@ -54,13 +54,12 @@ device backups switched on, Android or iOS may include this data in your Google 
 that is between you and Google or Apple. We cannot see any of it, and we cannot restore it for
 you. Uninstalling the app deletes it from the device.
 
-The Account page under Profile has a reset button that erases your progress on the device on the spot. It does
-not touch your account or the times you have already submitted; deleting the account does that.
+The Account page under Profile has a reset button. Signed out, it erases your progress on the device on the spot. Signed in, it erases it on all your devices and in the copy on our server. It does not touch your account or the times you have already submitted; deleting the account does that.
 
 ## Signing in
 
 Signing in is optional. Without it every puzzle, level, hint and achievement works exactly the
-same. Only the Social page under Profile needs an account.
+same. Only the Social page under Profile and the progress sync need an account.
 
 - On Android and on the web you sign in with **Google**. On the web, Google's sign-in script is
   only loaded once you tap Sign in.
@@ -79,8 +78,8 @@ device.
 
 ## What our server keeps
 
-Apart from the anonymous usage statistics below, the server exists only for groups and
-standings. Solving never waits for it, and no puzzle comes from it. If you are signed in, it
+Apart from the anonymous usage statistics below, the server exists only for groups, standings and
+progress sync. Solving never waits for it, and no puzzle comes from it. If you are signed in, it
 stores:
 
 - **Account:** a random player ID, the provider (Google or Apple) with its subject ID, and when
@@ -89,8 +88,9 @@ stores:
   Names are 2 to 14 characters, may not contain links, and a short list of offensive words is
   refused.
 - **Badges, flair and nameplate:** up to three badges you put on show, and the one flair and one
-  nameplate you have equipped, as IDs from the app's fixed list. Your coins and what you own stay on your device.
-- **Hustle level:** the highest stage you have reached in Hustle mode, as a single number.
+  nameplate you have equipped, as IDs from the app's fixed list.
+- **Hustle level:** the stage you have reached in Hustle mode, as a single number.
+- **Progress copy:** so your progress is the same on every device you sign in on, a copy of the puzzles you have solved (with time, hints, moves and when), your coin spending, the puzzles whose coins you doubled and the items you have equipped. Unfinished puzzles and settings are not part of it. It is used for nothing but syncing, is shown to nobody, and is deleted with your account.
 - **Groups:** the groups you created or joined, their names and six-character invite codes, and
   when you joined, and, if a group's creator removed you, that you may not rejoin that group. A
   player can be in at most 5 groups, and a group holds at most 50 players.
@@ -130,7 +130,7 @@ once more so that the app can also revoke Puzzle Hustle's access to your Apple I
 sheet, nothing is deleted. Without installing anything, you can delete a Google or Apple account
 at [puzzles.vexury.dev/delete-account](https://puzzles.vexury.dev/delete-account) after signing in.
 
-Deleting removes your account, display name, badges, flair, nameplate, Hustle level, all your submitted times, every report
+Deleting removes your account, display name, badges, flair, nameplate, Hustle level, the progress copy, all your submitted times, every report
 you made or that was made about you, and your group memberships, right away. A group you created
 passes to its longest-standing member, or is deleted if you were the last one in it. Your progress
 on the device is not affected.
@@ -219,7 +219,7 @@ store account, and stores only that yes or no on your device. Our server keeps n
 bought anything. Refunds and payment questions go through Google Play or Apple.
 
 Coins are earned by solving and cannot be bought directly; the purchase only doubles what new
-Daily, Weekly and Monthly solves earn. Which solves were doubled is stored on your device only.
+Daily, Weekly and Monthly solves earn. Which solves were doubled is stored on your device, and for signed-in players in the progress copy.
 
 ## Network
 
@@ -229,8 +229,8 @@ no connection at all.
 
 It reaches the internet for these things, and only these:
 
-- talking to our server: while you are signed in for standings, groups, your name, what you show and
-  your submitted times, and, unless you switch it off, for the anonymous usage statistics
+- talking to our server: while you are signed in for standings, groups, your name, what you show,
+  your submitted times and your synced progress, and, unless you switch it off, for the anonymous usage statistics
 - signing in with Google or Apple, when you choose to
 - fetching an ad when you have asked for one
 - asking Google Play or the App Store about the "No Ads · Free Hints" purchase
@@ -268,7 +268,7 @@ If you never sign in, we hold nothing that identifies you: everything the app sa
 where the reset button under Profile, Account and uninstalling both clear it.
 
 If you do sign in, the data listed under "What our server keeps" is processed to provide the
-groups and standings you asked for (Art. 6(1)(b) GDPR). Handling reports and limiting sign-in
+groups, standings and progress sync you asked for (Art. 6(1)(b) GDPR). Handling reports and limiting sign-in
 attempts serve our legitimate interest in a fair service that is safe from abuse (Art. 6(1)(f)
 GDPR). The anonymous usage statistics are described in their own section above. You can change your name in the Profile screen, leave any group and delete the account
 yourself as described above. For a copy of your data, or anything the app does not let you do
@@ -284,6 +284,7 @@ Questions go to vexury.dev@gmail.com and get an answer.
 
 This policy will be updated when the app changes in a way that affects it.
 
+- October 3, 2026: progress sync. If you sign in, your solved puzzles, coin spending and equipped items are also kept on our server, so your progress is the same on all your devices, and are deleted with the account. The reset button then erases your progress on all your devices.
 - October 2, 2026: up to three badges on show and a nameplate, shown to members of your groups;
   the hint rules (one free hint a day) and the purchase's new name "No Ads · Free Hints". Names are now at most 14 characters. Also listed now: what the app keeps on the device after you sign
   out, and the note the server keeps when a group's creator removes you.
