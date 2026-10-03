@@ -880,6 +880,18 @@
     "status": "watchlist"
   },
   {
+    "id": "resident-evil-2026",
+    "title": "Resident Evil",
+    "type": "movie",
+    "releaseMonth": 9,
+    "releaseYear": 2026,
+    "image": "https://image.tmdb.org/t/p/w342/psyKejP91PdgSNMPqYjy6p4gpwQ.jpg",
+    "distributor": "Sony",
+    "runtimeMinutes": 94,
+    "rating": null,
+    "status": "watchlist"
+  },
+  {
     "id": "his-house",
     "title": "His House",
     "type": "movie",
