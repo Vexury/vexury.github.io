@@ -15,8 +15,9 @@ This policy covers the Puzzle Hustle app for Android and iOS, and the web versio
 
 You can play every puzzle without an account, and there is no crash reporting and no third-party
 analytics. Settings and unfinished boards stay on your device; if you sign in, your progress, coins and equipped items are also kept on our server so they are the same on all your devices. The app does send
-anonymous usage statistics (how long puzzles take, where players stop) that carry no ID and cannot
-be linked to you or your device; you can switch them off under Profile, Account.
+pseudonymous usage statistics (how long puzzles take, where players stop) that carry no account,
+device or advertising ID and no IP address; we do not link them to you, and you can switch them off
+under Profile, Account.
 
 Signing in is optional. It unlocks private groups where friends compare their Daily, Weekly and
 Monthly times, and it keeps your progress in sync across your devices. If you sign in, our server keeps an account ID from Google
@@ -78,7 +79,7 @@ device.
 
 ## What our server keeps
 
-Apart from the anonymous usage statistics below, the server exists only for groups, standings and
+Apart from the usage statistics below, the server exists only for groups, standings and
 progress sync. Solving never waits for it, and no puzzle comes from it. If you are signed in, it
 stores:
 
@@ -138,9 +139,9 @@ on the device is not affected.
 If you cannot use the app, write to vexury.dev@gmail.com with your display name and the name of a
 group you are in, and we will delete the account for you.
 
-## Anonymous usage statistics
+## Usage statistics
 
-To find out which puzzles are too hard, too easy or confusing, the app sends short anonymous
+To find out which puzzles are too hard, too easy or confusing, the app sends short
 records to our server. There is one when you open the app on a day, one when you finish or skip
 the introduction, and one each time you leave or solve a puzzle. A record contains:
 
@@ -154,16 +155,17 @@ the introduction, and one each time you leave or solve a puzzle. A record contai
 - for the introduction: which card you reached and whether you finished or skipped it
 
 A record contains no account ID, no device or advertising ID, no name and no IP address, and
-records are not linked to one another, so we cannot tell which records come from the same person.
-Records wait on your device until they can be sent, and they are sent whether or not you are
-signed in, but never together with your account. Our server keeps them for about 13 months and
+records carry nothing that ties one to another. They are pseudonymous, not fully anonymous: for
+signed-in players, what a record says about a puzzle could in principle be matched to the progress
+copy on our server. We do not do that and never send a record together with your account. Records wait on your device until they can be sent, and they are sent whether or not you are
+signed in. Our server keeps them for about 13 months and
 then deletes them. We look at them only as totals, such as the median time of a Daily.
 
 You can switch this off at any time under **Anonymous stats** in Profile, Account. Switching it
 off also deletes any records not yet sent.
 
 The legal basis is our legitimate interest in improving the puzzles (Art. 6(1)(f) GDPR). As
-nothing sent identifies you, the impact on you is minimal, and you can object at any time by
+nothing sent carries your identity and we only look at totals, the impact on you is minimal, and you can object at any time by
 switching the statistics off.
 
 ## Ads
@@ -215,8 +217,8 @@ is handled entirely by Google Play, on iOS entirely by Apple's App Store. Your p
 to Google or Apple, never to us, and we never see your name, address or card.
 
 At each start the app asks Google Play or the App Store whether this purchase exists for your
-store account, and stores only that yes or no on your device. Our server keeps no record of who
-bought anything. Refunds and payment questions go through Google Play or Apple.
+store account, and stores only that yes or no on your device. Our server records no purchases, but the progress copy lists which solves were
+doubled, whether by a video or by the purchase. Refunds and payment questions go through Google Play or Apple.
 
 Coins are earned by solving and cannot be bought directly; the purchase only doubles what new
 Daily, Weekly and Monthly solves earn. Which solves were doubled is stored on your device, and for signed-in players in the progress copy.
@@ -230,7 +232,7 @@ no connection at all.
 It reaches the internet for these things, and only these:
 
 - talking to our server: while you are signed in for standings, groups, your name, what you show,
-  your submitted times and your synced progress, and, unless you switch it off, for the anonymous usage statistics
+  your submitted times and your synced progress, and, unless you switch it off, for the usage statistics
 - signing in with Google or Apple, when you choose to
 - fetching an ad when you have asked for one
 - asking Google Play or the App Store about the "No Ads · Free Hints" purchase
@@ -270,7 +272,7 @@ where the reset button under Profile, Account and uninstalling both clear it.
 If you do sign in, the data listed under "What our server keeps" is processed to provide the
 groups, standings and progress sync you asked for (Art. 6(1)(b) GDPR). Handling reports and limiting sign-in
 attempts serve our legitimate interest in a fair service that is safe from abuse (Art. 6(1)(f)
-GDPR). The anonymous usage statistics are described in their own section above. You can change your name in the Profile screen, leave any group and delete the account
+GDPR). The usage statistics are described in their own section above. You can change your name in the Profile screen, leave any group and delete the account
 yourself as described above. For a copy of your data, or anything the app does not let you do
 yourself, write to us.
 
@@ -284,7 +286,7 @@ Questions go to vexury.dev@gmail.com and get an answer.
 
 This policy will be updated when the app changes in a way that affects it.
 
-- October 3, 2026: progress sync. If you sign in, your solved puzzles, coin spending and equipped items are also kept on our server, so your progress is the same on all your devices, and are deleted with the account. The reset button then erases your progress on all your devices.
+- October 3, 2026: the usage statistics are now described as pseudonymous, since for signed-in players they could be matched to the progress copy. Progress sync. If you sign in, your solved puzzles, coin spending and equipped items are also kept on our server, so your progress is the same on all your devices, and are deleted with the account. The reset button then erases your progress on all your devices.
 - October 2, 2026: up to three badges on show and a nameplate, shown to members of your groups;
   the hint rules (one free hint a day) and the purchase's new name "No Ads · Free Hints". Names are now at most 14 characters. Also listed now: what the app keeps on the device after you sign
   out, and the note the server keeps when a group's creator removes you.
