@@ -150,7 +150,8 @@ group you are in, and we will delete the account for you.
 
 To find out which puzzles are too hard, too easy or confusing, the app sends short
 records to our server. There is one when you open the app on a day, one when you finish or skip
-the introduction, and one each time you leave or solve a puzzle. A record contains:
+the introduction, one each time you leave or solve a puzzle, and one each time an ad is offered or
+due and what came of it. A record contains:
 
 - the calendar day (no time of day)
 - the platform (Android, iOS or web) and which build of the app
@@ -160,6 +161,8 @@ the introduction, and one each time you leave or solve a puzzle. A record contai
   random puzzle and the level number or Hustle stage, whether you solved or left it, the time, moves and hints, whether
   you had played it before and whether it was your first puzzle of that type
 - for the introduction: which card you reached and whether you finished or skipped it
+- for an ad: where it was (hint, double coins, or a break between Hustle stages with its stage) and
+  what came of it (offered, coins chosen instead, watched, closed early, no ad available, shown)
 
 A record contains no account ID, no device or advertising ID, no name and no IP address, and
 records carry nothing that ties one to another. They are pseudonymous, not fully anonymous: for
@@ -302,7 +305,8 @@ Questions go to vexury.dev@gmail.com and get an answer.
 This policy will be updated when the app changes in a way that affects it.
 
 - October 5, 2026: occasional full-screen ads between Hustle stages from stage 20, never with the
-  "No Ads · Free Hints" purchase.
+  "No Ads · Free Hints" purchase. The usage statistics also record when an ad is offered or due and
+  what came of it.
 - October 3, 2026: the usage statistics are now described as pseudonymous, since for signed-in players they could be matched to the progress copy. Progress sync. If you sign in, your solved puzzles, coin spending and equipped items are also kept on our server, so your progress is the same on all your devices, and are deleted with the account. The reset button then erases your progress on all your devices.
 - October 2, 2026: up to three badges on show and a nameplate, shown to members of your groups;
   the hint rules (one free hint a day) and the purchase's new name "No Ads · Free Hints". Names are now at most 14 characters. Also listed now: what the app keeps on the device after you sign
