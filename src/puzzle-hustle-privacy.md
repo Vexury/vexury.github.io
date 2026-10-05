@@ -15,7 +15,7 @@ This policy covers the Puzzle Hustle app for Android and iOS, and the web versio
 
 You can play every puzzle without an account, and there is no crash reporting and no third-party
 analytics. Settings and unfinished boards stay on your device; if you sign in, your progress, coins and equipped items are also kept on our server so they are the same on all your devices. The app does send
-pseudonymous usage statistics (how long puzzles take, where players stop) that carry no account,
+pseudonymous usage statistics (how long puzzles take, where players stop, how often ads are watched) that carry no account,
 device or advertising ID and no IP address; we do not link them to you, and you can switch them off
 under Profile, Account.
 
@@ -148,8 +148,9 @@ group you are in, and we will delete the account for you.
 
 ## Usage statistics
 
-To find out which puzzles are too hard, too easy or confusing, the app sends short
-records to our server. There is one when you open the app on a day, one when you finish or skip
+To find out which puzzles are too hard, too easy or confusing, and how often ads are offered,
+watched or missing (so we can set how often they appear and what a video is worth), the app sends
+short records to our server. There is one when you open the app on a day, one when you finish or skip
 the introduction, one each time you leave or solve a puzzle, and one each time an ad is offered or
 due and what came of it. A record contains:
 
@@ -161,7 +162,7 @@ due and what came of it. A record contains:
   random puzzle and the level number or Hustle stage, whether you solved or left it, the time, moves and hints, whether
   you had played it before and whether it was your first puzzle of that type
 - for the introduction: which card you reached and whether you finished or skipped it
-- for an ad: where it was (hint, double coins, or a break between Hustle stages with its stage) and
+- for an ad: where it was (hint, double coins, or a break between Hustle stages) and
   what came of it (offered, coins chosen instead, watched, closed early, no ad available, shown)
 
 A record contains no account ID, no device or advertising ID, no name and no IP address, and
@@ -174,7 +175,7 @@ then deletes them. We look at them only as totals, such as the median time of a 
 You can switch this off at any time under **Anonymous stats** in Profile, Account. Switching it
 off also deletes any records not yet sent.
 
-The legal basis is our legitimate interest in improving the puzzles (Art. 6(1)(f) GDPR). As
+The legal basis is our legitimate interest in improving the puzzles and in setting ad frequency and rewards fairly (Art. 6(1)(f) GDPR). As
 nothing sent carries your identity and we only look at totals, the impact on you is minimal, and you can object at any time by
 switching the statistics off.
 
@@ -200,8 +201,9 @@ you have played since the last ad.
 The ads are served by Google AdMob (Google Ireland Limited, Gordon House, Barrow Street, Dublin 4,
 Ireland). To show and measure them, Google processes your device's **advertising ID** along with
 technical data such as your device type, operating system version, coarse location derived from
-your IP address, and how you interacted with the ad. We never receive any of it, and we cannot
-link it to you or to your Puzzle Hustle account.
+your IP address, and how you interacted with the ad. We never receive any of that from Google, and
+we cannot link it to you or to your Puzzle Hustle account. Our own usage statistics (above) only
+note whether an ad was offered, watched, closed early or unavailable, without any ID.
 
 On iOS the app never shows Apple's tracking prompt, so Google's SDK does not get your iPhone's
 advertising identifier (IDFA).
