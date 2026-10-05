@@ -141,7 +141,9 @@ at [puzzles.vexury.dev/delete-account](https://puzzles.vexury.dev/delete-account
 Deleting removes your account, display name, badges, flair, nameplate, Hustle level, the progress copy, all your submitted times, every report
 you made or that was made about you, the count of unknown invite codes, and your group memberships, right away. A group you created
 passes to its longest-standing member, or is deleted if you were the last one in it. Your progress
-on the device is not affected.
+on the device is not affected. The automatic recovery points of our database on Cloudflare still
+hold the deleted data for up to 30 days, then it is gone for good; we do not restore from them to
+undo a deletion.
 
 If you cannot use the app, write to vexury.dev@gmail.com with your display name and the name of a
 group you are in, and we will delete the account for you.
@@ -308,7 +310,8 @@ This policy will be updated when the app changes in a way that affects it.
 
 - October 5, 2026: occasional full-screen ads between Hustle stages from stage 20, never with the
   "No Ads · Free Hints" purchase. The usage statistics also record when an ad is offered or due and
-  what came of it.
+  what came of it. Account deletion now says that database recovery points keep deleted data for up
+  to 30 days.
 - October 3, 2026: the usage statistics are now described as pseudonymous, since for signed-in players they could be matched to the progress copy. Progress sync. If you sign in, your solved puzzles, coin spending and equipped items are also kept on our server, so your progress is the same on all your devices, and are deleted with the account. The reset button then erases your progress on all your devices.
 - October 2, 2026: up to three badges on show and a nameplate, shown to members of your groups;
   the hint rules (one free hint a day) and the purchase's new name "No Ads · Free Hints". Names are now at most 14 characters. Also listed now: what the app keeps on the device after you sign
