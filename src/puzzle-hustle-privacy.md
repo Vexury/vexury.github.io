@@ -25,8 +25,9 @@ or Apple, your display name, the badges, flair and nameplate you show, your Hust
 It never stores your email address. You can delete the account in the app at any time.
 
 The Android and iOS apps show rewarded video ads, which you only ever see after choosing to watch
-one, either for a hint or to double the coins of a Daily, Weekly or Monthly you just solved. Those
-ads come from Google. The web version has no ads.
+one, either for a hint or to double the coins of a Daily, Weekly or Monthly you just solved. In
+Hustle, from stage 20, they also show an occasional full-screen ad between stages. Those ads come
+from Google. The web version has no ads.
 
 ## Who is responsible
 
@@ -185,6 +186,14 @@ offer "Watch video · double": the video only starts if you tap it, and when it 
 for that puzzle count twice. Declining costs you nothing. If no ad can be delivered, the coins are
 not doubled and you can try again later while that puzzle's day, week or month is running.
 
+In Hustle, from stage 20, the Android and iOS apps show an occasional full-screen ad when you move on
+to the next stage: at most one after 5 stages and 4 minutes of play, or after 10 minutes of play,
+since the last ad, and never when you leave a stage that ends a round of ten. A video you chose to
+watch counts as the last ad. Daily, Weekly, Monthly, levels and random puzzles never show these ads,
+and with "No Ads · Free Hints" you never see them. The app loads such an ad in advance; if none is
+ready, you go on at once. To space them, the app keeps on your device how many stages and minutes
+you have played since the last ad.
+
 The ads are served by Google AdMob (Google Ireland Limited, Gordon House, Barrow Street, Dublin 4,
 Ireland). To show and measure them, Google processes your device's **advertising ID** along with
 technical data such as your device type, operating system version, coarse location derived from
@@ -240,7 +249,7 @@ It reaches the internet for these things, and only these:
 - talking to our server: while you are signed in for standings, groups, your name, what you show,
   your submitted times and your synced progress, and, unless you switch it off, for the usage statistics
 - signing in with Google or Apple, when you choose to
-- fetching an ad when you have asked for one
+- loading and showing ads
 - asking Google Play or the App Store about the "No Ads · Free Hints" purchase
 
 The web version has to be delivered to your browser, and that is done by GitHub Pages. Like any
@@ -292,6 +301,8 @@ Questions go to vexury.dev@gmail.com and get an answer.
 
 This policy will be updated when the app changes in a way that affects it.
 
+- October 5, 2026: occasional full-screen ads between Hustle stages from stage 20, never with the
+  "No Ads · Free Hints" purchase.
 - October 3, 2026: the usage statistics are now described as pseudonymous, since for signed-in players they could be matched to the progress copy. Progress sync. If you sign in, your solved puzzles, coin spending and equipped items are also kept on our server, so your progress is the same on all your devices, and are deleted with the account. The reset button then erases your progress on all your devices.
 - October 2, 2026: up to three badges on show and a nameplate, shown to members of your groups;
   the hint rules (one free hint a day) and the purchase's new name "No Ads · Free Hints". Names are now at most 14 characters. Also listed now: what the app keeps on the device after you sign
