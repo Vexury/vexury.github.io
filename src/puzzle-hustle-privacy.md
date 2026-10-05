@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: October 3, 2026</p>
+<p class="post-date">Last updated: October 5, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -92,17 +92,23 @@ stores:
   nameplate you have equipped, as IDs from the app's fixed list.
 - **Hustle level:** the stage you have reached in Hustle mode, as a single number.
 - **Progress copy:** so your progress is the same on every device you sign in on, a copy of the puzzles you have solved (with time, hints, moves and when), your coin spending, the puzzles whose coins you doubled and the items you have equipped. Unfinished puzzles and settings are not part of it. It is used for nothing but syncing, is shown to nobody, and is deleted with your account.
-- **Groups:** the groups you created or joined, their names and six-character invite codes, and
+- **Groups:** the groups you created or joined, their names and invite codes (six or eight characters), and
   when you joined, and, if a group's creator removed you, that you may not rejoin that group. A
   player can be in at most 5 groups, and a group holds at most 50 players.
 - **Times:** for each Daily, Weekly and Monthly puzzle you solve while signed in, your time, hints,
   moves and when you solved it. Times you solved shortly before signing in are sent once you do.
   Level and random puzzles are never sent.
 - **Reports:** when you report a name, who reported whom, the reason and when.
+- **Join attempts:** how many unknown invite codes you entered on the current day (UTC), so that
+  guessing codes is blocked after 30. Overwritten each day.
 
 Other members of a group you are in see your display name, nameplate, badges, flair, Hustle level, and your time and hints
 for each Daily, Weekly and Monthly. Nobody outside your groups sees your name. The standings also
 show how you did against everyone who solved the same puzzle, as an anonymous count.
+
+When you share a result, the app makes the picture on your device; nothing is uploaded. The
+picture shows your display name, Hustle level, badges, flair and nameplate, and may show the name
+of your best group, to whoever you send it to.
 
 The data stays on the server for as long as your account exists. There is no automatic expiry.
 
@@ -132,7 +138,7 @@ sheet, nothing is deleted. Without installing anything, you can delete a Google 
 at [puzzles.vexury.dev/delete-account](https://puzzles.vexury.dev/delete-account) after signing in.
 
 Deleting removes your account, display name, badges, flair, nameplate, Hustle level, the progress copy, all your submitted times, every report
-you made or that was made about you, and your group memberships, right away. A group you created
+you made or that was made about you, the count of unknown invite codes, and your group memberships, right away. A group you created
 passes to its longest-standing member, or is deleted if you were the last one in it. Your progress
 on the device is not affected.
 
