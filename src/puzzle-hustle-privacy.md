@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: October 5, 2026</p>
+<p class="post-date">Last updated: October 6, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -89,8 +89,8 @@ stores:
 - **Display name:** the name you choose, or a generated one such as "Player 4821" until you do.
   Names are 2 to 14 characters, may not contain links, and a short list of offensive words is
   refused.
-- **Badges, flair and nameplate:** up to three badges you put on show, and the one flair and one
-  nameplate you have equipped, as IDs from the app's fixed list.
+- **Badge, flair and nameplate:** the one badge, one flair and one nameplate you have equipped, as
+  IDs from the app's fixed list.
 - **Hustle level:** the stage you have reached in Hustle mode, as a single number.
 - **Progress copy:** so your progress is the same on every device you sign in on, a copy of the puzzles you have solved (with time, hints, moves and when), your coin spending, the puzzles whose coins you doubled and the items you have equipped. Unfinished puzzles and settings are not part of it. It is used for nothing but syncing, is shown to nobody, and is deleted with your account.
 - **Groups:** the groups you created or joined, their names and invite codes (six or eight characters), and
@@ -308,6 +308,7 @@ Questions go to vexury.dev@gmail.com and get an answer.
 
 This policy will be updated when the app changes in a way that affects it.
 
+- October 6, 2026: one badge on show instead of up to three; the lists stored before are deleted.
 - October 5, 2026: occasional full-screen ads between Hustle stages from stage 20, never with the
   "No Ads · Free Hints" purchase. The usage statistics also record when an ad is offered or due and
   what came of it. Account deletion now says that database recovery points keep deleted data for up
