@@ -5,15 +5,15 @@ title: Impressum
 
 # Impressum
 
-Angaben gemäß § 5 TMG
+Angaben gemäß § 5 DDG
 
-**Moritz Grauer**  
+**Vexury**  
+Inhaber: Moritz Alexander Grauer  
 Klara-Siebert-Straße 17  
 76137 Karlsruhe  
 Deutschland
 
-**E-Mail:** vexury.dev@gmail.com
+**E-Mail:** vexury.dev@gmail.com  
+**Telefon:** +49 152 33968167
 
----
-
-Diese Website ist ein privates, nicht-kommerzielles Angebot.
+Umsatzsteuer: Kleinunternehmer gemäß § 19 UStG, es wird keine Umsatzsteuer ausgewiesen.
