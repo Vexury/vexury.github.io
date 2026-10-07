@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: October 6, 2026</p>
+<p class="post-date">Last updated: October 7, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -49,6 +49,8 @@ The app saves the following on your device:
 - if you are signed in, your session and any times still waiting to be sent; after signing out,
   the last account's player ID and provider (Google or Apple), so the app can offer it first
 - the day you first played, and any usage statistics still waiting to be sent (see below)
+- whether the daily reminder is on and at what hour, how often the app has offered it, and on
+  which streak days the app has asked the store for a rating
 
 On Android and iOS this lives in the app's local storage and in a backup copy in the app's own
 private preferences, so that clearing the app cache does not wipe your progress. If you have
@@ -258,6 +260,8 @@ It reaches the internet for these things, and only these:
 - signing in with Google or Apple, when you choose to
 - loading and showing ads
 - asking Google Play or the App Store about the "No Ads · Free Hints" purchase
+- on streak days 4, 12 and 31, asking Google Play or the App Store to show their own rating
+  dialog; the store decides whether it appears, and any rating you give goes to the store, not to us
 
 The web version has to be delivered to your browser, and that is done by GitHub Pages. Like any
 web host, GitHub processes access data such as your IP address, the page requested and the time of
@@ -271,12 +275,21 @@ When you share a result or a group invite, the app hands a short text and a link
 share sheet. You choose which app receives it. We are not part of that and never see what you send
 or who you send it to.
 
+## Daily reminder
+
+If you turn it on, the app schedules one notification a day on your device, at the hour you pick,
+and leaves out days on which your streak is already safe. Scheduling happens entirely on the device
+and sends nothing to us or anyone else. It is off until you switch it on, and you can switch it off
+under Profile → Gameplay or in your device's notification settings.
+
 ## Permissions
 
 The Android build declares internet and network state access, the advertising ID permission that
-the Google Mobile Ads SDK requires, and the billing permission for the purchase. Neither the
-Android nor the iOS app requests any runtime permission: no camera, no microphone, no contacts, no
-location, no photos, no tracking.
+the Google Mobile Ads SDK requires, the billing permission for the purchase, and, for the daily
+reminder, permission to post notifications and to keep scheduled reminders across a restart
+(receive boot completed, wake lock). The only runtime permission either app asks for is permission
+to show notifications, and only when you turn on the daily reminder. No camera, no microphone, no
+contacts, no location, no photos, no tracking.
 
 ## Children
 
