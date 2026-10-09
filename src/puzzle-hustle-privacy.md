@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: October 9, 2026</p>
+<p class="post-date">Last updated: October 10, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -340,12 +340,17 @@ What Google processes for advertising is in your hands too: withdraw consent thr
 settings in the app, or reset or delete the advertising ID in your Android settings. For requests
 about data Google or Apple holds, they are the contact, through the links above.
 
-Questions go to vexury.dev@gmail.com and get an answer.
+Questions go to vexury.dev@gmail.com and get an answer. If you email us, for example through Send
+feedback in the Profile screen, we receive your address, your message and the app version and
+platform the app fills in below it. Your own mail app sends it; the app itself sends nothing. We use
+the mail only to answer you (Art. 6(1)(f) GDPR) and delete it once the matter is closed.
 
 ## Changes
 
 This policy will be updated when the app changes in a way that affects it.
 
+- October 10, 2026: Send feedback and Rate rows in the Profile screen; what we receive when you
+  email us.
 - October 9, 2026: the web version is now served by Cloudflare instead of GitHub Pages. On iPhone
   and iPad, saving a shared result picture asks for permission to add it to your photos.
 - October 9, 2026: the usage statistics also send a daily summary, purchase-card, coin-shop, sharing
