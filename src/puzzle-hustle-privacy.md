@@ -191,10 +191,13 @@ for a program error (at most five a day). A record contains:
 A record contains no account ID, no device or advertising ID, no name and no IP address. They are
 pseudonymous, not fully anonymous: for signed-in players, what a record says about a puzzle could in
 principle be matched to the progress copy on our server, and a day summary describes one device's
-day, so it could in principle be matched along with that day's puzzle records. The day summary
-therefore does not say whether you made the purchase. We do not do that and never send a record together with your account. Records wait on your device until they can be sent, and they are sent whether or not you are
-signed in. Our server keeps them for about 13 months and
-then deletes them. We look at them only as totals, such as the median time of a Daily.
+day, so it could in principle be matched along with that day's puzzle records. We do not do that
+and never send a record together with your account, and the day summary does not say whether you
+made the purchase. Records wait on your device until they can be sent, and they are sent whether or
+not you are signed in. Our server keeps the records for 90 days and then deletes them. Before that,
+it adds them up into daily totals (for example, how many Daily puzzles were solved on a day and how
+long they took, in steps), which it keeps; a total says nothing about any one device. We look at
+the statistics only as totals, such as the median time of a Daily.
 
 You can switch this off at any time under **Usage stats** in Profile, Account. Switching it
 off also deletes any records not yet sent.
@@ -344,7 +347,8 @@ This policy will be updated when the app changes in a way that affects it.
 
 - October 9, 2026: the usage statistics also send a daily summary, purchase-card, coin-shop, sharing
   and opened-link events and the app's own error reports; two more steps for how long ago you
-  started playing. The switch is now called "Usage stats".
+  started playing. The switch is now called "Usage stats". Records are kept for 90 days instead of
+  about 13 months; only daily totals stay longer.
 - October 6, 2026: one badge on show instead of up to three; the lists stored before are deleted.
 - October 5, 2026: occasional full-screen ads between Hustle stages from stage 20, never with the
   "No Ads · Free Hints" purchase. The usage statistics also record when an ad is offered or due and
