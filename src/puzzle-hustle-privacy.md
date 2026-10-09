@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: October 7, 2026</p>
+<p class="post-date">Last updated: October 9, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -13,9 +13,9 @@ This policy covers the Puzzle Hustle app for Android and iOS, and the web versio
 
 ## The short version
 
-You can play every puzzle without an account, and there is no crash reporting and no third-party
-analytics. Settings and unfinished boards stay on your device; if you sign in, your progress, coins and equipped items are also kept on our server so they are the same on all your devices. The app does send
-pseudonymous usage statistics (how long puzzles take, where players stop, how often ads are watched) that carry no account,
+You can play every puzzle without an account, and there is no third-party crash reporting or
+analytics; the app reports its own errors as part of the usage statistics. Settings and unfinished boards stay on your device; if you sign in, your progress, coins and equipped items are also kept on our server so they are the same on all your devices. The app does send
+pseudonymous usage statistics (how long puzzles take, where players stop, how often ads are watched, whether the purchase was made, shared links, errors) that carry no account,
 device or advertising ID and no IP address; we do not link them to you, and you can switch them off
 under Profile, Account.
 
@@ -48,7 +48,9 @@ The app saves the following on your device:
 - settings such as the theme, your display name and your last chosen difficulty
 - if you are signed in, your session and any times still waiting to be sent; after signing out,
   the last account's player ID and provider (Google or Apple), so the app can offer it first
-- the day you first played, and any usage statistics still waiting to be sent (see below)
+- the day you first played, and any usage statistics still waiting to be sent (see below), today's
+  running count for the daily summary, which errors were already reported today, and the day the
+  purchase card was last counted
 - whether the daily reminder is on and at what hour, how often the app has offered it, and on
   which streak days the app has asked the store for a rating
 
@@ -152,34 +154,52 @@ group you are in, and we will delete the account for you.
 
 ## Usage statistics
 
-To find out which puzzles are too hard, too easy or confusing, and how often ads are offered,
-watched or missing (so we can set how often they appear and what a video is worth), the app sends
-short records to our server. There is one when you open the app on a day, one when you finish or skip
-the introduction, one each time you leave or solve a puzzle, and one each time an ad is offered or
-due and what came of it. A record contains:
+To find out which puzzles are too hard, too easy or confusing, how often ads are offered,
+watched or missing (so we can set how often they appear and what a video is worth), how the
+purchase, the coin shop and sharing are used, and which errors players run into, the app sends
+short records to our server. There is one when you open the app on a day, a summary of each earlier
+day the app was opened, one when you finish or skip the introduction, one each time you leave or
+solve a puzzle, one each time an ad is offered or due and what came of it, one when the purchase
+card is shown (at most once a day) or used or a link to it is tapped, one when you buy an item in
+the coin shop, one when you share a result or an invite, one when a shared link is opened, and one
+for a program error (at most five a day). A record contains:
 
 - the calendar day (no time of day)
 - the platform (Android, iOS or web) and which build of the app
 - how long ago you started playing, in coarse steps (first day, second day, third day, 3 to 6
-  days, 1 to 2 weeks, 2 to 4 weeks, 1 to 3 months, longer)
+  days, exactly a week, 8 to 13 days, 2 to 4 weeks, exactly 30 days, 1 to 2 months, 2 to 3 months,
+  3 to 6 months, longer)
 - for a puzzle: its type, difficulty, whether it was a Daily, Weekly, Monthly, level, Hustle or
   random puzzle and the level number or Hustle stage, whether you solved or left it, the time, moves and hints, whether
   you had played it before and whether it was your first puzzle of that type
 - for the introduction: which card you reached and whether you finished or skipped it
 - for an ad: where it was (hint, double coins, or a break between Hustle stages) and
   what came of it (offered, coins chosen instead, watched, closed early, no ad available, shown)
+- for a day summary: how many puzzles you started and solved, minutes played, which kinds of
+  puzzle you played (Daily, Weekly, Monthly, level, random, Hustle), whether you were signed in, in
+  a group and had the reminder on, and your streak, coins and Hustle level in coarse steps
+- for the purchase: shown, bought, pending, cancelled, failed, restored, nothing found, or which
+  link to it was tapped; no receipt, order or store ID
+- for the coin shop: which item you bought
+- for sharing: a result or a group invite, and whether it was shared, copied, cancelled or failed;
+  never what you sent or to whom
+- for a shared link: whether it led to a puzzle or a group, and whether it opened in the app or the
+  browser
+- for an error: where it happened, the error text with links, quoted text, numbers and codes
+  removed, and the position in the app's code
 
-A record contains no account ID, no device or advertising ID, no name and no IP address, and
-records carry nothing that ties one to another. They are pseudonymous, not fully anonymous: for
-signed-in players, what a record says about a puzzle could in principle be matched to the progress
-copy on our server. We do not do that and never send a record together with your account. Records wait on your device until they can be sent, and they are sent whether or not you are
+A record contains no account ID, no device or advertising ID, no name and no IP address. They are
+pseudonymous, not fully anonymous: for signed-in players, what a record says about a puzzle could in
+principle be matched to the progress copy on our server, and a day summary describes one device's
+day, so it could in principle be matched along with that day's puzzle records. The day summary
+therefore does not say whether you made the purchase. We do not do that and never send a record together with your account. Records wait on your device until they can be sent, and they are sent whether or not you are
 signed in. Our server keeps them for about 13 months and
 then deletes them. We look at them only as totals, such as the median time of a Daily.
 
-You can switch this off at any time under **Anonymous stats** in Profile, Account. Switching it
+You can switch this off at any time under **Usage stats** in Profile, Account. Switching it
 off also deletes any records not yet sent.
 
-The legal basis is our legitimate interest in improving the puzzles and in setting ad frequency and rewards fairly (Art. 6(1)(f) GDPR). As
+The legal basis is our legitimate interest in improving the puzzles, fixing errors, setting ad frequency and rewards fairly, and understanding how the purchase, the coin shop and sharing are used (Art. 6(1)(f) GDPR). As
 nothing sent carries your identity and we only look at totals, the impact on you is minimal, and you can object at any time by
 switching the statistics off.
 
@@ -241,7 +261,7 @@ is handled entirely by Google Play, on iOS entirely by Apple's App Store. Your p
 to Google or Apple, never to us, and we never see your name, address or card.
 
 At each start the app asks Google Play or the App Store whether this purchase exists for your
-store account, and stores only that yes or no on your device. Our server records no purchases, but the progress copy lists which solves were
+store account, and stores that yes or no on your device. Unless you switch the usage statistics off, they note what came of a purchase attempt (see above), without any account or store ID; our server keeps no receipts or payment data. The progress copy lists which solves were
 doubled, whether by a video or by the purchase. Refunds and payment questions go through Google Play or Apple.
 
 Coins are earned by solving and cannot be bought directly; the purchase only doubles what new
@@ -273,13 +293,14 @@ and have no access to it. GitHub's own privacy statement covers it:
 
 When you share a result or a group invite, the app hands a short text and a link to your device's
 share sheet. You choose which app receives it. We are not part of that and never see what you send
-or who you send it to.
+or who you send it to. The usage statistics note only that you shared, copied or cancelled.
 
 ## Daily reminder
 
 If you turn it on, the app schedules one notification a day on your device, at the hour you pick,
 and leaves out days on which your streak is already safe. Scheduling happens entirely on the device
-and sends nothing to us or anyone else. It is off until you switch it on, and you can switch it off
+and sends nothing to us or anyone else, except that the daily summary in the usage statistics notes
+whether the reminder is on. It is off until you switch it on, and you can switch it off
 under Profile → Gameplay or in your device's notification settings.
 
 ## Permissions
@@ -321,6 +342,9 @@ Questions go to vexury.dev@gmail.com and get an answer.
 
 This policy will be updated when the app changes in a way that affects it.
 
+- October 9, 2026: the usage statistics also send a daily summary, purchase-card, coin-shop, sharing
+  and opened-link events and the app's own error reports; two more steps for how long ago you
+  started playing. The switch is now called "Usage stats".
 - October 6, 2026: one badge on show instead of up to three; the lists stored before are deleted.
 - October 5, 2026: occasional full-screen ads between Hustle stages from stage 20, never with the
   "No Ads · Free Hints" purchase. The usage statistics also record when an ad is offered or due and
