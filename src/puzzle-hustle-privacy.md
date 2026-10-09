@@ -286,11 +286,10 @@ It reaches the internet for these things, and only these:
 - on streak days 4, 12 and 31, asking Google Play or the App Store to show their own rating
   dialog; the store decides whether it appears, and any rating you give goes to the store, not to us
 
-The web version has to be delivered to your browser, and that is done by GitHub Pages. Like any
-web host, GitHub processes access data such as your IP address, the page requested and the time of
-the request in order to serve the page and keep the service secure. We do not receive that data
-and have no access to it. GitHub's own privacy statement covers it:
-[docs.github.com/site-policy](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement).
+The web version has to be delivered to your browser, and that is done by Cloudflare, the same
+provider that runs our server (see above). Like any web host, Cloudflare processes access data such
+as your IP address, the page requested and the time of the request in order to serve the page and
+keep the service secure. We do not store that data.
 
 ## Sharing a result
 
@@ -312,8 +311,10 @@ The Android build declares internet and network state access, the advertising ID
 the Google Mobile Ads SDK requires, the billing permission for the purchase, and, for the daily
 reminder, permission to post notifications and to keep scheduled reminders across a restart
 (receive boot completed, wake lock). The only runtime permission either app asks for is permission
-to show notifications, and only when you turn on the daily reminder. No camera, no microphone, no
-contacts, no location, no photos, no tracking.
+to show notifications, and only when you turn on the daily reminder. On iPhone and iPad, if you
+choose "Save Image" when sharing a result picture, iOS asks once for permission to add photos to
+your library; the app can only add that picture and cannot see your photos. No camera, no
+microphone, no contacts, no location, no tracking.
 
 ## Children
 
@@ -345,6 +346,8 @@ Questions go to vexury.dev@gmail.com and get an answer.
 
 This policy will be updated when the app changes in a way that affects it.
 
+- October 9, 2026: the web version is now served by Cloudflare instead of GitHub Pages. On iPhone
+  and iPad, saving a shared result picture asks for permission to add it to your photos.
 - October 9, 2026: the usage statistics also send a daily summary, purchase-card, coin-shop, sharing
   and opened-link events and the app's own error reports; two more steps for how long ago you
   started playing. The switch is now called "Usage stats". Records are kept for 90 days instead of
