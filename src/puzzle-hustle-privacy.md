@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: October 10, 2026</p>
+<p class="post-date">Last updated: October 13, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -13,8 +13,8 @@ This policy covers the Puzzle Hustle app for Android and iOS, and the web versio
 
 ## The short version
 
-You can play every puzzle without an account, and there is no third-party crash reporting or
-analytics; the app reports its own errors as part of the usage statistics. Settings and unfinished boards stay on your device; if you sign in, your progress, coins and equipped items are also kept on our server so they are the same on all your devices. The app does send
+You can play every puzzle without an account, and we use no third-party crash reporting or
+analytics service; the app reports its own errors as part of the usage statistics. Settings and unfinished boards stay on your device; if you sign in, your progress, coins and equipped items are also kept on our server so they are the same on all your devices. The app does send
 pseudonymous usage statistics (how long puzzles take, where players stop, how often ads are watched, whether the purchase was made, shared links, errors) that carry no account,
 device or advertising ID and no IP address; we do not link them to you, and you can switch them off
 under Profile, Account.
@@ -281,6 +281,7 @@ It reaches the internet for these things, and only these:
 - talking to our server: while you are signed in for standings, groups, your name, what you show,
   your submitted times and your synced progress, and, unless you switch it off, for the usage statistics
 - signing in with Google or Apple, when you choose to
+- reporting your achievements to Google Play Games or Game Center, if you are signed in there
 - loading and showing ads
 - asking Google Play or the App Store about the "No Ads · Free Hints" purchase
 - on streak days 4, 12 and 31, asking Google Play or the App Store to show their own rating
@@ -296,6 +297,25 @@ keep the service secure. We do not store that data.
 When you share a result or a group invite, the app hands a short text and a link to your device's
 share sheet. You choose which app receives it. We are not part of that and never see what you send
 or who you send it to. The usage statistics note only that you shared, copied or cancelled.
+
+## Google Play Games and Game Center
+
+On Android the app also reports your achievements to Google Play Games, on iOS to Apple's Game
+Center. This is separate from signing in to Puzzle Hustle: it only happens if you are signed in to
+Play Games or Game Center on your device. The app tries to sign you in when it starts; if you turn
+Game Center down, the app does not ask again. Without that sign-in, nothing is reported.
+
+What goes there is which achievements you have unlocked and how far along you are with the ones
+that count something, such as a streak. Google or Apple keep this with your Play Games or Game
+Center profile, show it there and process it under their own privacy policies
+([Google](https://policies.google.com/privacy), [Apple](https://www.apple.com/legal/privacy/)).
+We send this so your achievements show up in the service you are signed in to (Art. 6(1)(f) GDPR);
+Google and Apple are responsible for it on their side as independent controllers. On Android,
+Google's Play Games SDK starts with the app and collects its own diagnostic and usage data, whether
+or not you are signed in to Play Games. The app does not read your Play Games or Game Center name,
+profile or friends, and our server receives nothing from either. In the Play Games app you can
+delete this game's data under Settings; for Game Center, Apple handles deletion through
+[privacy.apple.com](https://privacy.apple.com/).
 
 ## Daily reminder
 
@@ -349,6 +369,8 @@ the mail only to answer you (Art. 6(1)(f) GDPR) and delete it once the matter is
 
 This policy will be updated when the app changes in a way that affects it.
 
+- October 13, 2026: achievements are also reported to Google Play Games and Game Center if you are
+  signed in there.
 - October 10, 2026: Send feedback and Rate rows in the Profile screen; what we receive when you
   email us.
 - October 9, 2026: the web version is now served by Cloudflare instead of GitHub Pages. On iPhone
