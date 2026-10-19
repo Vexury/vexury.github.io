@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: October 13, 2026</p>
+<p class="post-date">Last updated: October 19, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -178,8 +178,9 @@ for a program error (at most five a day). A record contains:
 - for a day summary: how many puzzles you started and solved, minutes played, which kinds of
   puzzle you played (Daily, Weekly, Monthly, level, random, Hustle), whether you were signed in, in
   a group and had the reminder on, and your streak, coins and Hustle level in coarse steps
-- for the purchase: shown, bought, pending, cancelled, failed, restored, nothing found, or which
-  link to it was tapped; no receipt, order or store ID
+- for the purchase: shown, bought, pending, cancelled, failed (with the store's error code, such as
+  network error or billing unavailable), restored, nothing found, or which link to it was tapped;
+  no receipt, order or store ID
 - for the coin shop: which item you bought
 - for sharing: a result or a group invite, and whether it was shared, copied, cancelled or failed;
   never what you sent or to whom
@@ -369,6 +370,7 @@ the mail only to answer you (Art. 6(1)(f) GDPR) and delete it once the matter is
 
 This policy will be updated when the app changes in a way that affects it.
 
+- October 19, 2026: a failed purchase or restore also notes the store's error code.
 - October 13, 2026: achievements are also reported to Google Play Games and Game Center if you are
   signed in there.
 - October 10, 2026: Send feedback and Rate rows in the Profile screen; what we receive when you
