@@ -27,6 +27,8 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/files");
   eleventyConfig.addPassthroughCopy("src/fonts");
   eleventyConfig.addPassthroughCopy({ "src/favicon": "/" });
+  // AdMob crawls the root domain of the developer website in the App Store listing.
+  eleventyConfig.addPassthroughCopy("src/app-ads.txt");
 
   // ── Image shortcode ───────────────────────────────────────────────────────
   // Shared thumb generator — used by both the shortcode and the filter
