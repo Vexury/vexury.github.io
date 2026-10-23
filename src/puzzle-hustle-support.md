@@ -39,7 +39,7 @@ solve are doubled, and the occasional ad between Hustle stages disappears. Nothi
 requires it.
 
 **I bought it, but it is gone.**
-Open the Profile tab and tap "Restore purchase" on the "No ads · Free hints" card. Use the same
+Open Profile › Account and tap "Restore" on the "No ads · Free hints" card. Use the same
 Apple ID or Google account you bought it with. A purchase in the App Store does not carry over to
 Android or the other way round, because each store handles its own purchases.
 
