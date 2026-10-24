@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: October 19, 2026</p>
+<p class="post-date">Last updated: October 24, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -26,8 +26,9 @@ It never stores your email address. You can delete the account in the app at any
 
 The Android and iOS apps show rewarded video ads, which you only ever see after choosing to watch
 one, either for a hint or to double the coins of a Daily, Weekly or Monthly you just solved. In
-Hustle, from stage 20, they also show an occasional full-screen ad between stages. Those ads come
-from Google. The web version has no ads.
+Hustle from stage 20, and in levels and random puzzles once the puzzles you solved add up to 40
+minutes, they also show an occasional full-screen ad between puzzles. Those ads come from Google.
+The web version has no ads.
 
 ## Who is responsible
 
@@ -173,7 +174,7 @@ for a program error (at most five a day). A record contains:
   random puzzle and the level number or Hustle stage, whether you solved or left it, the time, moves and hints, whether
   you had played it before and whether it was your first puzzle of that type
 - for the introduction: which card you reached and whether you finished or skipped it
-- for an ad: where it was (hint, double coins, or a break between Hustle stages) and
+- for an ad: where it was (hint, double coins, or a break after a Hustle stage, a level or a random puzzle) and
   what came of it (offered, coins chosen instead, watched, closed early, no ad available, shown)
 - for a day summary: how many puzzles you started and solved, minutes played, which kinds of
   puzzle you played (Daily, Weekly, Monthly, level, random, Hustle), whether you were signed in, in
@@ -218,13 +219,14 @@ offer "Watch video · double": the video only starts if you tap it, and when it 
 for that puzzle count twice. Declining costs you nothing. If no ad can be delivered, the coins are
 not doubled and you can try again later while that puzzle's day, week or month is running.
 
-In Hustle, from stage 20, the Android and iOS apps show an occasional full-screen ad when you move on
-to the next stage: at most one after 5 stages and 4 minutes of play, or after 10 minutes of play,
-since the last ad, and never when you leave a stage that ends a round of ten. A video you chose to
-watch counts as the last ad. Daily, Weekly, Monthly, levels and random puzzles never show these ads,
-and with "No Ads · Free Hints" you never see them. The app loads such an ad in advance; if none is
-ready, you go on at once. To space them, the app keeps on your device how many stages and minutes
-you have played since the last ad.
+In Hustle from stage 20, and in levels and random puzzles once the puzzles you solved add up to 40
+minutes, the Android and iOS apps show an occasional full-screen ad when you move on to the next
+puzzle: at most one after 5 puzzles and 4 minutes of play, or after 10 minutes of play, since the
+last ad, counted across these three modes together, and never when you leave a Hustle stage that
+ends a round of ten. A video you chose to watch counts as the last ad. Daily, Weekly and Monthly
+puzzles never show these ads, and with "No Ads · Free Hints" you never see them. The app loads such
+an ad in advance; if none is ready, you go on at once. To space them, the app keeps on your device
+how many puzzles and minutes you have played since the last ad.
 
 The ads are served by Google AdMob (Google Ireland Limited, Gordon House, Barrow Street, Dublin 4,
 Ireland). To show and measure them, Google processes your device's **advertising ID** along with
@@ -370,6 +372,9 @@ the mail only to answer you (Art. 6(1)(f) GDPR) and delete it once the matter is
 
 This policy will be updated when the app changes in a way that affects it.
 
+- October 24, 2026: the occasional full-screen ads between puzzles also come in levels and random
+  puzzles, once the puzzles you solved add up to 40 minutes; the usage statistics tell these breaks
+  apart from those in Hustle.
 - October 19, 2026: a failed purchase or restore also notes the store's error code.
 - October 13, 2026: achievements are also reported to Google Play Games and Game Center if you are
   signed in there.
