@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: October 24, 2026</p>
+<p class="post-date">Last updated: October 25, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -170,14 +170,14 @@ for a program error (at most five a day). A record contains:
 - how long ago you started playing, in coarse steps (first day, second day, third day, 3 to 6
   days, exactly a week, 8 to 13 days, 2 to 4 weeks, exactly 30 days, 1 to 2 months, 2 to 3 months,
   3 to 6 months, longer)
-- for a puzzle: its type, difficulty, whether it was a Daily, Weekly, Monthly, level, Hustle or
-  random puzzle and the level number or Hustle stage, whether you solved or left it, the time, moves and hints, whether
+- for a puzzle: its type, difficulty, whether it was a Daily, Weekly, Monthly, level, XL level,
+  Hustle or random puzzle and the level number or Hustle stage, whether you solved or left it, the time, moves and hints, whether
   you had played it before and whether it was your first puzzle of that type
 - for the introduction: which card you reached and whether you finished or skipped it
 - for an ad: where it was (hint, double coins, or a break after a Hustle stage, a level or a random puzzle) and
   what came of it (offered, coins chosen instead, watched, closed early, no ad available, shown)
 - for a day summary: how many puzzles you started and solved, minutes played, which kinds of
-  puzzle you played (Daily, Weekly, Monthly, level, random, Hustle), whether you were signed in, in
+  puzzle you played (Daily, Weekly, Monthly, level, random, Hustle, XL level), whether you were signed in, in
   a group and had the reminder on, and your streak, coins and Hustle level in coarse steps
 - for the purchase: shown, bought, pending, cancelled, failed (with the store's error code, such as
   network error or billing unavailable), restored, nothing found, or which link to it was tapped;
@@ -372,6 +372,8 @@ the mail only to answer you (Art. 6(1)(f) GDPR) and delete it once the matter is
 
 This policy will be updated when the app changes in a way that affects it.
 
+- October 25, 2026: the usage statistics name XL levels, the large picture puzzles in the Puzzle
+  tab, as a kind of puzzle of their own. Nothing else is collected.
 - October 24, 2026: the occasional full-screen ads between puzzles also come in levels and random
   puzzles, once the puzzles you solved add up to 40 minutes; the usage statistics tell these breaks
   apart from those in Hustle.
