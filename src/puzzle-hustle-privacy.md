@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: October 25, 2026</p>
+<p class="post-date">Last updated: October 27, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -163,7 +163,7 @@ day the app was opened, one when you finish or skip the introduction, one each t
 solve a puzzle, one each time an ad is offered or due and what came of it, one when the purchase
 card is shown (at most once a day) or used or a link to it is tapped, one when you buy an item in
 the coin shop, one when you share a result or an invite, one when a shared link is opened, and one
-for a program error (at most five a day). A record contains:
+for a program error or a failed sign-in (together at most five a day). A record contains:
 
 - the calendar day (no time of day)
 - the platform (Android, iOS or web) and which build of the app
@@ -189,6 +189,9 @@ for a program error (at most five a day). A record contains:
   browser
 - for an error: where it happened, the error text with links, quoted text, numbers and codes
   removed, and the position in the app's code
+- for a failed sign-in: the provider and the step (for example Google in the app or Apple on the
+  web) and the reason Google, Apple or our server gave, with the same cleanup and e-mail addresses
+  removed
 
 A record contains no account ID, no device or advertising ID, no name and no IP address. They are
 pseudonymous, not fully anonymous: for signed-in players, what a record says about a puzzle could in
@@ -372,6 +375,8 @@ the mail only to answer you (Art. 6(1)(f) GDPR) and delete it once the matter is
 
 This policy will be updated when the app changes in a way that affects it.
 
+- October 27, 2026: a failed sign-in is also recorded, with the provider, the step and the reason
+  it failed, so we can find out why someone cannot sign in. It carries no account, e-mail or name.
 - October 25, 2026: the usage statistics name XL levels, the large picture puzzles in the Puzzle
   tab, as a kind of puzzle of their own. Nothing else is collected.
 - October 24, 2026: the occasional full-screen ads between puzzles also come in levels and random
