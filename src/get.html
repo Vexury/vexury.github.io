@@ -1,0 +1,39 @@
+---
+layout: base.html
+permalink: /get/
+title: Get Puzzle Hustle
+description: "Puzzle Hustle, daily logic puzzles for Android and iOS. This page opens the right store for your phone."
+preview_image: /images/PuzzleHustle/PuzzleHustle_Cover.png
+---
+
+<div class="ph-intro">
+  <h1>🧩 Puzzle Hustle</h1>
+  <p>Daily logic puzzles for Android and iOS. On a phone this page opens your store right away; if it doesn't, pick it below.</p>
+  <div class="link-row">
+    <a id="get-play" href="https://play.google.com/store/apps/details?id=dev.vexury.puzzlehustle" class="link-btn">Google Play</a>
+    <a id="get-ios" href="https://apps.apple.com/app/id6814679756" class="link-btn">App Store</a>
+    <a href="/projects/puzzle-hustle/" class="link-btn">Play in the browser</a>
+  </div>
+</div>
+
+<!-- Bio link for social accounts: /get/?src=tiktok|instagram|shorts. The source goes into
+     the Play UTM referrer and, once PT is set, into the App Store campaign token. -->
+<script>
+  (function () {
+    var PT = '';
+    var m = /[?&]src=([a-z0-9-]{1,32})(?:&|$)/.exec(location.search);
+    var src = m ? m[1] : 'site';
+    var play = 'https://play.google.com/store/apps/details?id=dev.vexury.puzzlehustle&referrer=' +
+      encodeURIComponent('utm_source=' + src + '&utm_medium=' + (m ? 'social' : 'web') + '&utm_campaign=bio');
+    var appStore = PT
+      ? 'https://apps.apple.com/app/apple-store/id6814679756?pt=' + PT + '&ct=' + src + '-bio&mt=8'
+      : 'https://apps.apple.com/app/id6814679756';
+    document.getElementById('get-play').href = play;
+    document.getElementById('get-ios').href = appStore;
+
+    var ua = navigator.userAgent;
+    var ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    if (/Android/.test(ua)) location.replace(play);
+    else if (ios) location.replace(appStore);
+  })();
+</script>
