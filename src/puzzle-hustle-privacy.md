@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: October 27, 2026</p>
+<p class="post-date">Last updated: October 30, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -98,8 +98,9 @@ stores:
   IDs from the app's fixed list.
 - **Hustle level:** the stage you have reached in Hustle mode, as a single number.
 - **Progress copy:** so your progress is the same on every device you sign in on, a copy of the puzzles you have solved (with time, hints, moves and when), your coin spending, the puzzles whose coins you doubled and the items you have equipped. Unfinished puzzles and settings are not part of it. It is used for nothing but syncing, is shown to nobody, and is deleted with your account.
-- **Groups:** the groups you created or joined, their names and invite codes (six or eight characters), and
-  when you joined, and, if a group's creator removed you, that you may not rejoin that group. A
+- **Groups:** the groups you created or joined, their names and invite codes (six or eight characters),
+  when you joined, which of them you marked as your main group (shown to nobody else), and, if a
+  group's creator removed you, that you may not rejoin that group. A
   player can be in at most 5 groups, and a group holds at most 50 players.
 - **Times:** for each Daily, Weekly and Monthly puzzle you solve while signed in, your time, hints,
   moves and when you solved it. Times you solved shortly before signing in are sent once you do.
@@ -114,7 +115,8 @@ show how you did against everyone who solved the same puzzle, as an anonymous co
 
 When you share a result, the app makes the picture on your device; nothing is uploaded. The
 picture shows your display name, Hustle level, badges, flair and nameplate, and may show the name
-of your best group, to whoever you send it to.
+of one of your groups (your main group, the one where you placed best, or the one you picked on the
+result screen), to whoever you send it to.
 
 The data stays on the server for as long as your account exists. There is no automatic expiry.
 
@@ -375,6 +377,9 @@ the mail only to answer you (Art. 6(1)(f) GDPR) and delete it once the matter is
 
 This policy will be updated when the app changes in a way that affects it.
 
+- October 30, 2026: you can mark one of your groups as your main group; the server keeps that mark
+  with your membership, and it goes when you leave the group or delete your account. A shared
+  result picture may name your main group or the group you picked on the result screen.
 - October 27, 2026: a failed sign-in is also recorded, with the provider, the step and the reason
   it failed, so we can find out why someone cannot sign in. It carries no account, e-mail or name.
 - October 25, 2026: the usage statistics name XL levels, the large picture puzzles in the Puzzle
