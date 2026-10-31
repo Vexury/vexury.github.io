@@ -1,7 +1,7 @@
 ---
 title: "🎬 A Show Tracker Built From One JSON File"
 date: 2026-08-24
-summary: "A static horror, mystery and thriller tracker for the site: one JSON file, no backend, no client-side state, and a couple of things TMDB taught me the hard way."
+summary: "A static tracker for the horror, mystery and thriller films and series I watched, built from one JSON file, plus two things I learned about TMDB posters the hard way."
 preview_image: /images/ShowTracker_Preview.jpg
 ---
 
@@ -12,9 +12,10 @@ preview_image: /images/ShowTracker_Preview.jpg
 <a href="/show-tracker/" class="link-btn">Open the Show Tracker</a>
 </div>
 
-I wanted a place to keep track of the horror, mystery and thriller films and series I have watched, with a rating attached to each one. Not a Letterboxd account, just a page on this site that I own and that loads instantly. The whole thing is static: the site already builds with Eleventy and deploys through GitHub Actions, so the cheapest possible design was to make the data a file in the repo and let the existing pipeline do the rest.
+I wanted a place to keep track of the horror, mystery and thriller films and series I have watched, with a rating for each one. No Letterboxd account, just a page on my own site that loads instantly.
+The site already builds with Eleventy and deploys through GitHub Actions, so the simplest solution was to put the data into a file in the repo and let the existing pipeline do the rest.
 
-The result lives at [/show-tracker/](/show-tracker/). It has three sections: a hall of fame, a watchlist, and the full collection of everything watched.
+The result is at [/show-tracker/](/show-tracker/) and has three sections: a hall of fame, a watchlist and the full collection of everything I watched.
 
 ## One file, no backend
 
@@ -38,13 +39,14 @@ Every entry is an object in `src/_data/showtracker.json`, and that file is the o
 }
 ```
 
-A `status` of `watchlist`, `watched` or `hall_of_fame` decides which sections an entry appears in, and the three groups are filtered out of that one array at build time. There is no client-side state anywhere: no localStorage, no forms, no fetch. Rating something means editing its `rating` field and pushing the commit, which is a workflow I actually prefer, because it means the data is versioned and I can never lose it to a service shutting down.
+The `status` field (`watchlist`, `watched` or `hall_of_fame`) decides in which sections an entry shows up, and the three groups are filtered from that one array at build time.
+There is no client-side state at all (no localStorage, no forms, no fetch). To rate something, I edit its `rating` field and push the commit. I actually prefer that, because the data is versioned and I can't lose it when some service shuts down.
 
-## Sorting is where Liquid gives up
+## Sorting with Liquid
 
-Grouping is easy enough with Liquid's `where` and `where_exp`. Ordering was not. Liquid's `sort` filter takes a single property and has no descending form, and more annoyingly it treats `null` as sorting before everything else. My unrated watchlist entries floated straight to the top, above the 10s.
+Grouping is easy with Liquid's `where` and `where_exp`, but sorting was not. Liquid's `sort` filter only takes a single property, has no descending option and, even worse, sorts `null` before everything else. So my unrated watchlist entries ended up at the very top, above the 10s.
 
-So the ordering moved into two small filters in `.eleventy.js`:
+That's why the sorting moved into two small filters in `.eleventy.js`:
 
 ```js
 eleventyConfig.addFilter("sortByRatingDesc", function (arr) {
@@ -53,14 +55,13 @@ eleventyConfig.addFilter("sortByRatingDesc", function (arr) {
 });
 ```
 
-Two keys, descending, with unrated entries pushed to the bottom instead of the top, and ties broken alphabetically so the order is stable between builds. It runs once at build time, which is the right place for it.
+It sorts by two keys in descending order, puts unrated entries at the bottom and breaks ties alphabetically, so the order stays the same between builds. It runs once at build time.
 
-## Posters, and two ways to get them wrong
+## Posters from TMDB
 
-Posters are hotlinked from TMDB's image CDN rather than committed to the repo. That keeps a hundred-odd JPEGs out of git, at the cost of skipping the site's own thumbnail pipeline.
+The posters are hotlinked from TMDB's image CDN instead of committed to the repo. That keeps a hundred-odd JPEGs out of git, but they skip the site's own thumbnail pipeline.
 
-Getting the URLs right took two lessons. The first: TMDB serves localised artwork, so fetching a poster from a German connection quietly hands you German cover art. Adding `?image_language=en` fixes it.
+I had to learn two things to get the URLs right. First, TMDB serves localised artwork, so if you fetch a poster from a German connection, you get the German cover art without noticing. Adding `?image_language=en` fixes that.
 
-The second was more embarrassing. TMDB ids are not guessable, and a wrong id does not throw an error, it just hands you a perfectly valid poster for a completely different film. While filling the tracker I confidently guessed ids that turned out to be The Wailing, Notes on Blindness, A Monster Calls, Dragon Ball Super, The Shallows and Let Him Go. None of that surfaced as an error. The only reason none of them shipped is that every lookup now has to confirm the page's own title back before the entry gets written.
-
-That is the sort of failure worth designing around: not the one that crashes, but the one that looks entirely correct.
+The second one was more embarrassing. TMDB ids can't be guessed, and a wrong id does not throw an error, you just get a perfectly valid poster of a completely different film. While filling the tracker, I guessed ids that turned out to be The Wailing, Notes on Blindness, A Monster Calls, Dragon Ball Super, The Shallows and Let Him Go.
+None of this showed up as an error, and the only reason none of them are on the site is that every lookup now has to confirm the page's own title before the entry gets written.

@@ -1,7 +1,7 @@
 ---
 title: "🤑 Kenney Jam 2026: Scaleton Inc."
 date: 2026-07-19
-summary: "Fifty hours, a team of three, and a jam where you are not allowed to make any art. What you can make is shaders."
+summary: "A 50-hour jam with a team of three, where custom art is forbidden but custom shaders are allowed."
 preview_image: /images/Scaleton/Scaleton_Cover.png
 ---
 
@@ -16,67 +16,69 @@ preview_image: /images/Scaleton/Scaleton_Cover.png
   <img src="{% thumb '/images/Scaleton/Scaleton_01.png', 1100 %}" alt="Scaleton Inc. shop interior with customers queuing at the counter" loading="lazy" style="width:100%">
 </div>
 
-[Kenney Jam 2026](https://itch.io/jam/kenney-jam-2026) ran from **July 17 to July 19, 2026**, a 50 hour window. The theme: **Scale**.
+[Kenney Jam 2026](https://itch.io/jam/kenney-jam-2026) ran from July 17 to July 19, 2026, a 50 hour window, and the theme was **Scale**.
 
-The rule that defines this jam is not the theme, it is the assets. You may only use game assets made by [Kenney](https://kenney.nl/assets/) or [KayKit](https://kaylousberg.itch.io/). No custom art, no custom models, not even the placeholder meshes that ship with your engine. You can recolor, crop, rotate and combine, and that is it.
+The special thing about this jam is the asset rule. You may only use game assets made by [Kenney](https://kenney.nl/assets/) or [KayKit](https://kaylousberg.itch.io/), so no custom art, no custom models and not even the placeholder meshes that come with your engine. You can recolor, crop, rotate and combine them, and that's it.
+Custom materials, shaders, VFX, particles and audio are allowed though, and that ended up shaping the whole jam for us (more on that at the end).
 
-What the rules *do* allow is custom materials, shaders, VFX and particles, plus custom audio. That gap turns out to shape the whole jam, and I will come back to it at the end.
-
-I went in with a team of three: myself on programming, systems and UI, [cxbane](https://cxbane.zone) on art direction and audio, and Roby on level design and playtesting.
+We were a team of three: me on programming, systems and UI, [cxbane](https://cxbane.zone) on art direction and audio, and Roby on level design and playtesting.
 
 ## The Game
 
-Scaleton is a skeleton who got tired of fighting heroes and opened a shop instead. He sells weapons, supplies and knowledge to whatever wanders into the dungeon, heroes and monsters alike. You are not Scaleton exactly, you are the hand that keeps his business running.
+Scaleton is a skeleton who got tired of fighting heroes and opened a shop instead. He sells weapons, supplies and knowledge to whatever wanders into the dungeon, heroes and monsters alike. You play the hand that keeps his business running.
 
-Everything is a click. You click customers to serve them, click thieves before they reach the door, and click the rats that keep scurrying through the shop. Between all of that you spend what you earn on making the shop bigger.
+Everything is a click. You click customers to serve them, click thieves before they reach the door and click the rats that keep running through the shop. In between, you spend what you earn to make the shop bigger.
 
-Our reading of the theme was scale as in *scaling a business*, not scale as in physical size. Given that half the jam went for size jokes, the tycoon angle gave us room that felt less crowded.
+We read the theme as *scaling a business*. About half of the jam went for size jokes, so the tycoon idea gave us a bit more room.
 
 ## The Customer Pipeline
 
-Customers are NavMesh agents. They spawn near the entrance and then work through a list of stations in order, browsing before they arrive at the counter to pay.
+Customers are NavMesh agents. They spawn near the entrance and go through a list of stations in order, browsing before they get to the counter to pay.
 
-The part that keeps it from looking mechanical is that some stations pick randomly between alternatives. There are several tables and shelves carrying wares, so two customers running the same station order still walk different paths through the room. It is a cheap trick and it does a lot of work: the shop reads as a place with traffic rather than a conveyor belt.
+Some stations pick randomly between alternatives, because there are several tables and shelves with wares. So two customers with the same station order still walk different paths through the room. It's a cheap trick, and the shop looks a lot less mechanical with it.
 
 <div style="margin:1.5rem 0">
   <img src="{% thumb '/images/Scaleton/Scaleton_04.png', 1100 %}" alt="A customer being served at the counter with a radial progress timer above them" loading="lazy" style="width:100%">
 </div>
 
-Then there is the branch that makes the loop interesting. Every customer has a chance to skip checkout entirely and head straight for the exit with the goods. Under the hood a thief is not a special entity, it is the same agent taking a different route, which is exactly why the mechanic works: you cannot identify a thief by looking at them, only by noticing that they never stopped at the counter. Catching one means clicking them before they get out, and you get the money back.
-
-That single rule is what forces you to actually watch the shop instead of clicking the counter on autopilot.
+Every customer also has a chance to skip the checkout and walk straight to the exit with the goods. A thief is the same agent as everyone else, just taking a different route. That's why the mechanic works: you can't tell a thief by looking at them, only by noticing that they never stopped at the counter. If you click them before they get out, you get the money back.
+This makes you actually watch the shop instead of clicking the counter on autopilot.
 
 ## Two Currencies
 
-The upgrade system splits into two windows, and the split is the spine of the whole design.
+The upgrades are split into two windows with two currencies, and most of the design is built around that split.
 
-**Gold** buys throughput. Faster spawn rates, shorter customer processing times, and new rooms to expand into. Gold makes the shop busier.
+Gold buys throughput: faster spawn rates, shorter processing times per customer and new rooms to expand into. With gold, the shop gets busier.
 
 <div style="margin:1.5rem 0">
   <img src="{% thumb '/images/Scaleton/Scaleton_02.png', 1100 %}" alt="An unlockable storage room stocked with crates, barrels and produce" loading="lazy" style="width:100%">
 </div>
 
-**Reputation** buys automation, through the tech tree. A fire staff that hovers over the dungeon and shoots rats so you stop having to chase them. A bouncer who prevents stealing. Customers who start leaving extra tips. And automation itself, which is bought per department rather than as a single switch: the weapon shop, the grocery shop and the magic shop each learn to run themselves separately, so you choose which part of the business stops needing you first. All of it is ScriptableObject driven, which made adding and rebalancing upgrades during the jam a matter of editing assets rather than touching code.
+Reputation buys automation through the tech tree: a fire staff that hovers over the dungeon and shoots the rats so you don't have to chase them, a bouncer who stops thieves and customers who leave extra tips.
+Automation itself is bought per department, so the weapon shop, the grocery shop and the magic shop each learn to run on their own, and you decide which part of the business stops needing you first.
+All of it is driven by ScriptableObjects, so adding and rebalancing upgrades during the jam meant editing assets instead of touching code.
 
 <div style="margin:1.5rem 0">
   <img src="{% thumb '/images/Scaleton/Scaleton_06.png', 1100 %}" alt="The tech tree window, showing reputation-cost upgrade nodes connected in a branching layout" loading="lazy" style="width:100%">
 </div>
 
-The relationship between the two is the bit I like most. Reputation comes from clicking the mice that speed through the shop, so the currency that buys you *less clicking* is itself paid for in clicks. Early on you are serving every customer by hand, catching every thief by hand, and squashing every rat by hand. The game taxes your attention, and then sells you a way out of it with the very resource that tax generates.
+The part I like most is how the two currencies relate. Reputation comes from clicking the mice that speed through the shop, so the currency that buys you *less clicking* is itself paid for in clicks.
+Early on you serve every customer, catch every thief and squash every rat by hand, and then you use the reputation from all that clicking to buy your way out of it.
 
 <div style="margin:1.5rem 0">
   <img src="{% thumb '/images/Scaleton/Scaleton_03.png', 1100 %}" alt="An unlockable study room with scrolls, tomes and a wizard customer" loading="lazy" style="width:100%">
 </div>
 
-Gold makes the shop demand more of you. Reputation gives you back the capacity to handle it. Progress is the gap between those two closing.
+So gold makes the shop demand more from you and reputation gives you the capacity to handle it. You make progress as the gap between the two closes.
 
 ## The Torch
 
-The piece I am most proud of is a torch. That sounds small until you remember the constraint.
+The thing I am most proud of is a torch, which sounds small, but remember the asset rule.
+In this jam every mesh and texture is premade and shared with everyone else, so shaders and VFX are the only visual layer you actually make yourself.
+The torch is a combination of Shader Graph and a particle system, and it does most of the work in these screenshots: the warm light, the flicker and the low-poly stone looking like a dungeon instead of a grey box.
 
-In a jam where every mesh and every texture is premade and shared with every other entrant, shaders and VFX are the only visual layer you actually author. The torch is a Shader Graph and particle system combo, and it is doing most of the work in these screenshots: the warm pooling light, the flicker, the way the low-poly stone reads as a dungeon rather than a grey box.
-
-It also paid for itself twice. When the anti-rat staff went into the tech tree and needed a projectile, the fireball came straight out of the torch effect with a different setup. One effect, built well early, covering both the ambient lighting of the entire shop and a gameplay VFX we did not know we needed yet.
+It also paid off twice. When the anti-rat staff went into the tech tree and needed a projectile, the fireball came straight out of the torch effect with a different setup.
+So one effect that I built early covers the lighting of the whole shop and a gameplay VFX we did not even know we needed yet.
 
 <div style="text-align:center; margin:1.5rem 0">
   <video autoplay loop muted playsinline style="max-width:80%">
@@ -84,17 +86,18 @@ It also paid for itself twice. When the anti-rat staff went into the tech tree a
   </video>
 </div>
 
-Everyone in this jam is building out of the same box of parts. The lighting and the particles are the part that is yours.
+Everyone in this jam builds from the same box of parts, so the lighting and the particles are what makes the game look like your own.
 
 ## Retrospective
 
-Nothing broke. That is an unusual thing to write about a 50 hour jam.
+Nothing broke, which is rare for a 50 hour jam.
 
-The pacing landed too. Gold and reputation income lined up with the costs of the final upgrades closely enough that the curve just worked, and the last tech tree purchase ends the game by telling you that you successfully scaled Scaleton's business and made his dream come true. Getting an economy to resolve cleanly inside a weekend is usually the thing that does not happen.
+The pacing worked out too. Gold and reputation income matched the costs of the final upgrades closely enough that the curve just worked, and the last tech tree purchase ends the game by telling you that you successfully scaled Scaleton's business and made his dream come true. Getting an economy to work out within a weekend usually doesn't happen.
 
-I suspect the reason is the third person on the team. My previous jams have mostly been two people, and my instinct going in was that a third slot should go to another programmer. It should not. Roby spent the jam playing the game constantly, placing assets and tweaking numbers, which meant the balance was being tested continuously instead of in one panicked pass at the end. A dedicated set of eyes on pace and feel caught things that neither of us building the parts would have noticed.
+I think the reason is the third person on the team. Most of my previous jams were two people, and going in I thought a third slot should go to another programmer. That was wrong.
+Roby spent the jam playing the game constantly, placing assets and tweaking numbers, so the balance got tested the whole time and not in one panicked pass at the end. Having someone focused on pace and feel caught things that neither of us building the parts would have noticed.
 
-Coming off the [Juniper jam](/posts/008_JuniperDevGameJam/), where I split myself across two teams as primary programmer on both, this was the clearer lesson: one team, and the extra person playtests.
+After the [Juniper jam](/posts/008_JuniperDevGameJam/), where I was the main programmer in two teams at once, my takeaway is: one team, and the extra person playtests.
 
 <div style="margin:2rem 0 0">
   <img src="{% thumb '/images/Scaleton/Scaleton_05.png', 1100 %}" alt="Close-up of Scaleton behind the counter with a stack of gold, lit by torchlight" loading="lazy" style="width:100%">

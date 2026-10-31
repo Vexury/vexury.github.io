@@ -1,7 +1,7 @@
 ---
 title: "🔮 The Very Serious Juniper Dev Game Jam: Six of Nyx + Big Tony's Epic Wheel"
 date: 2026-06-27
-summary: "Eight days, two teams, two games: a 3D glass sphere puzzle and a yoyo horde shooter. Twice the output, twice the stress."
+summary: "Eight days in two teams at the same time: a 3D puzzle game with a glass sphere and a yoyo horde shooter."
 preview_image: /images/JuniperJam_Split.png
 ---
 
@@ -19,13 +19,17 @@ preview_image: /images/JuniperJam_Split.png
   <img src="{% thumb '/images/JuniperJam_Split.png', 1100 %}" alt="Six of Nyx and Big Tony's Epic Wheel" loading="lazy" style="width:100%">
 </div>
 
-The [Very Serious Juniper Dev Game Jam](https://itch.io/jam/theveryseriousjuniperdevgamejam) ran from **June 19 to June 27, 2026**, just over eight days. The theme: **Spin to Win**.
+The [Very Serious Juniper Dev Game Jam](https://itch.io/jam/theveryseriousjuniperdevgamejam) ran from June 19 to June 27, 2026, so a bit more than eight days. The theme was **Spin to Win**.
 
-I had already planned to join with [Cxbane](https://cxbane.zone), my regular jam partner from Necrocure and Shrimp Away. A few days before the start, a second team reached out: their programmer had dropped out and they needed someone on short notice. I said yes. So I spent eight days split across two separate projects, two codebases, and two sets of team dynamics.
+I had already planned to join with [Cxbane](https://cxbane.zone), my regular jam partner from Necrocure and Shrimp Away.
+A few days before the start, a second team reached out because their programmer had dropped out and they needed someone on short notice. I said yes, so I spent the eight days on two projects at once, with two codebases and two teams.
 
 ## Six of Nyx
 
-Six of Nyx is a 3D puzzle game. The setup: you control a large glass sphere with a marble trapped inside it. Each level is a floating platform puzzle in 3D space with three stars and a finish goal. The marble rolls freely inside the sphere, so rotating the sphere is how you navigate. A second mode, marble-view, lets you switch to controlling the marble directly, which is needed when the sphere position is set and the marble needs more precise guidance to reach something.
+Six of Nyx is a 3D puzzle game where you control a large glass sphere with a marble trapped inside.
+Each level is a floating platform puzzle with three stars and a finish goal.
+The marble rolls freely inside the sphere, so you navigate by rotating the sphere.
+In the second mode (marble-view) you control the marble directly, which you need when the sphere is in place and the marble has to reach something more precisely.
 
 <div style="text-align:center; margin:1.5rem 0">
   <img src="{% thumb '/images/SixOfNyx/SixOfNyx_Screenshot_01.png', 1100 %}" alt="Six of Nyx gameplay" loading="lazy" style="max-width:80%">
@@ -33,13 +37,16 @@ Six of Nyx is a 3D puzzle game. The setup: you control a large glass sphere with
 
 ### Controls
 
-Getting the two control modes to feel right took longer than expected. Rotating a large sphere and directly steering a marble inside it are very different input models, and blending between them without a jarring transition was something we kept tuning throughout the jam. We eventually landed on something that felt good, but the level design did not always make full use of the dual-view mechanic. Some levels could be completed entirely from one view, which flattens the concept. That is the clearest thing we would revisit with more time.
+Getting the two control modes to feel right took longer than expected. Rotating a large sphere and steering a marble inside it are very different inputs, and we kept tuning the switch between them for the whole jam so it would not feel jarring.
+In the end it felt good, but the level design did not always use both views. Some levels can be finished entirely from one view, and that would be the first thing to change with more time.
 
 ### The Mist Shader
 
-The most technically interesting piece is the volumetric mist inside the glass sphere. It is a raymarching shader built in Shader Graph backed by a custom HLSL file for the raymarching loop. Rays are cast through the sphere volume and sample 3D noise as they travel, accumulating density to produce soft cloud shapes that sit naturally inside the curved glass surface.
+The most interesting technical part is the volumetric mist inside the glass sphere.
+It is a raymarching shader in Shader Graph with a custom HLSL file for the raymarching loop. Rays go through the sphere volume and sample 3D noise along the way, accumulating density to get soft cloud shapes that sit inside the curved glass.
 
-I also wired it to a script for level transitions: when the scene changes, the script drives the shader's color and density toward a dense red, then fades it back to normal once the new level is loaded. It is a small touch, but it makes the transition feel deliberate rather than like a hard cut.
+I also hooked it up to a script for level transitions: when the scene changes, the script pushes the shader's color and density towards a dense red and fades it back to normal once the new level is loaded.
+It is a small detail, but the transition looks much nicer than a hard cut.
 
 <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin:1.5rem 0">
   <img src="{% thumb '/images/SixOfNyx/SixOfNyx_Screenshot_02.png', 550 %}" alt="Six of Nyx mist shader" loading="lazy" style="width:100%">
@@ -53,7 +60,8 @@ I also wired it to a script for level transitions: when the scene changes, the s
 
 ## Big Tony's Epic Wheel
 
-Big Tony is the humble owner of a mechanical museum who set aside a life of crime to pursue his dream of silly gizmos, doohickeys and whatchamacallits. His past catches up with him: four old rivals show up, one wave at a time. Your weapon is a yoyo. After each of the 10 waves, you spin a wheel and get a buff or a second yoyo.
+Big Tony is the humble owner of a mechanical museum who left his life of crime behind to follow his dream of silly gizmos, doohickeys and whatchamacallits.
+But his past catches up with him and four old rivals show up, one wave at a time. Your weapon is a yoyo, and after each of the 10 waves you spin a wheel and get a buff or a second yoyo.
 
 <div style="text-align:center; margin:1.5rem 0">
   <video autoplay loop muted playsinline style="max-width:80%">
@@ -61,17 +69,16 @@ Big Tony is the humble owner of a mechanical museum who set aside a life of crim
   </video>
 </div>
 
-I joined this team on short notice as their sole programmer. The artists were first-time jammers, which meant some things took longer to land than planned, and the final stretch of the jam was a crunch. There are features that did not make it in, and one more day would have made a real difference to the final state of the game.
+I joined this team on short notice as their only programmer. The artists were doing their first jam, so some things took longer than planned and the last stretch was a crunch.
+A few features did not make it in, and one more day would have helped the game a lot.
 
 ### Technical Work
 
-Three things are worth mentioning:
+There are three things I want to mention:
 
-The **dithered death fade** is a dissolve shader for enemies. Instead of a hard destroy, dying enemies fade out using a screen-space dither pattern on the alpha. Simple to implement and it adds a lot of game feel.
-
-The **HP-linked vignette** reads the player's current health and scales a post-process vignette from zero at full health to heavy near death. No number displayed, just growing screen pressure. It works well as a danger signal without interrupting the action.
-
-The **sprite flipbooks on 3D quads** were the main structural challenge. All the character art was 2D sprite sheets, and the game runs in 3D. I built a system where each character renders as a camera-facing quad mesh, with a shader advancing through frames of the sprite sheet based on an animation index and playback speed. The artists could keep their 2D workflow entirely while the game rendered in 3D space.
+- A dithered death fade for the enemies. Dying enemies dissolve with a screen-space dither pattern on the alpha instead of disappearing instantly. Simple to implement and it adds a lot of game feel.
+- A vignette linked to the player's HP. It scales a post-process vignette from zero at full health to heavy near death. No number is shown, the edges of the screen just get darker, and that works well as a danger signal without interrupting the action.
+- Sprite flipbooks on 3D quads, which was the main structural challenge. All the character art was 2D sprite sheets, but the game runs in 3D. So every character is a camera-facing quad, and a shader steps through the frames of the sprite sheet based on an animation index and playback speed. That way the artists could keep their 2D workflow completely.
 
 <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem; margin:1.5rem 0">
   <img src="{% thumb '/images/BigTonysEpicWheel/BigTonysEpicWheel_Shreenshot_01.png', 400 %}" alt="Big Tony's Epic Wheel gameplay" loading="lazy" style="width:100%">
@@ -81,8 +88,8 @@ The **sprite flipbooks on 3D quads** were the main structural challenge. All the
 
 ## Retrospective
 
-Eight days across two teams is genuinely exhausting. Each project got less attention than it would have with a full dedicated week, and keeping two design contexts, two codebases and two sets of team communication in parallel is a real cognitive load.
+Eight days in two teams is really exhausting. Each project got less attention than it would have with a full week, and keeping two designs, two codebases and two team chats in my head at the same time was a lot.
+Finishing a jam is always satisfying though, and finishing two in the same week (and a bit) felt kind of strange, in a good way.
 
-The output felt rewarding. Finishing a jam is always satisfying, and finishing two in the same window is a strange kind of double payoff.
-
-That said, I would not do it again, at least not as primary programmer on both. I tend to end up as the main programmer and producer on whatever team I join, and splitting that role across two projects just means both take a hit. One team, full commitment, is the better call.
+I would not do it again, at least not as the main programmer on both. I usually end up as main programmer and producer in whatever team I join, and splitting that across two projects means both of them suffer.
+Next time it's one team with full focus.

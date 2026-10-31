@@ -1,7 +1,7 @@
 ---
 title: "🧟 Mini Jame Gam #55: Necrocure"
 date: 2026-05-31
-summary: "A 58-hour jam about alien abductions, necromantic cows, and a dying planet that needs milk. Built in Unity with Cxbane."
+summary: "Aliens abducting resurrected cows because their dying planet needs the milk. A 58-hour jam game built in Unity with Cxbane."
 preview_image: /images/Necrocure/Necrocure_001.png
 ---
 
@@ -12,10 +12,11 @@ preview_image: /images/Necrocure/Necrocure_001.png
 <a href="https://github.com/Vexury/Necrocure-Mini-Game-Jam-55" class="link-btn">GitHub <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" style="vertical-align:-0.1em"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
 </div>
 
-The [Mini Jame Gam #55](https://itch.io/jam/mini-jame-gam-55) ran from **Friday May 29 at 1 PM to Sunday May 31 at 11:30 PM**, just under 58 hours. I teamed up with [Cxbane](https://cxbane.zone), who handled all the art direction and audio while I took care of programming, VFX and UI in Unity (6000.4.9f1 URP).
+The [Mini Jame Gam #55](https://itch.io/jam/mini-jame-gam-55) ran from Friday May 29, 1 PM to Sunday May 31, 11:30 PM, so just under 58 hours.
+I teamed up with [Cxbane](https://cxbane.zone), who did the art direction and audio, while I took care of programming, VFX and UI in Unity (6000.4.9f1 URP).
 
-The theme was announced at the start of the jam: **Necromancy**, with **Milk** as the mandatory special object to include somewhere in the game. 
-Time for some classic "aliens-come-to-a-farm-and-adbduct-cows-who-couldn't-care-less".
+The theme got announced at the start of the jam: **Necromancy**, and **Milk** had to show up somewhere in the game as a special object.
+Time for some classic "aliens-come-to-a-farm-and-abduct-cows-who-couldn't-care-less".
 
 <div style="text-align: center; margin: 1.5rem 0">
   <img src="{% thumb '/images/Necrocure/Necrocure_001.png', 1100 %}" alt="Necrocure concept" style="max-width:80%" loading="lazy">
@@ -23,9 +24,12 @@ Time for some classic "aliens-come-to-a-farm-and-adbduct-cows-who-couldn't-care-
 
 ## The Concept
 
-The concept we landed on: A crazed farmer on Earth used necromancy to resurrect his dead cows. Resurrected cows still produce milk, and milk means profit. Meanwhile, you play an alien race and your home planet is dying, and that very same necro-milk turns out to be the cure. So you arrive in your UFO, hover over the farm, and get to work.
+A crazed farmer on Earth used necromancy to bring his dead cows back to life, because resurrected cows still give milk and milk means profit.
+Meanwhile, you play an alien race whose home planet is dying, and this necro-milk happens to be the cure.
+So you arrive in your UFO, hover over the farm and start abducting.
 
-The twist is that you can't just abduct any cow. You need to identify the *resurrected* ones among the herd and pull them up with your traction beam. Collect enough necro-milk and make it back to the portal before the three-minute timer runs out. Left-clicking makes the cows moo, which turned out to be both mechanically useful and extremely funny during playtesting.
+You can't just take any cow though. You need to find the *resurrected* ones in the herd and pull them up with your traction beam, then make it back to the portal with enough necro-milk before the three-minute timer runs out.
+Left-clicking makes the cows moo, which actually helps while playing and was also extremely funny during playtesting.
 
 <div style="text-align: center; margin: 1.5rem 0">
   <img src="{% thumb '/images/Necrocure/Necrocure_002.png', 1100 %}" alt="Necrocure gameplay" style="max-width:80%" loading="lazy">
@@ -33,8 +37,8 @@ The twist is that you can't just abduct any cow. You need to identify the *resur
 
 ## Art and VFX
 
-Cxbane's art direction gave the game its identity immediately. The farm aesthetic against the alien visitor framing created exactly the absurd-but-coherent tone we were going for. 
-On my end, the most interesting technical work was the VFX: the traction beam and the space portal took me some time to create with Particle Systems (no Visual Effect Graph sadly because we needed to make a web build) and Shader Graph.
+Cxbane's art gave the game its look right away: a normal farm with an alien visitor on top, absurd but it all fits together, which is exactly the tone we wanted.
+On my end, the most interesting technical work was the VFX. The traction beam and the space portal took me some time to create with Particle Systems (no Visual Effect Graph sadly, because we needed to make a web build) and Shader Graph.
 
 <div style="text-align: center; margin: 1.5rem 0">
   <video autoplay loop muted playsinline style="max-width:80%">
@@ -45,11 +49,12 @@ On my end, the most interesting technical work was the VFX: the traction beam an
 
 ## Scoring and Retrospective
 
-The scoring system ended up simple: 10 milk to cure your planet (one star), 11 for two stars, 12 for three stars. Enough to make the run feel repeatable without overstaying its welcome. Most players really wanted to get three stars after returning with 10 milk in the first run.
+Scoring is simple: 10 milk cures your planet (one star), 11 gives two stars and 12 gives three.
+A run is short enough that you just want to go again, and most players who came back with 10 milk in their first run really wanted to get the three stars.
 
-Mini Jame Gam #55 was my second jam, and the difference from the first was noticeable: less time figuring out what a game jam even is, more time actually making the game. Cxbane was a great collaborator. The audio and visuals came in steadily throughout the weekend and made the game feel finished well before the deadline.
-
-Necromancy and milk made for a surprisingly coherent game!
+Mini Jame Gam #55 was my second jam and I noticed the difference to the first one: less time figuring out how a game jam even works, more time actually making the game.
+Working with Cxbane was great. Art and audio came in steadily over the weekend, so the game felt finished well before the deadline.
+In the end, necromancy and milk worked together surprisingly well!
 
 <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:0.35rem; margin:1.5rem 0">
   <img class="nc-art" src="{% thumb '/images/Necrocure/Necrocure_Cxbane_01.png', 200 %}" data-full="/images/Necrocure/Necrocure_Cxbane_01.png" alt="Art by Cxbane" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:3px;cursor:zoom-in;border:2px solid var(--border-mid)" loading="lazy">
