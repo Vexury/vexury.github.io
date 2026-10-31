@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: October 30, 2026</p>
+<p class="post-date">Last updated: October 31, 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -21,7 +21,7 @@ under Profile, Account.
 
 Signing in is optional. It unlocks private groups where friends compare their Daily, Weekly and
 Monthly times, and it keeps your progress in sync across your devices. If you sign in, our server keeps an account ID from Google
-or Apple, your display name, the badges, flair and nameplate you show, your Hustle level, your groups, the times you submit and a copy of your progress.
+or Apple, your display name, the badges, flair and nameplate you show, your Hustle level, your groups, the times you submit, a copy of your progress and, unless you switch it off, a short summary of your stats that members of your groups see on your profile.
 It never stores your email address. You can delete the account in the app at any time.
 
 The Android and iOS apps show rewarded video ads, which you only ever see after choosing to watch
@@ -47,7 +47,8 @@ The app saves the following on your device:
 - the day you last used your free hint
 - unfinished puzzles, so you can pick them up where you left off
 - settings such as the theme, your display name and your last chosen difficulty
-- if you are signed in, your session and any times still waiting to be sent; after signing out,
+- if you are signed in, your session and any times still waiting to be sent, whether your stats
+  show on your profile and the last stats summary the app sent; after signing out,
   the last account's player ID and provider (Google or Apple), so the app can offer it first
 - the day you first played, and any usage statistics still waiting to be sent (see below), today's
   running count for the daily summary, which errors were already reported today, and the day the
@@ -97,7 +98,13 @@ stores:
 - **Badge, flair and nameplate:** the one badge, one flair and one nameplate you have equipped, as
   IDs from the app's fixed list.
 - **Hustle level:** the stage you have reached in Hustle mode, as a single number.
-- **Progress copy:** so your progress is the same on every device you sign in on, a copy of the puzzles you have solved (with time, hints, moves and when), your coin spending, the puzzles whose coins you doubled and the items you have equipped. Unfinished puzzles and settings are not part of it. It is used for nothing but syncing, is shown to nobody, and is deleted with your account.
+- **Progress copy:** so your progress is the same on every device you sign in on, a copy of the puzzles you have solved (with time, hints, moves and when), your coin spending, the puzzles whose coins you doubled and the items you have equipped. Unfinished puzzles and settings are not part of it. It is used for nothing but syncing, is shown to nobody, and is deleted with your account. The profile stats below are a separate summary.
+- **Profile stats:** unless you switch **Show stats on my profile** off under Profile, Account, a
+  summary the app builds from your progress: your current and best streak and the last day it
+  counts, how many puzzles you solved, your perfect days, the achievements you unlocked, and for
+  each puzzle type how many you solved and your best time. The app sends it after each sync and it
+  replaces the last one. Switching it off deletes it from the server, and no new one is kept
+  until you switch it on again.
 - **Groups:** the groups you created or joined, their names and invite codes (six or eight characters),
   when you joined, which of them you marked as your main group (shown to nobody else), and, if a
   group's creator removed you, that you may not rejoin that group. A
@@ -110,8 +117,15 @@ stores:
   guessing codes is blocked after 30. Overwritten each day.
 
 Other members of a group you are in see your display name, nameplate, badges, flair, Hustle level, and your time and hints
-for each Daily, Weekly and Monthly. Nobody outside your groups sees your name. The standings also
-show how you did against everyone who solved the same puzzle, as an anonymous count.
+for each Daily, Weekly and Monthly. Tapping your name opens your profile. It also shows them the
+month your account was created, the names of the groups you share with them, which of today's
+Dailies you solved, and how you did against them in the Dailies you both solved over the last 30
+days (wins, losses and ties, worked out from the times above). With **Show stats on my profile**
+on, it shows your profile stats as well. Nobody outside your groups sees your name or your
+profile. The standings also show how you did against everyone who solved the same puzzle, as an
+anonymous count, and a profile shows how rare each of its achievements is: each night the server
+counts how many of the profiles with stats on hold each achievement. That count holds numbers only,
+and the share is shown once at least 20 profiles count.
 
 When you share a result, the app makes the picture on your device; nothing is uploaded. The
 picture shows your display name, Hustle level, badges, flair and nameplate, and may show the name
@@ -122,7 +136,8 @@ The data stays on the server for as long as your account exists. There is no aut
 
 ### Reports and moderation
 
-Every name in the standings has a report button. There is no automatic ban. We read reports by
+Tapping a name in the standings opens the player's profile; its menu offers Report name, Hide and,
+for the group's creator, Remove. There is no automatic ban. We read reports by
 hand, and a name that breaks the rules above may be replaced with a generated one, or an account
 used for abuse deleted. A group's creator can remove members from it, and anyone can leave a group
 at any time.
@@ -145,7 +160,7 @@ once more so that the app can also revoke Puzzle Hustle's access to your Apple I
 sheet, nothing is deleted. Without installing anything, you can delete a Google or Apple account
 at [puzzles.vexury.dev/delete-account](https://puzzles.vexury.dev/delete-account) after signing in.
 
-Deleting removes your account, display name, badges, flair, nameplate, Hustle level, the progress copy, all your submitted times, every report
+Deleting removes your account, display name, badges, flair, nameplate, Hustle level, profile stats, the progress copy, all your submitted times, every report
 you made or that was made about you, the count of unknown invite codes, and your group memberships, right away. A group you created
 passes to its longest-standing member, or is deleted if you were the last one in it. Your progress
 on the device is not affected. The automatic recovery points of our database on Cloudflare still
@@ -286,8 +301,8 @@ no connection at all.
 
 It reaches the internet for these things, and only these:
 
-- talking to our server: while you are signed in for standings, groups, your name, what you show,
-  your submitted times and your synced progress, and, unless you switch it off, for the usage statistics
+- talking to our server: while you are signed in for standings, groups, profiles, your name, what you show,
+  your submitted times, your synced progress and your profile stats, and, unless you switch it off, for the usage statistics
 - signing in with Google or Apple, when you choose to
 - reporting your achievements to Google Play Games or Game Center, if you are signed in there
 - loading and showing ads
@@ -360,7 +375,9 @@ where the reset button under Profile, Account and uninstalling both clear it.
 If you do sign in, the data listed under "What our server keeps" is processed to provide the
 groups, standings and progress sync you asked for (Art. 6(1)(b) GDPR). Handling reports and limiting sign-in
 attempts serve our legitimate interest in a fair service that is safe from abuse (Art. 6(1)(f)
-GDPR). The usage statistics are described in their own section above. You can change your name in the Profile screen, leave any group and delete the account
+GDPR). Showing your profile stats to your groups serves our legitimate interest in making groups
+more fun to play in (Art. 6(1)(f) GDPR); you can object at any time by switching **Show stats on my
+profile** off under Profile, Account, which also deletes the stored summary. The usage statistics are described in their own section above. You can change your name in the Profile screen, leave any group and delete the account
 yourself as described above. For a copy of your data, or anything the app does not let you do
 yourself, write to us.
 
@@ -377,6 +394,10 @@ the mail only to answer you (Art. 6(1)(f) GDPR) and delete it once the matter is
 
 This policy will be updated when the app changes in a way that affects it.
 
+- October 31, 2026: player profiles. Tapping a name in the standings opens that player's profile,
+  which shows members of your groups the month you joined, the groups you share, today's solved
+  Dailies, your record against them in shared Dailies and, unless you switch it off, a summary of
+  your stats, which the server now keeps. Report, Hide and Remove moved into the profile's menu.
 - October 30, 2026: you can mark one of your groups as your main group; the server keeps that mark
   with your membership, and it goes when you leave the group or delete your account. A shared
   result picture may name your main group or the group you picked on the result screen.
