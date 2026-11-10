@@ -622,8 +622,8 @@
     "image": "https://image.tmdb.org/t/p/w342/rhGx6E3qRNMgj3i5su2oukNHwIQ.jpg",
     "distributor": "A24",
     "runtimeMinutes": 111,
-    "rating": null,
-    "status": "watchlist"
+    "rating": 8,
+    "status": "watched"
   },
   {
     "id": "obsession",
