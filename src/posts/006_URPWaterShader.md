@@ -12,6 +12,8 @@ preview_image: /images/URP_Water/Water_01.png
 <a href="/projects/shadergraph/?file=StylizedGerstnerWater" class="link-btn">Shader Graph <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" style="vertical-align:-0.1em"><circle cx="2" cy="6" r="1.5" fill="currentColor"/><circle cx="10" cy="3" r="1.5" fill="currentColor"/><circle cx="10" cy="9" r="1.5" fill="currentColor"/><line x1="3.5" y1="5.5" x2="8.5" y2="3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="3.5" y1="6.5" x2="8.5" y2="8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
 </div>
 
+<p><em>There is a second version of this water now: <a href="/posts/013_URPWaterV2/">Stylized Water for Unity URP, v2</a>.</em></p>
+
 I wanted a water shader I could drop into any future Unity project and have it look good immediately. Stylized, but with enough physical grounding to feel convincing: real wave geometry, accurate lighting from the displaced surface, and subtle underwater color. Everything built in Shader Graph for URP so it stays editor-friendly and easy to tweak per-scene.
 
 The shader ended up with four main systems, each configurable independently: depth-based color, shoreline foam, Gerstner wave displacement, and screen-space refraction.
