@@ -4,6 +4,23 @@ layout: base.html
 <div class="post-content">{{ content }}</div>
 <script>
 (function () {
+  var videos = document.querySelectorAll('.post-content video.lazy-video');
+  if (!videos.length) return;
+  if (!('IntersectionObserver' in window)) {
+    videos.forEach(function (v) { v.autoplay = true; v.preload = 'auto'; v.load(); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) e.target.play().catch(function () {});
+      else e.target.pause();
+    });
+  }, { rootMargin: '300px 0px' });
+  videos.forEach(function (v) { io.observe(v); });
+})();
+</script>
+<script>
+(function () {
   var headings = document.querySelectorAll('.post-content h2');
   if (headings.length < 2) return;
 

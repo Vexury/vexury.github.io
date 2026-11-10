@@ -29,13 +29,13 @@ The look I was going for is the water in The Edge of Water. Most of it is close 
 
 The sea still uses a sum of Gerstner waves, like v1. New is that the same wave set is evaluated on the CPU as well, so things can float on it. The crests also get foam where the waves compress the surface. I use the Jacobian of the Gerstner displacement for that (it gets small where the surface bunches up) and a large noise breaks it up, so that not every crest along a wave front turns white at once.
 
-<video autoplay loop muted playsinline preload="metadata" style="width:100%; margin:1.5rem 0; border-radius:4px; display:block;">
+<video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:16/9; margin:1.5rem 0; border-radius:4px; display:block;">
   <source src="/images/URP_Water2/Water2_sea.mp4" type="video/mp4">
 </video>
 
 At the beach the water runs up the sand and back again. That swash is analytic, so there is no simulation behind it. The ground has its own shader that knows how long ago the water was at each spot, which means the sand stays dark and wet for a while and then dries. The foam rides on the front of the water that just arrived and thins out with age.
 
-<video autoplay loop muted playsinline preload="metadata" style="width:100%; margin:1.5rem 0; border-radius:4px; display:block;">
+<video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:16/9; margin:1.5rem 0; border-radius:4px; display:block;">
   <source src="/images/URP_Water2/Water2_shore.mp4" type="video/mp4">
 </video>
 
@@ -47,7 +47,7 @@ Almost everything reads from these two maps. The ripple simulation gets its wall
 
 In the river the detail normals and the foam travel with the current. White water was the tricky part here. My first version put it wherever the water was fast, which covered the whole rapids in one white sheet. Now it is baked around rocks: a cushion where the current runs into a rock, streaks along its sides and a trail behind it (but nothing in the calm spot right behind the rock).
 
-<video autoplay loop muted playsinline preload="metadata" style="width:100%; margin:1.5rem 0; border-radius:4px; display:block;">
+<video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:16/9; margin:1.5rem 0; border-radius:4px; display:block;">
   <source src="/images/URP_Water2/Water2_river.mp4" type="video/mp4">
 </video>
 
@@ -57,7 +57,7 @@ I wanted the character to leave a wake when walking through the water, and when 
 
 I first thought about stamping ring sprites into a texture, but stamps do not spread and do not reflect. So I went with a real simulation: a compute shader solves the wave equation on a 512 x 512 grid that covers 40 m around the player and moves with them. Every step reads the last two height fields and writes the next one. Everything that touches the water pushes the height down a little where it is, and the rest happens by itself. The water map gives the simulation its walls, so the rings reflect at the beach and at rocks.
 
-<video autoplay loop muted playsinline preload="metadata" style="width:100%; margin:1.5rem 0; border-radius:4px; display:block;">
+<video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:16/9; margin:1.5rem 0; border-radius:4px; display:block;">
   <source src="/images/URP_Water2/Water2_wake.mp4" type="video/mp4">
 </video>
 
@@ -106,7 +106,7 @@ My first waterfall was a flat band with a scrolling texture. That was fine from 
 
 So the curtain got volume. It is a flattened tube that follows the arc the water would really take when it leaves the edge, thin at the top (about 0.25 m) and 1 m thick at the bottom. The back of the tube is drawn first and shines through the glassy front. At the top the water is clear and blue, and on the way down it breaks up into white streaks.
 
-<video autoplay loop muted playsinline preload="metadata" style="width:100%; margin:1.5rem 0; border-radius:4px; display:block;">
+<video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:16/9; margin:1.5rem 0; border-radius:4px; display:block;">
   <source src="/images/URP_Water2/Water2_fall.mp4" type="video/mp4">
 </video>
 
@@ -122,7 +122,7 @@ The part I like most is in the pool. The foam flecks and the rings around the im
 
 In v1 the camera could not go under water. Now there is an underwater view for shallow water (down to about 6 m), which is a camera component plus a renderer feature. For every pixel it checks if the point on the near plane is below the surface, so the waterline runs through the image as a wavy line when the camera is half in the water. Below it the scene gets darker with depth, gets caustics and fades into the water color. From below, the surface shows the sky inside Snell's window and mirrors the ground outside of it.
 
-<video autoplay loop muted playsinline preload="metadata" style="width:100%; margin:1.5rem 0; border-radius:4px; display:block;">
+<video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:16/9; margin:1.5rem 0; border-radius:4px; display:block;">
   <source src="/images/URP_Water2/Water2_dive.mp4" type="video/mp4">
 </video>
 
@@ -138,13 +138,13 @@ Things under the water also gave me the nastiest bug of the project. Along the e
 
 Rain and night share one weather setup, so a rainy night works too. In the rain the sky closes, the sun dims, drops leave rings on the surface and the sand gets wet.
 
-<video autoplay loop muted playsinline preload="metadata" style="width:100%; margin:1.5rem 0; border-radius:4px; display:block;">
+<video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:16/9; margin:1.5rem 0; border-radius:4px; display:block;">
   <source src="/images/URP_Water2/Water2_rain.mp4" type="video/mp4">
 </video>
 
 At night there are fireflies over the water. Their reflection was a small problem of its own. The object reflections in the water are screen space and a firefly is much thinner than one step of the ray, so it never showed up. I solved that by letting each firefly draw its own mirror image on the surface.
 
-<video autoplay loop muted playsinline preload="metadata" style="width:100%; margin:1.5rem 0; border-radius:4px; display:block;">
+<video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:16/9; margin:1.5rem 0; border-radius:4px; display:block;">
   <source src="/images/URP_Water2/Water2_night.mp4" type="video/mp4">
 </video>
 
