@@ -93,7 +93,8 @@ permissions: your basic account info (`identify`) and your membership in the ser
 
 Our server uses them only while you sign in. It keeps your Discord user ID as the account's subject
 ID, takes your server nickname, Discord display name or username as your display name (or a
-generated one if none fits the name rules), and notes which server you played in and when Discord
+generated one if none fits the name rules), keeps the ID of your Discord profile picture so the
+Activity can show it next to your name to the other players of the server, and notes which server you played in and when Discord
 last confirmed that you are a member. That is how the server's standings know who belongs to them;
 a membership no longer confirmed for seven days stops counting. The Discord access token is not
 stored. Everything else works as for any signed-in account, and deleting the account also deletes
@@ -114,7 +115,8 @@ stores:
 - **Account:** a random player ID, the provider (Google, Apple or Discord) with its subject ID, and when
   the account was created.
 - **Discord servers:** for Discord accounts only, the IDs of the servers you played the Activity
-  in, each with when Discord last confirmed your membership.
+  in, each with when Discord last confirmed your membership, and the ID of your Discord profile
+  picture as of your last sign-in. The picture itself is loaded from Discord, not kept by us.
 - **Display name:** the name you choose, or a generated one such as "Player 4821" until you do.
   Names are 2 to 14 characters, may not contain links, and a short list of offensive words is
   refused.
@@ -420,7 +422,8 @@ This policy will be updated when the app changes in a way that affects it.
 - November 2026: the Discord Activity. Inside Discord you sign in with your Discord account; the
   server keeps your Discord user ID, a display name taken from Discord and the servers you played
   in, so each server gets its own standings. A server can also turn on daily reminders from the
-  bot, which keeps the server's ID, the channel's ID and its language.
+  bot, which keeps the server's ID, the channel's ID and its language. The Activity shows each
+  player's Discord profile picture, for which the server keeps the picture's ID.
 
 - October 31, 2026: player profiles. Tapping a name in the standings opens that player's profile,
   which shows members of your groups the month you joined, the groups you share, today's solved
