@@ -5,7 +5,7 @@ title: Puzzle Hustle Privacy Policy
 
 # Puzzle Hustle Privacy Policy
 
-<p class="post-date">Last updated: October 31, 2026</p>
+<p class="post-date">Last updated: November 2026</p>
 
 This policy covers the Puzzle Hustle app for Android and iOS, and the web version at
 [puzzles.vexury.dev](https://puzzles.vexury.dev/). For the rest of this website, see the
@@ -84,14 +84,33 @@ its own privacy policy ([Google](https://policies.google.com/privacy),
 Your session stays valid for 30 days and renews itself while you play. Signing out ends it on the
 device.
 
+## Discord Activity
+
+Puzzle Hustle can also be played as an Activity inside Discord. There you are signed in with your
+**Discord** account, since the Activity has no other way in. Discord asks you once to allow two
+permissions: your basic account info (`identify`) and your membership in the server you play in
+(`guilds.members.read`).
+
+Our server uses them only while you sign in. It keeps your Discord user ID as the account's subject
+ID, takes your server nickname, Discord display name or username as your display name (or a
+generated one if none fits the name rules), and notes which server you played in and when Discord
+last confirmed that you are a member. That is how the server's standings know who belongs to them;
+a membership no longer confirmed for seven days stops counting. The Discord access token is not
+stored. Everything else works as for any signed-in account, and deleting the account also deletes
+the server memberships. Discord itself learns that you use the Activity, under its own
+[privacy policy](https://discord.com/privacy). Discord routes the Activity's traffic through its
+own proxy, so our server does not see your IP address there.
+
 ## What our server keeps
 
 Apart from the usage statistics below, the server exists only for groups, standings and
 progress sync. Solving never waits for it, and no puzzle comes from it. If you are signed in, it
 stores:
 
-- **Account:** a random player ID, the provider (Google or Apple) with its subject ID, and when
+- **Account:** a random player ID, the provider (Google, Apple or Discord) with its subject ID, and when
   the account was created.
+- **Discord servers:** for Discord accounts only, the IDs of the servers you played the Activity
+  in, each with when Discord last confirmed your membership.
 - **Display name:** the name you choose, or a generated one such as "Player 4821" until you do.
   Names are 2 to 14 characters, may not contain links, and a short list of offensive words is
   refused.
@@ -393,6 +412,10 @@ the mail only to answer you (Art. 6(1)(f) GDPR) and delete it once the matter is
 ## Changes
 
 This policy will be updated when the app changes in a way that affects it.
+
+- November 2026: the Discord Activity. Inside Discord you sign in with your Discord account; the
+  server keeps your Discord user ID, a display name taken from Discord and the servers you played
+  in, so each server gets its own standings.
 
 - October 31, 2026: player profiles. Tapping a name in the standings opens that player's profile,
   which shows members of your groups the month you joined, the groups you share, today's solved
