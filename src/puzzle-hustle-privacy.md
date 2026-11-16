@@ -101,6 +101,10 @@ the server memberships. Discord itself learns that you use the Activity, under i
 [privacy policy](https://discord.com/privacy). Discord routes the Activity's traffic through its
 own proxy, so our server does not see your IP address there.
 
+A server's admins can let the Puzzle Hustle bot post a daily reminder in one of the server's
+channels. For that, our server keeps the server's ID, the channel's ID and the server's language,
+and nothing about the people in it. Turning the reminders off deletes them; after the bot is removed, they go with the next reminder it can no longer post.
+
 ## What our server keeps
 
 Apart from the usage statistics below, the server exists only for groups, standings and
@@ -415,7 +419,8 @@ This policy will be updated when the app changes in a way that affects it.
 
 - November 2026: the Discord Activity. Inside Discord you sign in with your Discord account; the
   server keeps your Discord user ID, a display name taken from Discord and the servers you played
-  in, so each server gets its own standings.
+  in, so each server gets its own standings. A server can also turn on daily reminders from the
+  bot, which keeps the server's ID, the channel's ID and its language.
 
 - October 31, 2026: player profiles. Tapping a name in the standings opens that player's profile,
   which shows members of your groups the month you joined, the groups you share, today's solved
