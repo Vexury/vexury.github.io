@@ -58,6 +58,9 @@
   --shadow-hover: 0 4px 14px rgba(0, 0, 0, 0.10);
   --hover-text: #ffffff;
   --hover-bg: #2d2d2d;
+  /* Focus ring. Full amber is 1.8:1 on the cream background, under the 3:1
+     a focus indicator needs, so light mode uses a deeper amber. */
+  --focus: #c47500;
 }
 
 [data-theme="dark"] {
@@ -73,6 +76,7 @@
   --shadow-hover: 0 4px 14px rgba(0, 0, 0, 0.6);
   --hover-text: #111110;
   --hover-bg: #e8e4de;
+  --focus: #FFA833;
   color-scheme: dark;
   -webkit-font-smoothing: antialiased;
 }
@@ -90,7 +94,7 @@
 /* Single global focus ring. The browser default outline reads as a rendering
    glitch against the cream background and 2px borders. */
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
   border-radius: 3px;
 }
@@ -1876,7 +1880,7 @@ p.seal {
 
 .back-to-top:hover {
   background: var(--accent);
-  color: white;
+  color: var(--on-accent);
 }
 
 /* ─── Footer ─────────────────────────────────────────────────────────────── */
@@ -1944,6 +1948,83 @@ p.seal {
 
 /* ─── Post content ───────────────────────────────────────────────────────── */
 
+/* Wide screens: the 780px column leaves room on the right, so the table of
+   contents moves there and stays in view while reading. Narrower screens keep
+   it inline under the date (post.html moves the element between the two). */
+.post-aside { display: none; }
+
+@media (min-width: 1140px) {
+  .post-layout {
+    display: grid;
+    grid-template-columns: 780px minmax(0, 1fr);
+    column-gap: 3rem;
+    align-items: start;
+  }
+  .post-aside {
+    display: block;
+    position: sticky;
+    top: 1.5rem;
+  }
+  .post-aside .toc {
+    margin: 0;
+    padding: 0 0 0 1rem;
+    border: none;
+    border-left: 1px solid var(--border-mid);
+    border-radius: 0;
+    background: none;
+  }
+  .post-aside .toc-title { border-bottom: none; padding-bottom: 0; }
+  .post-aside .toc-list { columns: 1; }
+}
+
+.post-pager {
+  max-width: 780px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.pager-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.85rem 1rem;
+  border: 2px solid var(--border-mid);
+  border-radius: 6px;
+  background: var(--card-bg);
+  transition: border-color 0.2s;
+}
+
+.pager-link:hover {
+  border-color: var(--accent);
+  background: var(--card-bg);
+  color: var(--text);
+}
+
+.pager-newer {
+  grid-column: 2;
+  text-align: right;
+}
+
+.pager-dir {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.pager-title {
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+@media (max-width: 640px) {
+  .post-pager { grid-template-columns: 1fr; }
+  .pager-newer { grid-column: auto; grid-row: 1; }
+}
+
 /* One column for text and media, so both end on the same edge. In a monospace
    face every character is 0.5em wide: 780px at 16px is about 97 characters
    per line, a compromise between reading measure and media size. */
@@ -1985,6 +2066,26 @@ p.seal {
   border-color: var(--accent);
   color: var(--accent);
   background: var(--card-bg);
+}
+
+/* On phones the toggle sits in the nav icon row like the other icons. */
+.theme-toggle.in-nav {
+  position: static;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  line-height: 1;
+}
+.theme-toggle.in-nav:hover { color: var(--text); background: none; }
+.theme-toggle.in-nav svg { width: 18px; height: 18px; }
+.theme-toggle.in-nav .theme-toggle-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 /* ─── Entrance animation ─────────────────────────────────────────────────── */
@@ -2409,9 +2510,21 @@ p.seal {
     height: auto;
   }
 
-  .back-to-top  { bottom: 1rem; right: 0.75rem; }
-  .scroll-cue   { bottom: 1rem; right: 0.75rem; }
-  .theme-toggle { bottom: 1rem; left: 0.75rem; }
+  /* Phones scroll by nature, so the cue only covers content. The theme
+     toggle moves into the nav icon row (see base.html), and back-to-top
+     shrinks to a single arrow so it covers as little as possible. */
+  .scroll-cue { display: none; }
+
+  .back-to-top {
+    bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+    right: 0.75rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border-radius: 50%;
+    box-shadow: var(--shadow-hover);
+  }
+  .back-to-top .btt-label { display: none; }
 
   .cvp-body {
     flex-direction: column;

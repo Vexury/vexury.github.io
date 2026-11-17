@@ -21,7 +21,7 @@ images:
   - /images/Engine/Engine_007.png
 
 
-description: C++ graphics engine built from scratch with dual OpenGL/Vulkan backends, progressive path tracing (CPU & GPU with hardware raytracing), Cook-Torrance GGX materials, BVH acceleration with binned SAH, and a full dockable editor UI. Supports light sources with NEE and MIS, textured PBR materials, and debug visualization modes. Features a post-processing pipeline for Tonemapping, Bloom and more. <br>Scene credit — Amazon Lumberyard Bistro ([ORCA](https://developer.nvidia.com/orca/amazon-lumberyard-bistro)), CC-BY 4.0.
+description: C++ graphics engine built from scratch with dual OpenGL/Vulkan backends, progressive path tracing (CPU & GPU with hardware raytracing), Cook-Torrance GGX materials, BVH acceleration with binned SAH, and a full dockable editor UI. Supports light sources with NEE and MIS, textured PBR materials, and debug visualization modes. Features a post-processing pipeline for Tonemapping, Bloom and more. <br>Bistro scene by Amazon Lumberyard ([ORCA](https://developer.nvidia.com/orca/amazon-lumberyard-bistro)), CC-BY 4.0.
 links:
   - label: GitHub
     url: https://github.com/Vexury/VexEngine

@@ -1,7 +1,18 @@
 ---
 layout: base.html
 ---
-<div class="post-content">{{ content }}</div>
+<div class="post-layout">
+  <div class="post-content">{{ content }}</div>
+  <aside class="post-aside"></aside>
+</div>
+{% assign newer = collections.postsSorted | getPreviousCollectionItem: page %}
+{% assign older = collections.postsSorted | getNextCollectionItem: page %}
+{% if newer or older %}
+<nav class="post-pager" aria-label="More posts">
+  {% if older %}<a class="pager-link pager-older" href="{{ older.url }}"><span class="pager-dir">← older</span><span class="pager-title">{{ older.data.title }}</span></a>{% endif %}
+  {% if newer %}<a class="pager-link pager-newer" href="{{ newer.url }}"><span class="pager-dir">newer →</span><span class="pager-title">{{ newer.data.title }}</span></a>{% endif %}
+</nav>
+{% endif %}
 <script>
 (function () {
   var videos = document.querySelectorAll('.post-content video.lazy-video');
@@ -66,10 +77,18 @@ layout: base.html
 
   nav.appendChild(list);
 
-  /* Insert after .post-date, falling back to after h1 */
+  /* Wide screens: in the sticky aside. Otherwise inline after .post-date,
+     falling back to after h1. */
   var anchor = document.querySelector('.post-content .post-date')
             || document.querySelector('.post-content h1');
-  if (anchor) anchor.after(nav);
+  var aside = document.querySelector('.post-aside');
+  var wide = window.matchMedia('(min-width: 1140px)');
+  function placeToc() {
+    if (wide.matches && aside) aside.appendChild(nav);
+    else if (anchor) anchor.after(nav);
+  }
+  placeToc();
+  wide.addEventListener('change', placeToc);
 
   /* Highlight active section */
   var links = list.querySelectorAll('a');
