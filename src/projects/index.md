@@ -4,11 +4,13 @@ title: Projects
 description: "Rendering and game projects: VexEngine, a custom C++ path tracer with OpenGL and Vulkan backends, Unity shaders, and games built at jams."
 ---
 
-<div class="project-filters">
-  <button class="filter-btn active" data-filter="all">All</button>
-  <button class="filter-btn" data-filter="rendering">Rendering</button>
-  <button class="filter-btn" data-filter="game-jams">Game Jams</button>
-  <button class="filter-btn" data-filter="games">Games</button>
+<h1 class="sr-only">Projects</h1>
+
+<div class="project-filters" role="group" aria-label="Filter projects">
+  <button class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
+  <button class="filter-btn" data-filter="rendering" aria-pressed="false">Rendering</button>
+  <button class="filter-btn" data-filter="game-jams" aria-pressed="false">Game Jams</button>
+  <button class="filter-btn" data-filter="games" aria-pressed="false">Games</button>
 </div>
 
 <div class="project-grid">
@@ -17,7 +19,7 @@ description: "Rendering and game projects: VexEngine, a custom C++ path tracer w
     {% if project.data.images %}
     {% if project.data.featured %}{% assign tw = 900 %}{% else %}{% assign tw = 400 %}{% endif %}
     <div class="slideshow">
-      <div class="frames" tabindex="0" role="group" aria-label="{{ project.data.title }} media, {{ project.data.images.size }} items. Use arrow keys to browse.">
+      <div class="frames" tabindex="0" role="group" data-title="{{ project.data.title | escape }}" aria-label="{{ project.data.title }} media, {{ project.data.images.size }} items. Use arrow keys to browse, Enter to enlarge.">
         {% for img in project.data.images %}{% if img contains '.mp4' or img contains '.webm' %}<video src="{{ img }}" muted playsinline preload="none"></video>{% else %}<img src="{% thumb img, tw %}" data-full="{{ img }}" alt="{{ project.data.title }}" loading="lazy">{% endif %}{% endfor %}
       </div>{% if project.data.images.size > 1 %}<button class="frame-nav prev" type="button" tabindex="-1" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button><button class="frame-nav next" type="button" tabindex="-1" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button><div class="scrubber" aria-hidden="true">{% for img in project.data.images %}<button class="scrub-seg" type="button" tabindex="-1"></button>{% endfor %}</div>{% endif %}
     </div>
@@ -32,11 +34,13 @@ description: "Rendering and game projects: VexEngine, a custom C++ path tracer w
   {% endfor %}
 </div>
 
-<div class="lightbox" id="lightbox">
-  <button class="lb-prev">&#8592;</button>
-  <img id="lightbox-img">
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Project media">
+  <button class="lb-close" type="button" aria-label="Close">&#x2715;</button>
+  <button class="lb-prev" type="button" aria-label="Previous">&#8592;</button>
+  <img id="lightbox-img" alt="">
   <video id="lightbox-video" controls autoplay loop></video>
-  <button class="lb-next">&#8594;</button>
+  <button class="lb-next" type="button" aria-label="Next">&#8594;</button>
+  <p class="lb-caption" aria-live="polite"><span class="lb-title"></span><span class="lb-count"></span></p>
 </div>
 
 <script>
@@ -44,8 +48,9 @@ const filterBtns = document.querySelectorAll('.filter-btn');
 const projectCards = document.querySelectorAll('.project-card');
 filterBtns.forEach(btn => {
   btn.addEventListener('click', () => {
-    filterBtns.forEach(b => b.classList.remove('active'));
+    filterBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
     btn.classList.add('active');
+    btn.setAttribute('aria-pressed', 'true');
     const cat = btn.dataset.filter;
     projectCards.forEach(card => {
       card.style.display = (cat === 'all' || card.dataset.category === cat) ? '' : 'none';
@@ -175,6 +180,11 @@ document.querySelectorAll('.slideshow').forEach(ss => {
   if (nextBtn) nextBtn.addEventListener('click', (e) => { e.stopPropagation(); touched = true; stopTimer(); goTo(index + 1); });
 
   scroller.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openLightbox(frames, index, scroller);
+      return;
+    }
     if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
     e.preventDefault();
     touched = true;
@@ -207,7 +217,7 @@ document.querySelectorAll('.slideshow').forEach(ss => {
   scroller.addEventListener('dragstart', (e) => e.preventDefault());
   scroller.addEventListener('click', () => {
     if (moved || Math.abs(scroller.scrollLeft - downScroll) > 5) return;
-    openLightbox(frames, index);
+    openLightbox(frames, index, scroller);
   });
 
   render();
@@ -220,9 +230,13 @@ const lbImg = document.getElementById('lightbox-img');
 const lbVideo = document.getElementById('lightbox-video');
 const lbPrevBtn = lightbox.querySelector('.lb-prev');
 const lbNextBtn = lightbox.querySelector('.lb-next');
+const lbCloseBtn = lightbox.querySelector('.lb-close');
+const lbTitle = lightbox.querySelector('.lb-title');
+const lbCount = lightbox.querySelector('.lb-count');
 
 let lbSlides = [];
 let lbIndex = 0;
+let lbReturnFocus = null;
 
 function lbShow(index) {
   lbIndex = (index + lbSlides.length) % lbSlides.length;
@@ -236,27 +250,34 @@ function lbShow(index) {
     lbVideo.style.display = 'none';
     lbImg.style.display = 'block';
     lbImg.src = slide.dataset.full || slide.src;
+    lbImg.alt = lbTitle.textContent;
   }
+  lbCount.textContent = lbSlides.length > 1 ? (lbIndex + 1) + ' / ' + lbSlides.length : '';
 }
 
 function lbClose() {
   lightbox.classList.remove('active');
   lbVideo.pause();
   lbVideo.removeAttribute('src');
+  if (lbReturnFocus) lbReturnFocus.focus();
 }
 
-function openLightbox(slides, start) {
+function openLightbox(slides, start, trigger) {
   lbSlides = slides;
+  lbReturnFocus = trigger || null;
+  lbTitle.textContent = trigger ? trigger.dataset.title : '';
   const multi = lbSlides.length > 1;
   lbPrevBtn.hidden = !multi;
   lbNextBtn.hidden = !multi;
   lbShow(start);
   lightbox.classList.add('active');
+  lbCloseBtn.focus();
 }
 
 lbPrevBtn.addEventListener('click', (e) => { e.stopPropagation(); lbShow(lbIndex - 1); });
 lbNextBtn.addEventListener('click', (e) => { e.stopPropagation(); lbShow(lbIndex + 1); });
 
+lbCloseBtn.addEventListener('click', (e) => { e.stopPropagation(); lbClose(); });
 lightbox.addEventListener('click', (e) => { if (e.target === lightbox) lbClose(); });
 
 document.addEventListener('keydown', (e) => {
@@ -264,5 +285,14 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') lbClose();
   if (e.key === 'ArrowLeft') lbShow(lbIndex - 1);
   if (e.key === 'ArrowRight') lbShow(lbIndex + 1);
+  if (e.key === 'Tab') {
+    // Keep focus inside the dialog while it is open.
+    const stops = [lbCloseBtn, lbPrevBtn, lbVideo, lbNextBtn]
+      .filter(el => !el.hidden && el.style.display !== 'none');
+    const i = stops.indexOf(document.activeElement);
+    e.preventDefault();
+    const next = e.shiftKey ? (i <= 0 ? stops.length - 1 : i - 1) : (i + 1) % stops.length;
+    stops[next].focus();
+  }
 });
 </script>
