@@ -1944,15 +1944,12 @@ p.seal {
 
 /* ─── Post content ───────────────────────────────────────────────────────── */
 
-/* Running text gets a reading measure; media, tables and code keep the full
-   1100px so renders and clips stay large. In a monospace face ch is exactly
-   one character, so 75ch is 75 characters per line. */
+/* One column for text and media, so both end on the same edge. In a monospace
+   face every character is 0.5em wide: 780px at 16px is about 97 characters
+   per line, a compromise between reading measure and media size. */
 .post-content {
   font-size: 1rem;
-}
-
-.post-content > :is(p, ul, ol, h2, h3, h4, blockquote, details) {
-  max-width: 75ch;
+  max-width: 780px;
 }
 
 .post-content img {
