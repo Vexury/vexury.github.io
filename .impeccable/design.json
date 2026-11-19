@@ -1,0 +1,163 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-19T00:00:00+01:00",
+  "title": "Design System: vexury.dev",
+  "extensions": {
+    "colorMeta": {
+      "amber": { "role": "primary", "displayName": "Selection Amber", "canonical": "#FFA833", "tonalRamp": ["#3d2400", "#5e3800", "#814e00", "#a86600", "#d08000", "#ffa833", "#ffc477", "#ffe2b8"] },
+      "amber-glow": { "role": "primary", "displayName": "Amber Halo", "canonical": "rgba(255, 168, 51, 0.35)", "tonalRamp": ["rgba(255,168,51,0.05)", "rgba(255,168,51,0.10)", "rgba(255,168,51,0.15)", "rgba(255,168,51,0.20)", "rgba(255,168,51,0.25)", "rgba(255,168,51,0.35)", "rgba(255,168,51,0.45)", "rgba(255,168,51,0.55)"] },
+      "amber-soft": { "role": "primary", "displayName": "Amber Tint", "canonical": "rgba(255, 168, 51, 0.10)", "tonalRamp": ["#0b0d10", "#14130f", "#1d1810", "#261d10", "#2f2311", "#3a2a12", "#4a3414", "#5e4016"] },
+      "void": { "role": "neutral", "displayName": "Void", "canonical": "#070b12", "tonalRamp": ["#070b12", "#0f1520", "#16202e", "#1a2433", "#2a3546", "#4b5a70", "#8e9aab", "#e6ebf2"] },
+      "fog": { "role": "neutral", "displayName": "Fog", "canonical": "#0f1520", "tonalRamp": ["#070b12", "#0f1520", "#16202e", "#1a2433", "#2a3546", "#4b5a70", "#8e9aab", "#e6ebf2"] },
+      "haze": { "role": "neutral", "displayName": "Haze", "canonical": "#16202e", "tonalRamp": ["#070b12", "#0f1520", "#16202e", "#1a2433", "#2a3546", "#4b5a70", "#8e9aab", "#e6ebf2"] },
+      "glass": { "role": "neutral", "displayName": "Tower Glass", "canonical": "#a7b2c2", "tonalRamp": ["#070b12", "#0f1520", "#1a2433", "#2a3546", "#4b5a70", "#8e9aab", "#a7b2c2", "#e6ebf2"] },
+      "core": { "role": "neutral", "displayName": "Core Light", "canonical": "#e6ebf2", "tonalRamp": ["#070b12", "#0f1520", "#1a2433", "#2a3546", "#4b5a70", "#8e9aab", "#a7b2c2", "#e6ebf2"] },
+      "dim": { "role": "neutral", "displayName": "Dim Readout", "canonical": "#8e9aab", "tonalRamp": ["#070b12", "#0f1520", "#1a2433", "#2a3546", "#4b5a70", "#8e9aab", "#a7b2c2", "#e6ebf2"] },
+      "hairline": { "role": "neutral", "displayName": "Hairline", "canonical": "rgba(167, 178, 194, 0.22)", "tonalRamp": ["rgba(167,178,194,0.08)", "rgba(167,178,194,0.14)", "rgba(167,178,194,0.22)", "rgba(167,178,194,0.30)", "rgba(167,178,194,0.42)", "rgba(167,178,194,0.55)", "rgba(167,178,194,0.70)", "rgba(167,178,194,0.85)"] },
+      "hairline-strong": { "role": "neutral", "displayName": "Strong Hairline", "canonical": "rgba(167, 178, 194, 0.42)", "tonalRamp": ["rgba(167,178,194,0.08)", "rgba(167,178,194,0.14)", "rgba(167,178,194,0.22)", "rgba(167,178,194,0.30)", "rgba(167,178,194,0.42)", "rgba(167,178,194,0.55)", "rgba(167,178,194,0.70)", "rgba(167,178,194,0.85)"] },
+      "pane": { "role": "neutral", "displayName": "Pane", "canonical": "rgba(15, 21, 32, 0.62)", "tonalRamp": ["rgba(15,21,32,0.30)", "rgba(15,21,32,0.40)", "rgba(15,21,32,0.50)", "rgba(15,21,32,0.62)", "rgba(15,21,32,0.70)", "rgba(15,21,32,0.80)", "rgba(15,21,32,0.90)", "rgba(10,15,23,0.96)"] },
+      "pane-solid": { "role": "neutral", "displayName": "Solid Pane", "canonical": "rgba(10, 15, 23, 0.96)", "tonalRamp": ["rgba(15,21,32,0.30)", "rgba(15,21,32,0.40)", "rgba(15,21,32,0.50)", "rgba(15,21,32,0.62)", "rgba(15,21,32,0.70)", "rgba(15,21,32,0.80)", "rgba(15,21,32,0.90)", "rgba(10,15,23,0.96)"] },
+      "scrollbar": { "role": "neutral", "displayName": "Scrollbar Thumb", "canonical": "#2a3546", "tonalRamp": ["#070b12", "#0f1520", "#16202e", "#1a2433", "#2a3546", "#4b5a70", "#8e9aab", "#e6ebf2"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The name on the home first screen only. Uppercase." },
+      "headline": { "displayName": "Headline", "purpose": "Home room titles and the system-log heading. Uppercase." },
+      "page-title": { "displayName": "Page Title", "purpose": "h1 on content pages and posts, sentence case, balanced wrap." },
+      "title": { "displayName": "Title", "purpose": "h2 section headings in posts and pages. Uppercase." },
+      "subtitle": { "displayName": "Subtitle", "purpose": "h3, card and post titles, sentence case." },
+      "body": { "displayName": "Body", "purpose": "Reading text; posts hold a 780px column." },
+      "body-light": { "displayName": "Panel Prose", "purpose": "Hero bio and prose inside glass panels, in tower glass." },
+      "label": { "displayName": "Label", "purpose": "Buttons, chips, nav links, back-to-top. Uppercase, 0.7 to 0.78rem, tracked 0.18 to 0.22em." },
+      "group-label": { "displayName": "Group Label", "purpose": "Names a list or panel's contents (work stream, contents, log groups). Uppercase, dim. Never a kicker above a headline." },
+      "data": { "displayName": "Data", "purpose": "Years, durations, version numbers and code. Tabular figures, dim." }
+    },
+    "shadows": [
+      { "name": "ambient", "value": "0 1px 2px rgba(0, 0, 0, 0.45), 0 6px 18px rgba(0, 0, 0, 0.3)", "purpose": "Project cards, post list entries, poster cards at rest." },
+      { "name": "ambient-raised", "value": "0 2px 4px rgba(0, 0, 0, 0.5), 0 14px 34px rgba(0, 0, 0, 0.45)", "purpose": "Cards on hover and the nav sub-panel." },
+      { "name": "selection-halo", "value": "0 0 0 1px rgba(255, 168, 51, 0.15), 0 0 24px rgba(255, 168, 51, 0.18)", "purpose": "Primary action at rest." },
+      { "name": "selection-halo-hover", "value": "0 0 0 1px rgba(255, 168, 51, 0.35), 0 0 34px rgba(255, 168, 51, 0.35)", "purpose": "Primary action on hover." },
+      { "name": "selected-glow", "value": "0 0 18px rgba(255, 168, 51, 0.16)", "purpose": "Selected filter chip; the work-stream tile uses 22px." },
+      { "name": "room-hold", "value": "0 0 0 1px rgba(255, 168, 51, 0.12), 0 30px 60px rgba(0, 0, 0, 0.35)", "purpose": "The home room panel whose station the camera is holding." },
+      { "name": "focus-ring", "value": "outline: 2px solid #FFA833; outline-offset: 2px; border-radius: 3px", "purpose": "Single global :focus-visible ring." }
+    ],
+    "motion": [
+      { "name": "control", "value": "0.2s (color, border-color, background, box-shadow)", "purpose": "Every control and card state change." },
+      { "name": "ease-appear", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Things that appear: nav sub-panel (0.24s), ambient canvas fade-in (1.2s)." },
+      { "name": "page-enter", "value": "0.28s ease-out, translateY(8px) to 0, footer delayed 0.08s", "purpose": "Site-wide page entrance; the header stays static." },
+      { "name": "room-hold", "value": "0.4s border-color, box-shadow", "purpose": "Room panel lighting as the camera arrives." },
+      { "name": "camera-glide", "value": "scroll-scrubbed spline, exponential damping (rate 3.2)", "purpose": "Home camera between project stations; cuts under reduced motion." },
+      { "name": "drift", "value": "constant slow mote and dust drift, monolith bob 0.04 units", "purpose": "Background life; held still under reduced motion." }
+    ],
+    "breakpoints": [
+      { "name": "phone", "value": "640px" },
+      { "name": "tablet", "value": "768px" },
+      { "name": "narrow", "value": "900px" },
+      { "name": "post-aside", "value": "1140px" },
+      { "name": "touch", "value": "(hover: none)" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one lit action per view: amber edge, amber label, selection halo.",
+      "html": "<a class=\"ds-vbtn ds-vbtn-primary\" href=\"#\">Enter the work</a>",
+      "css": ".ds-vbtn { display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 1.4rem; border: 1px solid var(--hair-strong, rgba(167,178,194,0.42)); border-radius: 6px; background: rgba(15,21,32,0.5); color: var(--core, #e6ebf2); font-family: 'Jost', system-ui, sans-serif; font-size: 0.76rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s, color 0.2s, background 0.2s; } .ds-vbtn-primary { border-color: var(--amber, #FFA833); color: var(--amber, #FFA833); box-shadow: 0 0 0 1px rgba(255,168,51,0.15), 0 0 24px rgba(255,168,51,0.18); } .ds-vbtn-primary:hover { box-shadow: 0 0 0 1px rgba(255,168,51,0.35), 0 0 34px rgba(255,168,51,0.35); } .ds-vbtn:focus-visible { outline: 2px solid var(--amber, #FFA833); outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Quiet glass slab; edge brightens to core light on hover.",
+      "html": "<a class=\"ds-vbtn2\" href=\"#\">CV</a>",
+      "css": ".ds-vbtn2 { display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 1.4rem; border: 1px solid var(--hair-strong, rgba(167,178,194,0.42)); border-radius: 6px; background: rgba(15,21,32,0.5); color: var(--core, #e6ebf2); font-family: 'Jost', system-ui, sans-serif; font-size: 0.76rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; text-decoration: none; transition: border-color 0.2s, background 0.2s; } .ds-vbtn2:hover { border-color: var(--core, #e6ebf2); background: rgba(15,21,32,0.8); } .ds-vbtn2:focus-visible { outline: 2px solid var(--amber, #FFA833); outline-offset: 2px; }"
+    },
+    {
+      "name": "Link Button",
+      "kind": "button",
+      "refersTo": "link-button",
+      "description": "Chip-sized secondary button for card and panel links, with an optional inline SVG icon.",
+      "html": "<a class=\"ds-link-btn\" href=\"#\">GitHub <svg width=\"12\" height=\"12\" viewBox=\"0 0 16 16\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38v-1.33c-2.23.48-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.8.06 1.23.82 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8z\"/></svg></a>",
+      "css": ".ds-link-btn { display: inline-flex; align-items: center; gap: 0.45rem; min-height: 2.25rem; padding: 0 0.95rem; background: rgba(15,21,32,0.5); border: 1px solid var(--hair-strong, rgba(167,178,194,0.42)); border-radius: 6px; color: var(--core, #e6ebf2); font-family: 'Jost', system-ui, sans-serif; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; line-height: 1; text-decoration: none; white-space: nowrap; transition: border-color 0.2s, background 0.2s; } .ds-link-btn:hover { border-color: var(--core, #e6ebf2); background: rgba(15,21,32,0.8); } .ds-link-btn:focus-visible { outline: 2px solid var(--amber, #FFA833); outline-offset: 2px; }"
+    },
+    {
+      "name": "Filter Chips",
+      "kind": "chip",
+      "refersTo": "filter-chip",
+      "description": "Category filters; the selected one is the selected object and takes the amber edge.",
+      "html": "<div class=\"ds-filters\"><button class=\"ds-chip is-active\">All</button><button class=\"ds-chip\">Rendering</button><button class=\"ds-chip\">Game jams</button></div>",
+      "css": ".ds-filters { display: flex; gap: 0.5rem; flex-wrap: wrap; } .ds-chip { display: inline-flex; align-items: center; min-height: 2.25rem; padding: 0 0.95rem; background: rgba(15,21,32,0.5); border: 1px solid var(--hair, rgba(167,178,194,0.22)); border-radius: 6px; color: var(--dim, #8e9aab); font-family: 'Jost', system-ui, sans-serif; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; line-height: 1; cursor: pointer; transition: border-color 0.2s, color 0.2s; } .ds-chip:hover { border-color: var(--hair-strong, rgba(167,178,194,0.42)); color: var(--core, #e6ebf2); } .ds-chip.is-active { border-color: var(--amber, #FFA833); color: var(--amber, #FFA833); box-shadow: 0 0 18px rgba(255,168,51,0.16); } .ds-chip:focus-visible { outline: 2px solid var(--amber, #FFA833); outline-offset: 2px; }"
+    },
+    {
+      "name": "Glass Panel",
+      "kind": "card",
+      "refersTo": "glass-panel",
+      "description": "The universal container: fog glass, one hairline edge, 8px corners; edge turns amber when pointed at.",
+      "html": "<article class=\"ds-panel\"><h3 class=\"ds-panel-title\">Stylized Water</h3><p class=\"ds-panel-meta\"><span class=\"ds-mono\">2026</span> · Unity URP shaders</p><p class=\"ds-panel-body\">Panel prose sits in light Jost, tower glass, 1.65 line height.</p></article>",
+      "css": ".ds-panel { max-width: 22rem; padding: 1.25rem; background: var(--pane, rgba(15,21,32,0.62)); border: 1px solid var(--hair-strong, rgba(167,178,194,0.42)); border-radius: 8px; color: var(--core, #e6ebf2); font-family: 'Jost', system-ui, sans-serif; box-shadow: 0 1px 2px rgba(0,0,0,0.45), 0 6px 18px rgba(0,0,0,0.3); transition: border-color 0.2s, box-shadow 0.2s; } .ds-panel:hover { border-color: var(--amber, #FFA833); box-shadow: 0 2px 4px rgba(0,0,0,0.5), 0 14px 34px rgba(0,0,0,0.45); } .ds-panel-title { margin: 0 0 0.4rem; font-size: 1rem; font-weight: 500; letter-spacing: 0.02em; } .ds-panel-meta { margin: 0 0 0.8rem; font-size: 0.8rem; font-weight: 300; color: var(--dim, #8e9aab); } .ds-mono { font-family: 'Inconsolata', monospace; font-variant-numeric: tabular-nums; } .ds-panel-body { margin: 0; font-size: 0.9rem; font-weight: 300; line-height: 1.65; color: var(--glass, #a7b2c2); }"
+    },
+    {
+      "name": "Header Navigation",
+      "kind": "nav",
+      "refersTo": "header-band",
+      "description": "Fixed header band with slash-prefixed wordmark and tracked links; the current section is amber.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-wordmark\" href=\"#\">/&nbsp;vexury</a><div class=\"ds-nav-links\"><a class=\"ds-nav-link\" href=\"#\">/&nbsp;home</a><a class=\"ds-nav-link is-active\" href=\"#\">/&nbsp;projects</a><a class=\"ds-nav-link\" href=\"#\">/&nbsp;posts</a><a class=\"ds-nav-link\" href=\"#\">/&nbsp;cv</a></div></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 1.5rem; background: rgba(7,11,18,0.92); border-bottom: 1px solid var(--hair, rgba(167,178,194,0.22)); font-family: 'Jost', system-ui, sans-serif; } .ds-wordmark { font-size: 0.95rem; font-weight: 500; letter-spacing: 0.32em; text-transform: uppercase; color: var(--core, #e6ebf2); text-decoration: none; } .ds-nav-links { display: flex; gap: 1.5rem; } .ds-nav-link { font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim, #8e9aab); text-decoration: none; white-space: nowrap; transition: color 0.2s; } .ds-nav-link:hover { color: var(--core, #e6ebf2); } .ds-nav-link.is-active { color: var(--amber, #FFA833); } .ds-nav a:focus-visible { outline: 2px solid var(--amber, #FFA833); outline-offset: 2px; border-radius: 3px; }"
+    },
+    {
+      "name": "Work Stream Tile",
+      "kind": "custom",
+      "refersTo": "glass-panel",
+      "description": "Home bottom-bar tile: thumbnail, tracked name, dim meta with mono year; amber edge when current or pointed at.",
+      "html": "<a class=\"ds-stream\" href=\"#\"><span class=\"ds-stream-thumb\"></span><span class=\"ds-stream-name\">VexEngine</span><span class=\"ds-stream-meta\"><span class=\"ds-stream-year\">2026</span> · rendering engine</span></a>",
+      "css": ".ds-stream { display: grid; grid-template-columns: 64px 1fr; grid-template-rows: auto auto; column-gap: 0.8rem; align-items: center; max-width: 22rem; padding: 0.55rem; border: 1px solid var(--hair, rgba(167,178,194,0.22)); border-radius: 6px; background: rgba(15,21,32,0.45); color: var(--core, #e6ebf2); font-family: 'Jost', system-ui, sans-serif; text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s; } .ds-stream:hover, .ds-stream.is-current { border-color: var(--amber, #FFA833); box-shadow: 0 0 22px rgba(255,168,51,0.16); } .ds-stream:focus-visible { outline: 2px solid var(--amber, #FFA833); outline-offset: 2px; } .ds-stream-thumb { grid-row: span 2; width: 64px; height: 36px; border-radius: 3px; background: linear-gradient(135deg, #2a3546, #16202e); } .ds-stream-name { font-size: 0.78rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; } .ds-stream-meta { font-size: 0.8rem; font-weight: 300; color: var(--dim, #8e9aab); } .ds-stream-year { font-family: 'Inconsolata', monospace; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Back to Top",
+      "kind": "button",
+      "refersTo": "back-to-top",
+      "description": "Fixed solid-pane control that appears after 400px of scroll.",
+      "html": "<button class=\"ds-btt\"><svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><line x1=\"12\" y1=\"20\" x2=\"12\" y2=\"4\"/><polyline points=\"5 11 12 4 19 11\"/></svg> top</button>",
+      "css": ".ds-btt { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.5rem 0.85rem; background: var(--pane-solid, rgba(10,15,23,0.96)); border: 1px solid var(--hair-strong, rgba(167,178,194,0.42)); border-radius: 6px; color: var(--core, #e6ebf2); font-family: 'Jost', system-ui, sans-serif; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer; transition: border-color 0.2s; } .ds-btt:hover { border-color: var(--core, #e6ebf2); } .ds-btt:focus-visible { outline: 2px solid var(--amber, #FFA833); outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Console in the Void",
+    "overview": "Every page is a system menu floating in a black void. A fog floor grid and drifting white motes run behind the content in WebGL (the full three.js monolith scene on home, a light WebGL2 fog floor with dust everywhere else), and the content sits on top as lit glass: near-transparent fill, a single 1px hairline edge, no heavy blur. The type is thin, wide-tracked and uppercase where it names things, and plain light sans where it explains them. The work (renders, clips, screenshots) is the only saturated colour on screen.\n\nAmber is light, not decoration. It is the glow on whatever the visitor has chosen: the monolith in front, the active filter, the current page in the nav, the primary action, the focus ring. Everything else stays in the cold blue-grey range between void and core light, so the one amber thing always reads as \"this one\". The site is dark only; there is no theme toggle. A warm paper theme exists solely for the CV PDF export.\n\nThe world refuses the hero-plus-card-grid portfolio on home, where the camera glides between project stations instead. The other pages keep conventional layouts (grid of project cards, post list, reading column) but dress them in the same glass, hairline and amber rules.",
+    "keyCharacteristics": [
+      "Black void ground (#070b12) with a live WebGL fog floor and motes behind every page; a CSS radial haze is the fallback.",
+      "Glass panels: translucent fog fill, 1px blue-grey hairline, 8px corners.",
+      "Jost for everything a person reads; Inconsolata only for years, measurements and code.",
+      "Thin tracked uppercase for names and controls, light sentence-case for prose.",
+      "Amber reserved for the selected object, focus and the primary action.",
+      "Motion is slow and continuous in the background, quick and quiet (0.2s) on controls."
+    ],
+    "rules": [
+      { "name": "The One Light Rule", "body": "Amber marks exactly three things: the selected object (including the one under the pointer when pointing is choosing, as in the work stream and project cards), the focus ring, and the primary action. It is never a heading colour, a badge fill, or a hover tint on chrome like icons or the wordmark.", "section": "colors" },
+      { "name": "The Cold Ground Rule", "body": "Every neutral is a blue-grey from the void ramp. No warm greys, no pure black, no pure white text; core light (#e6ebf2) is the brightest text on the site.", "section": "colors" },
+      { "name": "The Measured Mono Rule", "body": "Inconsolata is for values and code only. If the text would still make sense read aloud as a sentence, it is Jost.", "section": "typography" },
+      { "name": "The Thin Name Rule", "body": "Uppercase tracking is for things that name or operate (names, room titles, controls, group labels). Prose is never uppercase.", "section": "typography" },
+      { "name": "The Glass Not Frost Rule", "body": "Panels are translucent fog with a hairline edge. No backdrop blur, no gradient fills, no inner glow; the scene behind must stay visible.", "section": "elevation" },
+      { "name": "The Halo Is Selection Rule", "body": "An amber glow means \"chosen\". A neutral control never glows.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do put every surface on glass: pane fill, one 1px hairline edge, 8px corners for panels, 6px for controls.",
+      "Do keep amber for the selected object, the focus ring and the primary action, and show it as edge plus halo rather than fill.",
+      "Do set names, titles and controls in thin or medium Jost uppercase with wide tracking (0.12 to 0.28em), and prose in light sentence case.",
+      "Do use Inconsolata with tabular figures for years, durations and code, and nothing else.",
+      "Do keep the background alive with the ambient field, and keep the page readable with the CSS radial haze when WebGL is missing.",
+      "Do honour reduced motion: camera cuts between stations, motes and dust hold still, control transitions drop.",
+      "Do keep control transitions at 0.2s on colour, border and shadow; use cubic-bezier(0.16, 1, 0.3, 1) for things that appear (sub-panel, canvas fade)."
+    ],
+    "donts": [
+      "Don't add a light theme or a theme toggle to the live site; the paper theme is for the CV PDF export only.",
+      "Don't use amber on headings, badges, decorative chips or chrome hover states (wordmark, footer icons).",
+      "Don't introduce warm greys, pure black or pure white; stay on the void to core ramp.",
+      "Don't frost panels with backdrop blur or fill them with gradients.",
+      "Don't set prose in Inconsolata or in uppercase.",
+      "Don't place a small tracked label above a headline as a kicker; group labels name a list or panel, not a title.",
+      "Don't use emoji or glyph characters as icons; icons are inline SVG."
+    ]
+  }
+}

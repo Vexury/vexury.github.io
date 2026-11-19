@@ -7,7 +7,7 @@ Built with [11ty](https://www.11ty.dev/) and hosted on [GitHub Pages](https://pa
 ## Stack
 
 - **11ty** — static site generator with Liquid templating
-- **CSS** — single stylesheet, Inconsolata monospace font, warm off-white palette, `#FFA833` accent, dark mode via `data-theme="dark"`
+- **CSS** — single stylesheet, dark "console void" world with Jost and Inconsolata, `#FFA833` accent, WebGL backgrounds (three.js on home, raw WebGL2 elsewhere)
 - **@11ty/eleventy-img** — thumbnail generation (webp, 400px / 900px) during build
 - **GitHub Actions** — deploy to GitHub Pages on push to `main`
 

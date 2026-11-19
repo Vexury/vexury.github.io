@@ -24,17 +24,18 @@ The site shows work rendered by his own engine (VexEngine, Vulkan/C++ path trace
 
 ## Operating Context
 
-- Static site: Eleventy 3, Liquid templates, GitHub Pages, deployed on push to `main`. No backend, no client-side state beyond theme choice.
-- Sections: home (hero, VexEngine render strip, life timeline), projects (filterable cards with media filmstrips, categories game-jams / games / rendering), posts (technical blog), CV page with PDF export, Shader Graph viewer, show tracker (personal horror/mystery list), Puzzle Hustle pages, legal pages.
+- Static site: Eleventy 3, Liquid templates, GitHub Pages, deployed on push to `main`. No backend, no client-side state.
+- Sections: home (WebGL scroll scene through the featured work, background log), projects (filterable cards with media filmstrips, categories game-jams / games / rendering), posts (technical blog), CV page with PDF export, Shader Graph viewer, show tracker (personal horror/mystery list), Puzzle Hustle pages, legal pages.
 - The Puzzle Hustle landing pages (`/get/`, `/puzzlehustle/`) deliberately use the app's own look and are outside the site theme.
 
 ## Capabilities and Constraints
 
-- Refinement only: the existing identity is binding (monospace Inconsolata, warm off-white palette, accent `#FFA833`, dark mode via `[data-theme="dark"]`). Improve hierarchy, layout, detail, motion and mobile within it.
+- The console world is binding site-wide: a black void with fog, glass panels on 1px hairlines, Jost for UI and reading, Inconsolata only for code and data, amber `#FFA833` only for the selected object, the focus and the primary action. Dark only. DESIGN.md records the system.
+- The CV PDF prints on a light paper theme (`html[data-paper]`) that the export script sets; it never appears on the live site.
 - All styles in one file, `src/css/style.css`, colors only through CSS variables.
 - Page transitions: `.page-entering` fade on main and footer only; the header stays static on purpose. Native view transitions deferred for browser support.
 - Images go through the build-time `thumb` shortcode (webp); image basenames must be unique.
-- Open: whether an animation library (GSAP) is added. Decide only where CSS cannot do the job.
+- Home runs a three.js and GSAP ScrollTrigger scene (`src/scripts/home.js`); every other page draws a raw WebGL2 fog floor with dust (`src/scripts/ambient.js`, a few KB). Both are bundled by esbuild in the `eleventy.before` hook. Content stays readable without WebGL or JS.
 
 ## Brand Commitments
 
@@ -55,4 +56,4 @@ The site shows work rendered by his own engine (VexEngine, Vulkan/C++ path trace
 1. The work is the proof: renders, games and write-ups lead, interface recedes.
 2. A hiring manager should grasp the skill profile within the first screen and reach the strongest evidence in one step.
 3. Depth is available but optional: skimmers and deep readers both get served.
-4. Keep the existing identity; craft shows in precision, not in new decoration.
+4. One world across the site; craft shows in precision, not in extra decoration.

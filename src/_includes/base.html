@@ -35,17 +35,9 @@
   <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="icon" href="/favicon-192.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <script>
-    (function () {
-      var t = localStorage.getItem('theme');
-      if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-      }
-    })();
-  </script>
   <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
+<body{% if bodyClass %} class="{{ bodyClass }}"{% endif %}>
   <script>
     document.documentElement.classList.add('page-entering');
   </script>
@@ -112,7 +104,7 @@
     (function () {
       var btn = document.createElement('button');
       btn.className = 'back-to-top';
-      btn.innerHTML = '<span aria-hidden="true">↑</span><span class="btt-label" aria-hidden="true"> top</span>';
+      btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="20" x2="12" y2="4"/><polyline points="5 11 12 4 19 11"/></svg><span class="btt-label" aria-hidden="true"> top</span>';
       btn.setAttribute('aria-label', 'Back to top');
       btn.addEventListener('click', function () {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -123,58 +115,16 @@
       }, { passive: true });
     })();
 
-    (function () {
-      var html = document.documentElement;
-      var btn = document.createElement('button');
-      btn.className = 'theme-toggle';
-      btn.setAttribute('aria-label', 'Toggle dark mode');
-      var moonSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-      var sunSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
-      function updateLabel() {
-        var dark = html.getAttribute('data-theme') === 'dark';
-        btn.innerHTML = (dark ? sunSvg : moonSvg) + '<span class="theme-toggle-label">' + (dark ? 'light' : 'dark') + '</span>';
-      }
-      updateLabel();
-      btn.addEventListener('click', function () {
-        var dark = html.getAttribute('data-theme') === 'dark';
-        if (dark) {
-          html.removeAttribute('data-theme');
-          localStorage.setItem('theme', 'light');
-        } else {
-          html.setAttribute('data-theme', 'dark');
-          localStorage.setItem('theme', 'dark');
-        }
-        updateLabel();
-      });
-      /* Phones: the toggle joins the nav icons instead of floating over the
-         content. Moves back when the window grows past the breakpoint. */
-      var narrow = window.matchMedia('(max-width: 640px)');
-      function place() {
-        var slot = narrow.matches && document.querySelector('.nav-icons');
-        if (slot) { slot.appendChild(btn); btn.classList.add('in-nav'); }
-        else { document.body.appendChild(btn); btn.classList.remove('in-nav'); }
-      }
-      place();
-      narrow.addEventListener('change', place);
-    })();
-
     requestAnimationFrame(function () {
       setTimeout(function () {
         document.documentElement.classList.remove('page-entering');
       }, 0);
     });
 
-    (function () {
-      if (document.body.scrollHeight <= window.innerHeight + 80) return;
-      var cue = document.createElement('div');
-      cue.className = 'scroll-cue';
-      cue.innerHTML = '<span class="scroll-cue-label">scroll</span><span class="scroll-cue-arrow">↓</span>';
-      document.body.appendChild(cue);
-      window.addEventListener('scroll', function () {
-        cue.classList.toggle('hidden', window.scrollY > 60);
-      }, { passive: true });
-    })();
   </script>
+{%- if page.url != '/' %}
+  <script type="module" src="/js/ambient.js"></script>
+{%- endif %}
   <script data-goatcounter="https://vexury.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>

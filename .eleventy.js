@@ -26,6 +26,26 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/images");
   eleventyConfig.addPassthroughCopy("src/files");
   eleventyConfig.addPassthroughCopy("src/fonts");
+  eleventyConfig.addPassthroughCopy({
+    "node_modules/@fontsource-variable/jost/files/jost-latin-wght-normal.woff2": "fonts/jost-latin-wght-normal.woff2",
+  });
+
+  // ── Home page script ──────────────────────────────────────────────────────
+  // three.js and GSAP are bundled and tree-shaken into one file, loaded only
+  // by the home page.
+  eleventyConfig.addWatchTarget("./src/scripts/");
+  eleventyConfig.on("eleventy.before", async () => {
+    const esbuild = require("esbuild");
+    await esbuild.build({
+      entryPoints: ["src/scripts/home.js", "src/scripts/ambient.js"],
+      outdir: "_site/js",
+      bundle: true,
+      minify: true,
+      format: "esm",
+      target: "es2020",
+      legalComments: "none",
+    });
+  });
   eleventyConfig.addPassthroughCopy({ "src/favicon": "/" });
   // AdMob crawls the root domain of the developer website in the App Store listing.
   eleventyConfig.addPassthroughCopy("src/app-ads.txt");

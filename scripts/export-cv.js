@@ -12,7 +12,7 @@ const OUT_DIR  = path.join(__dirname, '../export');
 const PORT     = 4243;
 
 const HIDE_CHROME = `
-  .site-header, .site-footer, .theme-toggle, .back-to-top, .scroll-cue {
+  .site-header, .site-footer, .back-to-top, .void-canvas {
     display: none !important;
   }
   html, body { padding: 0 !important; margin: 0 !important; }
@@ -92,6 +92,7 @@ async function exportPDF(browser, outputPath, dark) {
   await page.setViewport({ width: 1280, height: 900 });
   await page.emulateMediaFeatures([{ name: 'prefers-color-scheme', value: dark ? 'dark' : 'light' }]);
   await page.goto(`http://127.0.0.1:${PORT}/cv/`, { waitUntil: 'networkidle0' });
+  if (!dark) await page.evaluate(() => document.documentElement.setAttribute('data-paper', ''));
   await page.emulateMediaType('screen');
   await page.addStyleTag({ content: HIDE_CHROME });
   await page.addStyleTag({ content: COMPACT });
