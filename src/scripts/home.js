@@ -73,6 +73,16 @@ function start() {
       return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r;
     }
   `;
+  // 4x4 ordered dither: a frame the camera flies through dissolves pixel by
+  // pixel instead of fading to a see-through ghost.
+  const ditherGLSL = `
+    float bayer4(vec2 p) {
+      ivec2 q = ivec2(mod(p, 4.0));
+      int i = q.x + q.y * 4;
+      int m[16] = int[16](0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5);
+      return (float(m[i]) + 0.5) / 16.0;
+    }
+  `;
   const fogGLSL = `
     uniform vec3 uFog; uniform float uFogDensity;
     vec3 applyFog(vec3 c, float d) { float f = 1.0 - exp(-uFogDensity * uFogDensity * d * d); return mix(c, uFog, clamp(f, 0.0, 1.0)); }
@@ -87,7 +97,7 @@ function start() {
       uniforms: {
         map0: { value: null }, map1: { value: null }, uMix: { value: 0 },
         uLit: { value: 0.35 }, uAlpha: { value: 0 },
-        uSize: { value: new Vector2(1, 1) }, uRadius: { value: 0 },
+        uSize: { value: new Vector2(1, 1) }, uRadius: { value: 0 }, uFade: { value: 1 },
         uFog: { value: VOID }, uFogDensity: { value: FOG_DENSITY },
       },
       vertexShader: `
@@ -100,11 +110,13 @@ function start() {
         }`,
       fragmentShader: `
         uniform sampler2D map0; uniform sampler2D map1; uniform float uMix; uniform float uLit; uniform float uAlpha;
-        uniform vec2 uSize; uniform float uRadius;
+        uniform vec2 uSize; uniform float uRadius; uniform float uFade;
         varying vec2 vUv; varying float vDist;
         ${fogGLSL}
         ${roundGLSL}
+        ${ditherGLSL}
         void main() {
+          if (uFade < 1.0 && uFade <= bayer4(gl_FragCoord.xy)) discard;
           vec2 uv = ${reflect ? 'vec2(vUv.x, 1.0 - vUv.y)' : 'vUv'};
           vec3 c = mix(texture2D(map0, uv).rgb, texture2D(map1, uv).rgb, uMix);
           c *= mix(0.12, 1.0, uLit);
@@ -137,15 +149,17 @@ function start() {
   function bezelMaterial(size, radius) {
     return new ShaderMaterial({
       transparent: true, depthWrite: false,
-      uniforms: { uSize: { value: size }, uRadius: { value: radius }, uColor: { value: new Color(0x16202e) }, uFog: { value: VOID }, uFogDensity: { value: FOG_DENSITY } },
+      uniforms: { uSize: { value: size }, uRadius: { value: radius }, uFade: { value: 1 }, uColor: { value: new Color(0x16202e) }, uFog: { value: VOID }, uFogDensity: { value: FOG_DENSITY } },
       vertexShader: `
         varying vec2 vUv; varying float vDist;
         void main(){ vUv = uv; vec4 mv = modelViewMatrix * vec4(position, 1.0); vDist = -mv.z; gl_Position = projectionMatrix * mv; }`,
       fragmentShader: `
-        uniform vec2 uSize; uniform float uRadius; uniform vec3 uColor; varying vec2 vUv; varying float vDist;
+        uniform vec2 uSize; uniform float uRadius; uniform float uFade; uniform vec3 uColor; varying vec2 vUv; varying float vDist;
         ${fogGLSL}
         ${roundGLSL}
+        ${ditherGLSL}
         void main(){
+          if (uFade < 1.0 && uFade <= bayer4(gl_FragCoord.xy)) discard;
           float sd = roundRect((vUv - 0.5) * uSize, uSize * 0.5, uRadius);
           float a = 0.55 * (1.0 - smoothstep(-fwidth(sd), fwidth(sd), sd));
           gl_FragColor = linearToOutputTexel(vec4(applyFog(uColor, vDist), a));
@@ -207,7 +221,7 @@ function start() {
     g.add(glow);
 
     scene.add(g);
-    return { group: g, face, refl, edgeMat, glow, accent, base: pos.clone(), lit: 0, textures: [], cycle: 0 };
+    return { group: g, face, refl, glass, edgeMat, glow, accent, base: pos.clone(), lit: 0, textures: [], cycle: 0, ow, oh, fz: d / 2 };
   }
 
   function setTextures(m, t0, t1 = t0) {
@@ -256,8 +270,7 @@ function start() {
   const towerCount = narrow() ? 14 : 26;
   // Keep-out discs (x, z, radius) around the work, so no empty tower stands
   // in front of or beside a monolith. A tower inside one slides outward on x.
-  const keepOut = [[2.6, 0, 3.4], [9.5, -9, 3.6], [-7.05, -23.9, 2.8],
-    [0.4, -32, 1.8], [3.6, -34.5, 1.8], [6.8, -32.5, 1.8], [1.6, -38, 1.8], [9.4, -37.5, 1.8], [3.0, -40, 1.8]];
+  const keepOut = [[2.6, 0, 3.4], [9.5, -9, 4.0], [-6.82, -23.9, 3.2], [3.7, -35, 5.2]];
   for (let i = 0; i < towerCount; i++) {
     const w = 0.5 + rand() * 0.9, h = 2 + rand() * 6.5, dd = 0.5 + rand() * 0.9;
     const side = rand() < 0.5 ? -1 : 1;
@@ -348,7 +361,8 @@ function start() {
   });
 
   const waterEl = document.getElementById('room-water');
-  const water = makeMonolith({ w: 3.4, h: 1.91, pos: new Vector3(9.5, 1.8, -9), rotY: -0.45 });
+  const WATER_W = 4.1, WATER_H = 2.3;
+  const water = makeMonolith({ w: WATER_W, h: WATER_H, pos: new Vector3(9.5, 1.9, -9), rotY: -0.45 });
   water.station = [2];
   monos.push(water);
   const video = document.createElement('video');
@@ -362,8 +376,9 @@ function start() {
 
   const puzzleEl = document.getElementById('room-puzzle');
   const phones = [];
+  const PHONE_W = 1.14, PHONE_H = 2.03, PHONE_GAP = 1.38;
   puzzleEl.dataset.phones.split('|').forEach((url, i) => {
-    const m = makeMonolith({ w: 0.95, h: 1.69, d: 0.08, radius: 0.11, pos: new Vector3(-8.2 + i * 1.15, 1.25 + (i === 1 ? 0.18 : 0), -24 + Math.abs(i - 1) * 0.25), rotY: 0.3 });
+    const m = makeMonolith({ w: PHONE_W, h: PHONE_H, d: 0.08, radius: 0.13, pos: new Vector3(-8.2 + i * PHONE_GAP, 1.45 + (i === 1 ? 0.2 : 0), -24 + Math.abs(i - 1) * 0.3), rotY: 0.3 });
     m.station = [3];
     phones.push(m); monos.push(m);
     loadTex(url).then(t => { if (t) { setTextures(m, t); revealMonolith(m); } });
@@ -371,10 +386,10 @@ function start() {
 
   // Jam games recede deeper in the field; they light up for "More work".
   // They sit right of the camera axis, clear of the panel on the left.
-  const moreSpots = [[0.4, 1.4, -32, 0.25], [3.6, 1.9, -34.5, 0], [6.8, 1.5, -32.5, -0.25], [1.6, 1.7, -38, 0.2], [9.4, 1.8, -37.5, -0.35], [3.0, 1.3, -40, 0]];
+  const moreSpots = [[1.0, 1.5, -32.5, 0.2], [3.7, 2.15, -34.6, 0], [6.4, 1.5, -32.5, -0.2], [1.2, 2.3, -37.2, 0.25], [6.2, 2.3, -37.2, -0.25], [3.7, 0.95, -36.8, 0]];
   document.querySelectorAll('.more-list [data-tex]').forEach((li, i) => {
     const s = moreSpots[i % moreSpots.length];
-    const m = makeMonolith({ w: 2.0, h: 1.13, pos: new Vector3(s[0], s[1], s[2]), rotY: s[3], accent: false });
+    const m = makeMonolith({ w: 2.5, h: 1.41, pos: new Vector3(s[0], s[1], s[2]), rotY: s[3], accent: false });
     m.station = [4];
     monos.push(m);
     loadTex(li.dataset.tex).then(t => { if (t) { setTextures(m, t); revealMonolith(m); } });
@@ -385,8 +400,8 @@ function start() {
   const wide = [
     { p: [0.4, 2.0, 8.2], t: [1.3, 1.45, -1.5] },
     { p: [-0.7, 1.9, 6.0], t: [1.2, 1.75, 0] },
-    { p: [4.4, 1.8, -3.0], t: [8.7, 1.75, -9] },
-    { p: [-2.6, 1.75, -18.2], t: [-6.0, 1.4, -24.2] },
+    { p: [3.8, 1.85, -2.1], t: [8.7, 1.85, -9] },
+    { p: [-2.0, 1.85, -17.4], t: [-5.7, 1.55, -24.2] },
     { p: [0.6, 3.4, -24.5], t: [0.8, 1.4, -35] },
     { p: [0.0, 11, -14], t: [0.0, 0.0, -22] },
   ];
@@ -407,8 +422,9 @@ function start() {
   const frames = [
     { c: engine.base, hw: ENGINE_W / 2, hh: ENGINE_H / 2 },
     { c: engine.base, hw: ENGINE_W / 2, hh: ENGINE_H / 2 },
-    { c: water.base, hw: 3.4 / 2, hh: 1.91 / 2 },
-    { c: phoneCenter, hw: (2.3 + 0.95) / 2, hh: 1.69 / 2 + 0.18 },
+    { c: water.base, hw: WATER_W / 2, hh: WATER_H / 2 },
+    { c: phoneCenter, hw: (PHONE_GAP * 2 + PHONE_W) / 2, hh: PHONE_H / 2 + 0.2 },
+    { c: new Vector3(3.7, 1.7, -35), hw: 3.6, hh: 1.4 },
   ];
   const fitTall = () => tall.map((st, i) => {
     const fr = frames[i];
@@ -462,7 +478,7 @@ function start() {
   let s = stationAt(scrollY);
   let visible = true;
   let cycleClock = 0;
-  const tmpP = new Vector3(), tmpT = new Vector3(), look = new Vector3();
+  const tmpP = new Vector3(), tmpT = new Vector3(), look = new Vector3(), local = new Vector3();
   look.copy(pathTgt.getPoint(s / last));
 
   html.classList.add('void-gl');
@@ -483,14 +499,19 @@ function start() {
 
     let focus = null, best = 0;
     for (const m of monos) {
+      local.copy(camera.position);
+      m.group.worldToLocal(local);
+      const inside = Math.abs(local.x) < m.ow * 0.5 + 0.6 && Math.abs(local.y) < m.oh * 0.5 + 0.6;
+      const fade = inside ? MathUtils.smoothstep(Math.abs(local.z - m.fz), 0.35, 2.4) : 1;
+      for (const mat of [m.face.material, m.refl.material, m.glass.material]) mat.uniforms.uFade.value = fade;
       const w = Math.max(...m.station.map(st => 1 - Math.min(1, Math.abs(s - st))));
       m.lit = MathUtils.damp(m.lit, w, 5, dt);
       const k = m.lit;
       m.group.scale.setScalar(1 + 0.12 * k);
       m.group.position.y = m.base.y + (reduce ? 0 : Math.sin(time * 0.6 + m.base.z) * 0.04) + k * 0.08;
       m.edgeMat.color.copy(GLASS).lerp(m.accent ? AMBER : GLASS, k);
-      m.edgeMat.opacity = 0.35 + 0.6 * k;
-      m.glow.material.uniforms.uStrength.value = (m.accent ? 0.19 : 0) * k;
+      m.edgeMat.opacity = (0.35 + 0.6 * k) * fade;
+      m.glow.material.uniforms.uStrength.value = (m.accent ? 0.19 : 0) * k * fade;
       for (const mesh of [m.face, m.refl]) mesh.material.uniforms.uLit.value = 0.25 + 0.75 * k;
       if (k > best) { best = k; focus = m; }
     }
