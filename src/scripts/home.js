@@ -286,7 +286,7 @@ function start() {
   const towerCount = narrow() ? 14 : 26;
   // Keep-out discs (x, z, radius) around the work, so no empty tower stands
   // in front of or beside a monolith. A tower inside one slides outward on x.
-  const keepOut = [[2.6, 0, 3.4], [9.5, -9, 4.0], [-6.82, -23.9, 3.2], [3.7, -35, 5.2]];
+  const keepOut = [[2.6, 0, 3.4], [9.5, -9, 4.6], [-6.54, -23.9, 3.6], [3.7, -35, 5.2]];
   for (let i = 0; i < towerCount; i++) {
     const w = 0.5 + rand() * 0.9, h = 2 + rand() * 6.5, dd = 0.5 + rand() * 0.9;
     const side = rand() < 0.5 ? -1 : 1;
@@ -377,8 +377,8 @@ function start() {
   });
 
   const waterEl = document.getElementById('room-water');
-  const WATER_W = 4.1, WATER_H = 2.3;
-  const water = makeMonolith({ w: WATER_W, h: WATER_H, pos: new Vector3(9.5, 1.9, -9), rotY: -0.45 });
+  const WATER_W = 4.9, WATER_H = 2.76;
+  const water = makeMonolith({ w: WATER_W, h: WATER_H, pos: new Vector3(9.5, 2.1, -9), rotY: -0.45 });
   water.station = [2];
   monos.push(water);
   const video = document.createElement('video');
@@ -392,9 +392,9 @@ function start() {
 
   const puzzleEl = document.getElementById('room-puzzle');
   const phones = [];
-  const PHONE_W = 1.14, PHONE_H = 2.03, PHONE_GAP = 1.38;
+  const PHONE_W = 1.37, PHONE_H = 2.44, PHONE_GAP = 1.66;
   puzzleEl.dataset.phones.split('|').forEach((url, i) => {
-    const m = makeMonolith({ w: PHONE_W, h: PHONE_H, d: 0.08, radius: 0.13, pos: new Vector3(-8.2 + i * PHONE_GAP, 1.45 + (i === 1 ? 0.2 : 0), -24 + Math.abs(i - 1) * 0.3), rotY: 0.3 });
+    const m = makeMonolith({ w: PHONE_W, h: PHONE_H, d: 0.08, radius: 0.13, pos: new Vector3(-8.2 + i * PHONE_GAP, 1.7 + (i === 1 ? 0.24 : 0), -24 + Math.abs(i - 1) * 0.36), rotY: 0.3 });
     m.station = [3];
     phones.push(m); monos.push(m);
     loadTex(url).then(t => { if (t) { setTextures(m, t); revealMonolith(m); } });
@@ -416,8 +416,8 @@ function start() {
   const wide = [
     { p: [0.4, 2.0, 8.2], t: [1.3, 1.45, -1.5] },
     { p: [-0.7, 1.9, 6.0], t: [1.2, 1.75, 0] },
-    { p: [3.8, 1.85, -2.1], t: [8.7, 1.85, -9] },
-    { p: [-2.0, 1.85, -17.4], t: [-5.7, 1.55, -24.2] },
+    { p: [2.4, 2.0, -1.3], t: [7.9, 2.0, -9] },
+    { p: [-1.14, 2.0, -16.38], t: [-5.4, 1.75, -24.2] },
     { p: [1.3, 3.4, -24.5], t: [1.5, 1.4, -35] },
     { p: [0.0, 11, -14], t: [0.0, 0.0, -22] },
   ];
