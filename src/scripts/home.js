@@ -65,7 +65,14 @@ function start() {
     res(t);
   }, undefined, () => res(null)));
 
-  // ── Shared shader bits: exponential fog, matching the clear colour ──
+  // ── Shared shader bits: exponential fog, matching the clear colour, and a
+  // rounded-rectangle distance for the slab corners ──
+  const roundGLSL = `
+    float roundRect(vec2 p, vec2 halfSize, float r) {
+      vec2 q = abs(p) - halfSize + r;
+      return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r;
+    }
+  `;
   const fogGLSL = `
     uniform vec3 uFog; uniform float uFogDensity;
     vec3 applyFog(vec3 c, float d) { float f = 1.0 - exp(-uFogDensity * uFogDensity * d * d); return mix(c, uFog, clamp(f, 0.0, 1.0)); }
@@ -80,6 +87,7 @@ function start() {
       uniforms: {
         map0: { value: null }, map1: { value: null }, uMix: { value: 0 },
         uLit: { value: 0.35 }, uAlpha: { value: 0 },
+        uSize: { value: new Vector2(1, 1) }, uRadius: { value: 0 },
         uFog: { value: VOID }, uFogDensity: { value: FOG_DENSITY },
       },
       vertexShader: `
@@ -92,13 +100,16 @@ function start() {
         }`,
       fragmentShader: `
         uniform sampler2D map0; uniform sampler2D map1; uniform float uMix; uniform float uLit; uniform float uAlpha;
+        uniform vec2 uSize; uniform float uRadius;
         varying vec2 vUv; varying float vDist;
         ${fogGLSL}
+        ${roundGLSL}
         void main() {
           vec2 uv = ${reflect ? 'vec2(vUv.x, 1.0 - vUv.y)' : 'vUv'};
           vec3 c = mix(texture2D(map0, uv).rgb, texture2D(map1, uv).rgb, uMix);
           c *= mix(0.12, 1.0, uLit);
-          float a = uAlpha;
+          float sd = roundRect((vUv - 0.5) * uSize, uSize * 0.5, uRadius);
+          float a = uAlpha * (1.0 - smoothstep(-fwidth(sd), fwidth(sd), sd));
           ${reflect ? 'a *= smoothstep(0.0, 1.0, vUv.y) * 0.22; c *= 0.7;' : ''}
           gl_FragColor = linearToOutputTexel(vec4(applyFog(c, vDist), a));
         }`,
@@ -109,13 +120,13 @@ function start() {
   function glowMaterial() {
     return new ShaderMaterial({
       transparent: true, depthWrite: false, blending: AdditiveBlending,
-      uniforms: { uColor: { value: AMBER.clone() }, uStrength: { value: 0 }, uSize: { value: new Vector2(1, 1) }, uInner: { value: new Vector2(1, 1) } },
+      uniforms: { uColor: { value: AMBER.clone() }, uStrength: { value: 0 }, uSize: { value: new Vector2(1, 1) }, uInner: { value: new Vector2(1, 1) }, uRadius: { value: 0 } },
       vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
       fragmentShader: `
-        uniform vec3 uColor; uniform float uStrength; uniform vec2 uSize; uniform vec2 uInner; varying vec2 vUv;
+        uniform vec3 uColor; uniform float uStrength; uniform vec2 uSize; uniform vec2 uInner; uniform float uRadius; varying vec2 vUv;
+        ${roundGLSL}
         void main(){
-          vec2 p = abs(vUv - 0.5) * uSize;
-          float dist = length(max(p - uInner * 0.5, 0.0));
+          float dist = roundRect((vUv - 0.5) * uSize, uInner * 0.5, uRadius);
           float outside = step(0.0001, dist);
           float g = exp(-dist * 14.0) * outside;
           gl_FragColor = linearToOutputTexel(vec4(uColor * g * uStrength, 1.0));
@@ -123,15 +134,51 @@ function start() {
     });
   }
 
-  // ── Monolith: glass slab with an image face, edge lines and glow ──
-  function makeMonolith({ w, h, d = 0.14, pos, rotY = 0, accent = true }) {
+  function bezelMaterial(size, radius) {
+    return new ShaderMaterial({
+      transparent: true, depthWrite: false,
+      uniforms: { uSize: { value: size }, uRadius: { value: radius }, uColor: { value: new Color(0x16202e) }, uFog: { value: VOID }, uFogDensity: { value: FOG_DENSITY } },
+      vertexShader: `
+        varying vec2 vUv; varying float vDist;
+        void main(){ vUv = uv; vec4 mv = modelViewMatrix * vec4(position, 1.0); vDist = -mv.z; gl_Position = projectionMatrix * mv; }`,
+      fragmentShader: `
+        uniform vec2 uSize; uniform float uRadius; uniform vec3 uColor; varying vec2 vUv; varying float vDist;
+        ${fogGLSL}
+        ${roundGLSL}
+        void main(){
+          float sd = roundRect((vUv - 0.5) * uSize, uSize * 0.5, uRadius);
+          float a = 0.55 * (1.0 - smoothstep(-fwidth(sd), fwidth(sd), sd));
+          gl_FragColor = linearToOutputTexel(vec4(applyFog(uColor, vDist), a));
+        }`,
+    });
+  }
+
+  // Rounded outline as a closed polyline, 6 segments per corner.
+  function roundRectLoop(hw, hh, r) {
+    const pts = [];
+    const corners = [[hw - r, hh - r, 0], [-hw + r, hh - r, 1], [-hw + r, -hh + r, 2], [hw - r, -hh + r, 3]];
+    for (const [cx, cy, q] of corners) {
+      for (let i = 0; i <= 6; i++) {
+        const a = (q + i / 6) * Math.PI / 2;
+        pts.push(cx + Math.cos(a) * r, cy + Math.sin(a) * r, 0);
+      }
+    }
+    const geo = new BufferGeometry();
+    geo.setAttribute('position', new Float32BufferAttribute(pts, 3));
+    return geo;
+  }
+
+  // ── Monolith: a lit image in a thin rounded glass bezel, with an edge line
+  // and a glow that only the selected work gets ──
+  function makeMonolith({ w, h, d = 0.14, pos, rotY = 0, accent = true, radius = 0.07 }) {
     const g = new Group();
     g.position.copy(pos);
     g.rotation.y = rotY;
 
-    const glass = new Mesh(new BoxGeometry(w + 0.12, h + 0.12, d), new MeshBasicMaterial({
-      color: 0x16202e, transparent: true, opacity: 0.35, depthWrite: false,
-    }));
+    const b = 0.035;
+    const ow = w + b * 2, oh = h + b * 2;
+    const glass = new Mesh(new PlaneGeometry(ow, oh), bezelMaterial(new Vector2(ow, oh), radius));
+    glass.position.z = d / 2;
     g.add(glass);
 
     const face = new Mesh(new PlaneGeometry(w, h), faceMaterial(false));
@@ -141,20 +188,21 @@ function start() {
     const refl = new Mesh(new PlaneGeometry(w, h), faceMaterial(true));
     refl.position.set(0, -pos.y * 2, d / 2 + 0.005);
     g.add(refl);
+    for (const mesh of [face, refl]) {
+      mesh.material.uniforms.uSize.value.set(w, h);
+      mesh.material.uniforms.uRadius.value = Math.max(radius - b, 0.01);
+    }
 
-    // One clean frame on the front face; the box edges would double it.
-    const fw = (w + 0.12) / 2, fh = (h + 0.12) / 2;
-    const frameGeo = new BufferGeometry();
-    frameGeo.setAttribute('position', new Float32BufferAttribute([-fw, -fh, 0, fw, -fh, 0, fw, fh, 0, -fw, fh, 0], 3));
     const edgeMat = new LineBasicMaterial({ color: GLASS.clone(), transparent: true, opacity: 0.4 });
-    const edges = new LineLoop(frameGeo, edgeMat);
+    const edges = new LineLoop(roundRectLoop(ow / 2, oh / 2, radius), edgeMat);
     edges.position.z = d / 2 + 0.008;
     g.add(edges);
 
     const gw = w + 1.4, gh = h + 1.4;
     const glow = new Mesh(new PlaneGeometry(gw, gh), glowMaterial());
     glow.material.uniforms.uSize.value.set(gw, gh);
-    glow.material.uniforms.uInner.value.set(w + 0.12, h + 0.12);
+    glow.material.uniforms.uInner.value.set(ow, oh);
+    glow.material.uniforms.uRadius.value = radius;
     glow.position.z = d / 2 + 0.002;
     g.add(glow);
 
@@ -206,10 +254,19 @@ function start() {
   const towerFill = new MeshBasicMaterial({ color: 0x1a2433, transparent: true, opacity: 0.24, depthWrite: false });
   const dust = [];
   const towerCount = narrow() ? 14 : 26;
+  // Keep-out discs (x, z, radius) around the work, so no empty tower stands
+  // in front of or beside a monolith. A tower inside one slides outward on x.
+  const keepOut = [[2.6, 0, 3.4], [9.5, -9, 3.6], [-7.05, -23.9, 2.8],
+    [0.4, -32, 1.8], [3.6, -34.5, 1.8], [6.8, -32.5, 1.8], [1.6, -38, 1.8], [9.4, -37.5, 1.8], [3.0, -40, 1.8]];
   for (let i = 0; i < towerCount; i++) {
     const w = 0.5 + rand() * 0.9, h = 2 + rand() * 6.5, dd = 0.5 + rand() * 0.9;
     const side = rand() < 0.5 ? -1 : 1;
-    const x = side * (5.5 + rand() * 12), z = 6 - rand() * 46;
+    let x = side * (5.5 + rand() * 12);
+    const z = 6 - rand() * 46;
+    for (const [kx, kz, kr] of keepOut) {
+      const dx = x - kx;
+      if (Math.hypot(dx, z - kz) < kr + w / 2) x = kx + (dx < 0 ? -1 : 1) * (kr + w / 2);
+    }
     const box = new BoxGeometry(w, h, dd);
     const fill = new Mesh(box, towerFill);
     const edge = new LineSegments(new EdgesGeometry(box), towerEdge);
@@ -262,10 +319,28 @@ function start() {
   const monos = [];
 
   const engineEl = document.getElementById('room-vexengine');
-  const engine = makeMonolith({ w: 3.6, h: 2.03, pos: new Vector3(2.4, 1.75, 0), rotY: -0.18 });
+  const ENGINE_W = 4.3, ENGINE_H = 2.42;
+  const engine = makeMonolith({ w: ENGINE_W, h: ENGINE_H, pos: new Vector3(2.6, 1.85, 0), rotY: -0.18 });
   engine.station = [0, 1];
   monos.push(engine);
+  // Captions in the hero tag and the room panel follow the render on screen.
+  const captionRows = (engineEl.dataset.captions || '').split('|').map(r => r.split(';'));
+  const captionEls = Array.from(document.querySelectorAll('.hero-tag [data-cap], .room-caption [data-cap]'));
+  const showCaption = i => {
+    const row = engine.captions[i];
+    if (!row) return;
+    for (const el of captionEls) {
+      const text = row[+el.dataset.cap] || '';
+      if (el.textContent === text) continue;
+      if (reduce) { el.textContent = text; continue; }
+      gsap.to(el, { opacity: 0, duration: 0.35, ease: 'power2.in', onComplete: () => {
+        el.textContent = text;
+        gsap.to(el, { opacity: 1, duration: 0.5, ease: 'power2.out' });
+      } });
+    }
+  };
   Promise.all(engineEl.dataset.tex.split('|').map(loadTex)).then(ts => {
+    engine.captions = captionRows.filter((_, i) => ts[i]);
     engine.textures = ts.filter(Boolean);
     if (!engine.textures.length) return;
     setTextures(engine, engine.textures[0]);
@@ -288,14 +363,15 @@ function start() {
   const puzzleEl = document.getElementById('room-puzzle');
   const phones = [];
   puzzleEl.dataset.phones.split('|').forEach((url, i) => {
-    const m = makeMonolith({ w: 0.95, h: 1.69, d: 0.08, pos: new Vector3(-8.2 + i * 1.15, 1.25 + (i === 1 ? 0.18 : 0), -24 + Math.abs(i - 1) * 0.25), rotY: 0.3 });
+    const m = makeMonolith({ w: 0.95, h: 1.69, d: 0.08, radius: 0.11, pos: new Vector3(-8.2 + i * 1.15, 1.25 + (i === 1 ? 0.18 : 0), -24 + Math.abs(i - 1) * 0.25), rotY: 0.3 });
     m.station = [3];
     phones.push(m); monos.push(m);
     loadTex(url).then(t => { if (t) { setTextures(m, t); revealMonolith(m); } });
   });
 
   // Jam games recede deeper in the field; they light up for "More work".
-  const moreSpots = [[-2.6, 1.4, -31, 0.25], [1.0, 1.9, -34, 0], [4.6, 1.5, -32, -0.25], [-6.0, 1.7, -36, 0.35], [7.6, 1.8, -37, -0.35], [0.0, 1.3, -39, 0]];
+  // They sit right of the camera axis, clear of the panel on the left.
+  const moreSpots = [[0.4, 1.4, -32, 0.25], [3.6, 1.9, -34.5, 0], [6.8, 1.5, -32.5, -0.25], [1.6, 1.7, -38, 0.2], [9.4, 1.8, -37.5, -0.35], [3.0, 1.3, -40, 0]];
   document.querySelectorAll('.more-list [data-tex]').forEach((li, i) => {
     const s = moreSpots[i % moreSpots.length];
     const m = makeMonolith({ w: 2.0, h: 1.13, pos: new Vector3(s[0], s[1], s[2]), rotY: s[3], accent: false });
@@ -308,9 +384,9 @@ function start() {
   // the focus in the top half of a phone screen ──
   const wide = [
     { p: [0.4, 2.0, 8.2], t: [1.3, 1.45, -1.5] },
-    { p: [-0.6, 1.8, 4.8], t: [1.0, 1.65, 0] },
+    { p: [-0.7, 1.9, 6.0], t: [1.2, 1.75, 0] },
     { p: [4.4, 1.8, -3.0], t: [8.7, 1.75, -9] },
-    { p: [-3.8, 1.75, -18.4], t: [-7.4, 1.4, -24.2] },
+    { p: [-2.6, 1.75, -18.2], t: [-6.0, 1.4, -24.2] },
     { p: [0.6, 3.4, -24.5], t: [0.8, 1.4, -35] },
     { p: [0.0, 11, -14], t: [0.0, 0.0, -22] },
   ];
@@ -319,7 +395,7 @@ function start() {
     { p: [2.3, 2.2, 6.2], t: [2.4, 1.25, 0] },
     { p: [6.9, 2.3, -3.6], t: [9.5, 1.3, -9] },
     { p: [-5.6, 2.0, -19.4], t: [-7.0, 0.95, -24] },
-    { p: [0.8, 3.6, -25], t: [0.8, 1.0, -35] },
+    { p: [3.4, 3.8, -25.5], t: [3.4, 1.2, -35.5] },
     { p: [0.0, 12, -14], t: [0.0, 0.0, -22] },
   ];
   // Portrait screens are narrow, so the hand-placed framings cut the work off
@@ -329,8 +405,8 @@ function start() {
   // object sits in the upper third, clear of the panel that scrolls in under it.
   const phoneCenter = phones.reduce((a, m) => a.add(m.base), new Vector3()).divideScalar(phones.length || 1);
   const frames = [
-    { c: engine.base, hw: 3.6 / 2, hh: 2.03 / 2 },
-    { c: engine.base, hw: 3.6 / 2, hh: 2.03 / 2 },
+    { c: engine.base, hw: ENGINE_W / 2, hh: ENGINE_H / 2 },
+    { c: engine.base, hw: ENGINE_W / 2, hh: ENGINE_H / 2 },
     { c: water.base, hw: 3.4 / 2, hh: 1.91 / 2 },
     { c: phoneCenter, hw: (2.3 + 0.95) / 2, hh: 1.69 / 2 + 0.18 },
   ];
@@ -414,7 +490,7 @@ function start() {
       m.group.position.y = m.base.y + (reduce ? 0 : Math.sin(time * 0.6 + m.base.z) * 0.04) + k * 0.08;
       m.edgeMat.color.copy(GLASS).lerp(m.accent ? AMBER : GLASS, k);
       m.edgeMat.opacity = 0.35 + 0.6 * k;
-      m.glow.material.uniforms.uStrength.value = (m.accent ? 0.28 : 0) * k;
+      m.glow.material.uniforms.uStrength.value = (m.accent ? 0.19 : 0) * k;
       for (const mesh of [m.face, m.refl]) mesh.material.uniforms.uLit.value = 0.25 + 0.75 * k;
       if (k > best) { best = k; focus = m; }
     }
@@ -428,6 +504,7 @@ function start() {
         cycleClock = 0;
         const next = (engine.cycle + 1) % engine.textures.length;
         setTextures(engine, engine.textures[engine.cycle], engine.textures[next]);
+        showCaption(next);
         const mix = [engine.face.material.uniforms.uMix, engine.refl.material.uniforms.uMix];
         mix.forEach(u => { u.value = 0; });
         gsap.to(mix, { value: 1, duration: reduce ? 0 : 1.1, ease: 'power2.inOut', onComplete: () => {

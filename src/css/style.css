@@ -648,10 +648,11 @@ pre code {
   color: var(--core);
 }
 
+/* Sits under the monolith, above the work stream. */
 .hero-tag {
   position: absolute;
   right: 4%;
-  top: 64%;
+  bottom: 10.5rem;
   padding: 0.8rem 1rem;
   min-width: 14rem;
   border: 1px solid var(--hair-strong);
@@ -674,6 +675,20 @@ pre code {
   font-weight: 300;
   letter-spacing: 0.04em;
   color: var(--glass);
+}
+
+.tag-credit {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  color: var(--dim);
+}
+
+/* The render now on the monolith, under the room's stack line. */
+.room-caption {
+  margin: -0.4rem 0 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+  color: var(--dim);
 }
 
 /* Bottom bar of the first screen: the work to open. */
@@ -968,9 +983,12 @@ pre code {
   color: var(--glass);
 }
 
+@media (max-width: 900px), (max-height: 760px) {
+  .hero-tag { display: none; }
+}
+
 @media (max-width: 900px) {
   .log-grid { grid-template-columns: 1fr; }
-  .hero-tag { display: none; }
 }
 
 @media (max-width: 640px), (orientation: portrait) and (max-width: 1100px) {
