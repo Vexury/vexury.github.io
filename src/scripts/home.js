@@ -82,6 +82,12 @@ function start() {
       int m[16] = int[16](0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5);
       return (float(m[i]) + 0.5) / 16.0;
     }
+    vec2 ditherCell() { return floor(gl_FragCoord.xy / 3.0); }
+    float hash12(vec2 p) {
+      vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+      p3 += dot(p3, p3.yzx + 33.33);
+      return fract((p3.x + p3.y) * p3.z);
+    }
   `;
   const fogGLSL = `
     uniform vec3 uFog; uniform float uFogDensity;
@@ -97,7 +103,7 @@ function start() {
       uniforms: {
         map0: { value: null }, map1: { value: null }, uMix: { value: 0 },
         uLit: { value: 0.35 }, uAlpha: { value: 0 },
-        uSize: { value: new Vector2(1, 1) }, uRadius: { value: 0 }, uFade: { value: 1 },
+        uSize: { value: new Vector2(1, 1) }, uRadius: { value: 0 }, uFade: { value: 1 }, uTime: { value: 0 },
         uFog: { value: VOID }, uFogDensity: { value: FOG_DENSITY },
       },
       vertexShader: `
@@ -110,16 +116,26 @@ function start() {
         }`,
       fragmentShader: `
         uniform sampler2D map0; uniform sampler2D map1; uniform float uMix; uniform float uLit; uniform float uAlpha;
-        uniform vec2 uSize; uniform float uRadius; uniform float uFade;
+        uniform vec2 uSize; uniform float uRadius; uniform float uFade; uniform float uTime;
         varying vec2 vUv; varying float vDist;
         ${fogGLSL}
         ${roundGLSL}
         ${ditherGLSL}
         void main() {
-          if (uFade < 1.0 && uFade <= bayer4(gl_FragCoord.xy)) discard;
+          vec2 cell = ditherCell();
+          float th = bayer4(cell);
+          if (uFade < 1.0 && uFade <= th) discard;
           vec2 uv = ${reflect ? 'vec2(vUv.x, 1.0 - vUv.y)' : 'vUv'};
           vec3 c = mix(texture2D(map0, uv).rgb, texture2D(map1, uv).rgb, uMix);
           c *= mix(0.12, 1.0, uLit);
+          if (uFade < 1.0) {
+            float p = 1.0 - uFade;
+            float n = hash12(cell + floor(uTime * 24.0) * 17.0);
+            vec3 speckle = c * n * n * 4.0;
+            c = mix(c, speckle, smoothstep(0.0, 0.55, p));
+            float front = 1.0 - smoothstep(0.0, 0.065, uFade - th);
+            c = mix(c, vec3(1.0, 0.45, 0.05) * 1.3, front * smoothstep(0.05, 0.3, p));
+          }
           float sd = roundRect((vUv - 0.5) * uSize, uSize * 0.5, uRadius);
           float a = uAlpha * (1.0 - smoothstep(-fwidth(sd), fwidth(sd), sd));
           ${reflect ? 'a *= smoothstep(0.0, 1.0, vUv.y) * 0.22; c *= 0.7;' : ''}
@@ -159,7 +175,7 @@ function start() {
         ${roundGLSL}
         ${ditherGLSL}
         void main(){
-          if (uFade < 1.0 && uFade <= bayer4(gl_FragCoord.xy)) discard;
+          if (uFade < 1.0 && uFade <= bayer4(ditherCell())) discard;
           float sd = roundRect((vUv - 0.5) * uSize, uSize * 0.5, uRadius);
           float a = 0.55 * (1.0 - smoothstep(-fwidth(sd), fwidth(sd), sd));
           gl_FragColor = linearToOutputTexel(vec4(applyFog(uColor, vDist), a));
@@ -386,7 +402,7 @@ function start() {
 
   // Jam games recede deeper in the field; they light up for "More work".
   // They sit right of the camera axis, clear of the panel on the left.
-  const moreSpots = [[1.0, 1.5, -32.5, 0.2], [3.7, 2.15, -34.6, 0], [6.4, 1.5, -32.5, -0.2], [1.2, 2.3, -37.2, 0.25], [6.2, 2.3, -37.2, -0.25], [3.7, 0.95, -36.8, 0]];
+  const moreSpots = [[1.0, 1.5, -32.5, 0.2], [3.7, 2.15, -34.6, 0], [6.4, 1.5, -32.5, -0.2], [1.2, 2.3, -37.2, 0.25], [6.2, 2.3, -37.2, -0.25], [3.7, 0.9, -32.6, 0]];
   document.querySelectorAll('.more-list [data-tex]').forEach((li, i) => {
     const s = moreSpots[i % moreSpots.length];
     const m = makeMonolith({ w: 2.5, h: 1.41, pos: new Vector3(s[0], s[1], s[2]), rotY: s[3], accent: false });
@@ -402,7 +418,7 @@ function start() {
     { p: [-0.7, 1.9, 6.0], t: [1.2, 1.75, 0] },
     { p: [3.8, 1.85, -2.1], t: [8.7, 1.85, -9] },
     { p: [-2.0, 1.85, -17.4], t: [-5.7, 1.55, -24.2] },
-    { p: [0.6, 3.4, -24.5], t: [0.8, 1.4, -35] },
+    { p: [1.3, 3.4, -24.5], t: [1.5, 1.4, -35] },
     { p: [0.0, 11, -14], t: [0.0, 0.0, -22] },
   ];
   const tall = [
@@ -502,8 +518,9 @@ function start() {
       local.copy(camera.position);
       m.group.worldToLocal(local);
       const inside = Math.abs(local.x) < m.ow * 0.5 + 0.6 && Math.abs(local.y) < m.oh * 0.5 + 0.6;
-      const fade = inside ? MathUtils.smoothstep(Math.abs(local.z - m.fz), 0.35, 2.4) : 1;
+      const fade = inside ? MathUtils.smoothstep(Math.abs(local.z - m.fz), 0.25, 4.2) : 1;
       for (const mat of [m.face.material, m.refl.material, m.glass.material]) mat.uniforms.uFade.value = fade;
+      m.face.material.uniforms.uTime.value = time;
       const w = Math.max(...m.station.map(st => 1 - Math.min(1, Math.abs(s - st))));
       m.lit = MathUtils.damp(m.lit, w, 5, dt);
       const k = m.lit;
