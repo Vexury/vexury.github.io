@@ -20,7 +20,7 @@ OWN-WORLD: Void #070B12 ground, fog #0F1520, tower glass #A7B2C2 edges, core lig
 
 STORY: Visitor lands in the field and sees real project art hanging in depth, reads who Moritz is, then glides through three rooms (VexEngine, Stylized Water, Puzzle Hustle), sees the rest of the work receding, ends on a system log of background and contact.
 
-FIRST VIEWPORT: Full-bleed WebGL void. VexEngine monolith centre-right, glowing amber edges, its face showing an offline render; jam and app monoliths recede left and right into fog among empty glass towers. Left: MORITZ GRAUER in large thin tracked caps, role line, two-sentence bio, primary amber button "enter the work", secondary links. Bottom bar: work stream list (project, year, discipline) that jumps the camera.
+FIRST VIEWPORT: Full-bleed WebGL void. VexEngine monolith centre-right, glowing amber edges, its face showing an offline render; jam and app monoliths recede left and right into fog among empty glass towers. Left: MORITZ GRAUER in large thin tracked caps, role line, two-sentence bio, primary amber button "view my work", secondary links. Bottom bar: work stream list (project, year, discipline) that jumps the camera.
 
 FORM: console-dashboard challenger (digital-design-canon-console-dashboard-atmosphere), competitive card chosen by the user over the assigned Safelight; seed:f8eaa1df5ff330be.
 

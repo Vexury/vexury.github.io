@@ -62,7 +62,7 @@
       "kind": "button",
       "refersTo": "button-primary",
       "description": "The one lit action per view: amber edge, amber label, selection halo.",
-      "html": "<a class=\"ds-vbtn ds-vbtn-primary\" href=\"#\">Enter the work</a>",
+      "html": "<a class=\"ds-vbtn ds-vbtn-primary\" href=\"#\">View my work</a>",
       "css": ".ds-vbtn { display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 1.4rem; border: 1px solid var(--hair-strong, rgba(167,178,194,0.42)); border-radius: 6px; background: rgba(15,21,32,0.5); color: var(--core, #e6ebf2); font-family: 'Jost', system-ui, sans-serif; font-size: 0.76rem; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; text-decoration: none; transition: border-color 0.2s, box-shadow 0.2s, color 0.2s, background 0.2s; } .ds-vbtn-primary { border-color: var(--amber, #FFA833); color: var(--amber, #FFA833); box-shadow: 0 0 0 1px rgba(255,168,51,0.15), 0 0 24px rgba(255,168,51,0.18); } .ds-vbtn-primary:hover { box-shadow: 0 0 0 1px rgba(255,168,51,0.35), 0 0 34px rgba(255,168,51,0.35); } .ds-vbtn:focus-visible { outline: 2px solid var(--amber, #FFA833); outline-offset: 2px; }"
     },
     {

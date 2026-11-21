@@ -240,7 +240,7 @@ Small, consistent radii on a strict ladder: 3px for thumbnails and the focus rin
 ### Buttons
 Quiet glass slabs with tracked uppercase labels; the primary one is lit.
 - **Shape:** 6px corners, 1px edge, 2.75rem tall on home and post calls to action, 2.25rem for link buttons in cards and panels.
-- **Primary:** amber edge and amber label over 50% fog glass, wrapped in the selection halo. One per view (enter the work, view shader graph).
+- **Primary:** amber edge and amber label over 50% fog glass, wrapped in the selection halo. One per view (view my work, view shader graph).
 - **Secondary:** strong-hairline edge, core label. Hover turns the edge core light and deepens the fill to 80%.
 - **Link button:** the secondary style at chip size, optionally with a 12 to 14px inline SVG icon after the label (GitHub, play, blog post).
 - **Focus:** the global 2px amber outline at 2px offset.
