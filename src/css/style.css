@@ -632,20 +632,22 @@ pre code {
 
 .hero-links {
   display: flex;
-  gap: 1.6rem;
+  align-items: center;
+  gap: 1.3rem;
   margin: 0;
 }
 
-.hero-links a {
+.hero-icon {
+  display: flex;
   color: var(--dim);
-  font-size: 0.74rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
   text-decoration: none;
+  border-bottom: none;
+  transition: color 0.2s;
 }
 
-.hero-links a:hover {
+.hero-icon:hover {
   color: var(--core);
+  background: none;
 }
 
 /* Sits under the monolith, above the work stream. */
@@ -3405,11 +3407,13 @@ html.sg-embedded .site-header {
    pseudo-element extends the tappable box; the visible chrome stays as is. */
 @media (hover: none) {
   .nav-icon-btn,
+  .hero-icon,
   .link-btn,
   .filter-btn {
     position: relative;
   }
   .nav-icon-btn::after,
+  .hero-icon::after,
   .link-btn::after,
   .filter-btn::after {
     content: '';
