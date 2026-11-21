@@ -75,16 +75,23 @@ const MAX_SCALE = 0.78;
 
 // .cvp-body is a flex container and Chrome will not fragment one across pages,
 // so a document even a few px too tall pushes the whole body onto page 2 and
-// leaves page 1 nearly blank. Solve for the scale that keeps it on one page.
+// leaves page 1 nearly blank. The height depends on the viewport width, which
+// depends on the scale, so bisect for the largest scale that measurably fits.
 async function fitScale(page) {
-  let scale = MAX_SCALE;
-  for (let i = 0; i < 2; i++) {
+  const fits = async scale => {
     await page.setViewport({ width: Math.round(A4_W / scale), height: 900 });
-    await new Promise(r => setTimeout(r, 150));
+    await new Promise(r => setTimeout(r, 100));
     const height = await page.evaluate(() => document.documentElement.scrollHeight);
-    scale = Math.min(MAX_SCALE, (A4_H - 2) / height);
+    return height * scale <= A4_H - 2;
+  };
+  if (await fits(MAX_SCALE)) return MAX_SCALE;
+  let lo = 0.4, hi = MAX_SCALE;
+  for (let i = 0; i < 12; i++) {
+    const mid = (lo + hi) / 2;
+    if (await fits(mid)) lo = mid; else hi = mid;
   }
-  return scale;
+  await fits(lo);
+  return lo;
 }
 
 async function exportPDF(browser, outputPath, dark) {
