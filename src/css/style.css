@@ -912,6 +912,25 @@ pre code {
   color: var(--dim);
 }
 
+.l-note {
+  margin-top: 0.15rem;
+  font-size: 0.84rem;
+  font-weight: 300;
+  color: var(--glass);
+}
+
+/* Plain list inside the panel, not the boxed details used in posts. */
+.log-theses {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+}
+
+.log-theses[open] summary {
+  border-bottom: none;
+}
+
 .log-theses summary {
   cursor: pointer;
   font-size: 0.76rem;
