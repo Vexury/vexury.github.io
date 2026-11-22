@@ -2,7 +2,7 @@
 title: ⚙️ VexEngine - Custom Rendering Engine
 date: 2026-02-13
 ongoing: true
-summary: A C++ graphics engine built from scratch — path tracing, Cook-Torrance GGX, dual OpenGL/Vulkan backend, BVH acceleration, denoising and a full editor UI.
+summary: "A C++ graphics engine I built from scratch, with path tracing, Cook-Torrance GGX materials, OpenGL and Vulkan backends, BVH acceleration, denoising and an editor UI."
 preview_image: /images/Engine/Engine_011.png
 ---
 
@@ -14,7 +14,7 @@ preview_image: /images/Engine/Engine_011.png
 <a href="https://github.com/Vexury/VexEngine" class="link-btn">GitHub <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" style="vertical-align:-0.1em"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>
 </div>
 
-VexEngine is a C++ graphics engine I built from scratch — featuring a progressive path tracer with CPU and GPU backends, Cook-Torrance GGX materials, BVH acceleration, denoising and a dockable editor UI. It supports both OpenGL and Vulkan through an abstracted rendering interface.
+VexEngine is a C++ graphics engine I built from scratch. It has a progressive path tracer with CPU and GPU backends, Cook-Torrance GGX materials, BVH acceleration, denoising and a dockable editor UI. OpenGL and Vulkan both run through one abstracted rendering interface.
 
 <div style="text-align:center; color:#888; font-size:0.85em;">
       <img class="lb" src="{% thumb '/images/Engine/Engine_011.png', 1100 %}" alt="Full editor layout" style="max-width:100%" loading="lazy">
@@ -22,9 +22,9 @@ VexEngine is a C++ graphics engine I built from scratch — featuring a progress
       Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
 </div>
 
-After years of working within large frameworks like [PBRT](https://github.com/mmp/pbrt-v4), where the overhead of navigating someone else's codebase often got in the way of actually experimenting, I wanted a clean, minimal engine that I fully understand and control. I have already worked with multiple rendering frameworks for teaching at KIT but VexEngine is built around my own experiments rather than a fixed curriculum.
+I worked within large frameworks like [PBRT](https://github.com/mmp/pbrt-v4) for years, and navigating someone else's codebase often got in the way of actually experimenting. So I wanted a clean, minimal engine that I fully understand and control. I have also worked with several rendering frameworks for teaching at KIT, but VexEngine is built around my own experiments and not around a fixed curriculum.
 
-## Feature Checklist
+## Feature checklist
 
 Here is an overview of what is done and what I am planning to work on next:
 
@@ -108,7 +108,7 @@ Here is an overview of what is done and what I am planning to work on next:
 <details>
 <summary>Materials</summary>
 
-- [x] Microfacet BSDF (GGX/Cook-Torrance) — handles both diffuse and specular lobes
+- [x] Microfacet BSDF (GGX/Cook-Torrance, diffuse and specular lobes)
 - [x] Mirror (perfect specular, delta BRDF)
 - [x] Dielectric (glass, Fresnel reflect/refract, delta BRDF)
 - [x] PBR parameter mapping from OBJ/MTL
@@ -137,11 +137,11 @@ Here is an overview of what is done and what I am planning to work on next:
 
 </details>
 
-Some of the features are further discussed below.
+I go into some of these features in more detail below.
 
 ## Editor
 
-The foundation is [GLFW](https://www.glfw.org/) for window creation and input handling, with [Dear ImGui](https://github.com/ocornut/imgui) (docking branch) on top for the UI. Since ImGui is immediate-mode, the entire editor is just code — no widget trees, no event callbacks, just describe what you want each frame and move on. Every panel can be freely docked, undocked and resized.
+The foundation is [GLFW](https://www.glfw.org/) for window creation and input, with [Dear ImGui](https://github.com/ocornut/imgui) (docking branch) on top for the UI. ImGui is immediate mode, so the whole editor is just code: every frame I describe what should be on screen, and there are no widget trees or event callbacks. Every panel can be docked, undocked and resized.
 
 <div style="text-align:center; color:#888; font-size:0.85em;">
       <img class="lb" src="{% thumb '/images/Engine/Engine_002.png', 1100 %}" alt="Full editor layout" style="max-width:100%" loading="lazy">
@@ -149,39 +149,43 @@ The foundation is [GLFW](https://www.glfw.org/) for window creation and input ha
       Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
 </div>
 
-The editor is built around five panels. The **Scene Hierarchy** is a free n-level tree: every node can be parented under any other by drag-and-drop, and the hierarchy updates immediately. OBJ files with multiple named objects are imported as a root node with one child per object name. Clicking a node selects it and syncs the viewport highlight. The **Inspector** exposes the selected node's local transform and material properties — base color tint, roughness, metallic, emissive strength, IOR — and lets you edit them live across all render backends. Each texture slot shows an inline thumbnail; hovering it pops up a larger preview so you can identify maps at a glance without leaving the inspector. The **Console** captures all engine output in real time, the **Viewport** is the main rendering view, and **Stats** shows a live dashboard: FPS, frame time, VSync toggle, current render mode, path tracer sample count and samples/sec, scene geometry counts (nodes, submeshes, triangles, vertices, textures, lights, emissive meshes, volumes), BVH node count and SAH cost, viewport resolution, and — on Vulkan — a per-category GPU memory breakdown (textures, geometry, framebuffers, ray tracing) against the driver's reported VRAM budget.
+The editor has five panels. The scene hierarchy is a free n-level tree: every node can be dragged under any other node and the hierarchy updates immediately. OBJ files with multiple named objects are imported as a root node with one child per object name. Clicking a node selects it and highlights it in the viewport.
 
-Navigating the scene feels like Blender: scroll to zoom, middle-mouse to pan, click-drag to orbit around a focus point. Meshes can be loaded at runtime via file dialog — OBJ via [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader), and glTF via [tinygltf](https://github.com/syoyo/tinygltf). glTF imports preserve the full node hierarchy from the file, creating one SceneNode per GLTF node under a named root. Materials are imported with full PBR data: ARM-packed `metallicRoughnessTexture` maps are automatically split across the AO (R), Roughness (G), and Metallic (B) slots with no redundant GPU copies.
+The inspector shows the local transform and the material properties of the selected node (base color tint, roughness, metallic, emissive strength, IOR), and all of them can be edited live in every render backend. Each texture slot has a small inline thumbnail, and hovering it shows a larger, proportionally scaled preview, so I can check which map is loaded without leaving the inspector.
+
+The console shows all engine output in real time and the viewport is the main rendering view. The stats panel shows FPS, frame time, a VSync toggle, the current render mode, the path tracer sample count and samples/sec, scene geometry counts (nodes, submeshes, triangles, vertices, textures, lights, emissive meshes, volumes), BVH node count and SAH cost and the viewport resolution. On Vulkan it also breaks down GPU memory by category (textures, geometry, framebuffers, ray tracing) against the VRAM budget the driver reports.
+
+Navigating the scene works like in Blender: scroll to zoom, middle mouse to pan and click-drag to orbit around a focus point. Meshes can be loaded at runtime through a file dialog, OBJ with [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader) and glTF with [tinygltf](https://github.com/syoyo/tinygltf). glTF imports keep the full node hierarchy of the file, with one SceneNode per glTF node under a named root. Materials come in with full PBR data: ARM-packed `metallicRoughnessTexture` maps are split across the AO (R), Roughness (G) and Metallic (B) slots automatically, without redundant GPU copies.
 
 <details>
-<summary>OBJ Import Performance</summary>
+<summary>OBJ import performance</summary>
 
-Loading large scenes exposed three layered bottlenecks in the import pipeline, each fixed independently.
+Loading large scenes was slow at first. There were three separate bottlenecks in the import pipeline, and I fixed each of them on its own. Switching render modes afterwards had its own problems, which come after the table.
 
-**Double texture decode** — `Texture2D::createFromFile` decoded each texture from disk for GPU upload, then `rebuildRaytraceGeometry` decoded the same files again from disk to build the CPU-side ray tracing data structures. For Bistro (274 unique textures) this meant 548 `stbi_load` calls. The fix: decode once with the rows unflipped, cache the raw pixels in a `Scene::importedTexPixels` map, flip the rows in-place for GPU upload, then let the ray tracing rebuild consume the cached pixels directly and clear the map when done.
+The first problem was a double texture decode. `Texture2D::createFromFile` decoded each texture from disk for the GPU upload, and then `rebuildRaytraceGeometry` decoded the same files from disk again to build the CPU-side ray tracing data structures. For Bistro (274 unique textures) that meant 548 `stbi_load` calls. Now each texture is decoded once with the rows unflipped and the raw pixels are cached in a `Scene::importedTexPixels` map. The rows get flipped in place for the GPU upload, and the ray tracing rebuild reads the cached pixels directly and clears the map when it is done.
 
-**Ray tracing SSBO size** — All texture pixels are packed into a flat GPU buffer for the path tracer's texture array. At full resolution, Bistro's 274 textures produced a 3536 MB SSBO. Textures in the ray tracing SSBO are now capped at 1024 px per axis (nearest-neighbour downsample) before packing, reducing it to 884 MB with no visible quality difference at path-traced sample counts.
+The second one was the size of the ray tracing SSBO. All texture pixels are packed into one flat GPU buffer for the texture array of the path tracer, and at full resolution Bistro's 274 textures produced a 3536 MB SSBO. Textures in that buffer are now capped at 1024 px per axis (nearest-neighbour downsample) before packing. That brings it down to 884 MB with no visible difference in quality at path-traced sample counts.
 
-**Sequential texture decode** — After the above two fixes, the remaining bottleneck was the GPU upload phase: 274 textures decoded sequentially on the main thread before being uploaded. Since `stbi_load` is thread-safe for concurrent calls, all unique texture paths are now decoded in parallel across N worker threads (N = hardware concurrency) before the GPU upload begins. Each thread takes work from a shared atomic index, writes into a pre-allocated slot, and the main thread moves all results into `importedTexPixels` after joining — no locking required.
+After these two fixes the GPU upload phase was the bottleneck: 274 textures were decoded one after another on the main thread before the upload. `stbi_load` is thread-safe for concurrent calls, so all unique texture paths are now decoded in parallel on N worker threads (N = hardware concurrency) before the GPU upload starts. Each thread takes work from a shared atomic index and writes into a pre-allocated slot, and after joining, the main thread moves all results into `importedTexPixels`, so no locking is needed.
 
 Measured on the Bistro exterior (1591 submeshes, 2.8M triangles, 274 textures) after each fix:
 
 | State | GPU upload | Total import |
 |---|---|---|
 | After fixes 1 & 2 | 12 106 ms | 18.6 s |
-| + parallel decode (28 threads) | 668 ms decode + 1 732 ms upload | **8.4 s** |
+| + parallel decode (28 threads) | 668 ms decode + 1 732 ms upload | 8.4 s |
 
 The remaining ~5 s are tinyobjloader parsing (2.3 s) and SSBO/BVH packing (3.2 s), both sequential by nature.
 
-**Render-mode switch** — Switching to a path tracing mode after loading triggers a geometry rebuild. The pixel cache is cleared after each rebuild to avoid holding ~3.5 GB of raw texture data permanently, so rebuilds previously re-read all 274 textures from disk (9.7 s). A `prefetchTextures()` call at the start of each rebuild re-fills the cache in parallel if empty, bringing the stall from 10.5 s to ~2.5–5 s depending on mode.
+Switching to a path tracing mode after loading triggers a geometry rebuild. The pixel cache is cleared after each rebuild so it does not hold ~3.5 GB of raw texture data forever, which meant that every rebuild read all 274 textures from disk again (9.7 s). A `prefetchTextures()` call at the start of each rebuild now refills the cache in parallel if it is empty. That brings the stall down from 10.5 s to ~2.5 to 5 s, depending on the mode.
 
-**Double BVH build** — The Compute and CPU path tracing modes built two identical BVHs: one inside `CPURaytracer::setGeometry` and a second `m_rtBVH` for triangle reordering in the GPU compute SSBO. Since both traverse `scene.nodes` in identical order, the resulting permutation is the same. `getBVH()` is now exposed on `CPURaytracer`, and `m_rtBVH` is assigned from it directly — saving ~2.2 s per Compute RT rebuild. CPU Raytrace and Compute Raytrace mode switches now take ~5 s; HW RT takes ~2.5 s.
+The Compute and CPU path tracing modes also built two identical BVHs: one inside `CPURaytracer::setGeometry` and a second `m_rtBVH` for reordering the triangles in the GPU compute SSBO. Both traverse `scene.nodes` in the same order, so the permutation is the same. `CPURaytracer` now exposes `getBVH()` and `m_rtBVH` is assigned from it directly, which saves ~2.2 s per Compute RT rebuild. Switching to CPU Raytrace or Compute Raytrace mode now takes ~5 s, HW RT takes ~2.5 s.
 
-**Redundant RT→RT rebuilds** — Every render-mode switch previously forced a full geometry rebuild, even when switching between two RT modes (e.g. CPU → Compute). The rebuild is only necessary when leaving rasterizer mode (gizmo edits are deferred there). RT→RT switches now skip the rebuild entirely; the existing `m_cpuBVHDirty` flag still triggers a rebuild when a mode needs the CPU BVH for the first time (e.g. HW RT → CPU RT). Switching between CPU RT and Compute RT is now instant.
+Every render-mode switch used to force a full geometry rebuild, even between two RT modes (e.g. CPU → Compute). The rebuild is only necessary when leaving rasterizer mode, because gizmo edits are deferred there. RT→RT switches now skip it, and the existing `m_cpuBVHDirty` flag still triggers a rebuild when a mode needs the CPU BVH for the first time (e.g. HW RT → CPU RT). Switching between CPU RT and Compute RT is instant now.
 
 </details>
 
-Clicking an object in the viewport highlights it with a **screen-space outline**: the selected geometry is rendered as a solid silhouette into an offscreen mask, which the tone-map pass then dilates with a 5×5 kernel and composites as an orange ring over the final image.
+Clicking an object in the viewport highlights it with a screen-space outline. The selected geometry is rendered as a solid silhouette into an offscreen mask, and the tone-map pass dilates that mask with a 5×5 kernel and draws it as an orange ring over the final image.
 
 <div style="text-align:center; color:#888; font-size:0.85em;">
       <img class="lb" src="{% thumb '/images/Engine/Engine_Selection.png', 1100 %}" alt="Full editor layout" style="max-width:100%" loading="lazy">
@@ -189,36 +193,36 @@ Clicking an object in the viewport highlights it with a **screen-space outline**
       Scene: [Chess Set](https://polyhaven.com/a/chess_set) (CC0)
 </div>
 
-Selected objects can also be transformed directly in the viewport: **W** for translate, **E** for rotate, **R** for scale, **G** to toggle local/global space. The gizmo is drawn using the ImGui draw list, so it requires no additional GPU passes. The **pivot point** is derived from the geometry's own AABB rather than the matrix origin, so scaling and rotating always feel anchored to the visual center of the object. All operations are recorded as **undoable commands** (Ctrl+Z / Ctrl+Y), and Ctrl+D duplicates the selected object. Primitive objects — plane, cube, UV sphere, and cylinder — can be created directly from the hierarchy panel.
+Selected objects can also be transformed directly in the viewport with W (translate), E (rotate) and R (scale), and G toggles between local and global space. The gizmo is drawn with the ImGui draw list, so it needs no extra GPU passes. The pivot point comes from the AABB of the geometry and not from the matrix origin, so scaling and rotating always stay anchored to the visual center of the object. All operations are recorded as undoable commands (Ctrl+Z / Ctrl+Y), and Ctrl+D duplicates the selected object. Primitive objects (plane, cube, UV sphere and cylinder) can be created directly from the hierarchy panel.
 
 <details>
-<summary>Picking, Selection & Outline — Implementation Details</summary>
+<summary>Picking, selection & outline details</summary>
 
-**Shared infrastructure**
+Both backends share the same selection setup:
 
-- Left-click coordinates are captured from the ImGui viewport (top-left origin) and queued as a pick request.
-- `pick()` is called once per click and returns a `{groupIdx, submeshIdx}` pair that drives the selection state.
-- The selection feeds into a mask render pass every frame: selected geometry is drawn as solid white into a dedicated color-only framebuffer (`m_outlineMaskFB`), even when nothing is selected (clear to black) so the image is always in a valid sampler state.
-- The outline composite runs inside the existing tone-map fullscreen pass. A 5×5 box dilation over the mask produces `ring = dilated × (1 − original)`, overlaid in orange on top of the tone-mapped image.
+- Left-click coordinates come from the ImGui viewport (top-left origin) and are queued as a pick request.
+- `pick()` runs once per click and returns a `{groupIdx, submeshIdx}` pair that drives the selection state.
+- The selection feeds a mask render pass every frame: selected geometry is drawn as solid white into a dedicated color-only framebuffer (`m_outlineMaskFB`). The pass also runs when nothing is selected (clear to black), so the image is always in a valid sampler state.
+- The outline composite runs inside the existing tone-map fullscreen pass. A 5×5 box dilation over the mask gives `ring = dilated × (1 − original)`, which is drawn in orange over the tone-mapped image.
 
-**Picking**
+Picking itself works differently in the two backends:
 
 | | OpenGL | Vulkan |
 |---|---|---|
-| Method | GPU ID render + pixel readback | CPU Möller–Trumbore ray-triangle intersection |
-| Resources | Dedicated `m_pickShader`, `m_pickFB` | None — uses `SceneMesh::meshData` CPU vertices |
+| Method | GPU ID render + pixel readback | CPU Möller-Trumbore ray-triangle intersection |
+| Resources | Dedicated `m_pickShader`, `m_pickFB` | None, uses `SceneMesh::meshData` CPU vertices |
 | Result | `readPixel(x, y) − 1` → flat draw index → `{group, submesh}` | Nearest-`t` triangle hit → `{group, submesh}` |
 | GPU sync | `glReadPixels` stalls the pipeline | Zero GPU involvement |
 
-**Outline mask rendering**
+Rendering the outline mask:
 
 | | OpenGL | Vulkan |
 |---|---|---|
-| Uniform order | `bind()` first, then `setMat4()` — `glUniform*` requires a bound program | `setMat4()` first, then `bind()` — `bind()` flushes the UBO to the GPU |
+| Uniform order | `bind()` first, then `setMat4()`, because `glUniform*` needs a bound program | `setMat4()` first, then `bind()`, because `bind()` flushes the UBO to the GPU |
 | Depth test | Disabled explicitly (`glDisable`) and restored after | Disabled via pipeline state at `createPipeline(depthTest=false)` |
-| Image layout | Managed implicitly by the driver | Render pass transitions color attachment to `SHADER_READ_ONLY_OPTIMAL` at `vkCmdEndRenderPass` — no explicit barrier needed before sampling |
+| Image layout | Managed implicitly by the driver | Render pass transitions color attachment to `SHADER_READ_ONLY_OPTIMAL` at `vkCmdEndRenderPass`, so no explicit barrier is needed before sampling |
 
-**Outline composite**
+And the outline composite:
 
 | | OpenGL | Vulkan |
 |---|---|---|
@@ -229,25 +233,25 @@ Selected objects can also be transformed directly in the viewport: **W** for tra
 </details>
 
 <details>
-<summary>Gizmo Implementation Details</summary>
+<summary>Gizmo implementation details</summary>
 
-All three modes operate in world space. The gizmo target is the selected scene node; the world matrix is resolved by walking the parent chain (`getWorldMatrix` = recursive parent × local). Write-back converts the new world matrix to local space via `inverse(parentWorld) × newWorld`.
+All three modes work in world space. The gizmo target is the selected scene node, and its world matrix comes from walking the parent chain (`getWorldMatrix` = recursive parent × local). To write the result back, the new world matrix is converted to local space with `inverse(parentWorld) × newWorld`.
 
-**Translate** — A ray is cast from the camera through the cursor and projected onto the axis line. The offset accumulated is `newWorld[3] += axis × worldDist`, applied directly to the translation column. Using `glm::translate` instead would apply the offset in local space and produce wrong results when the object is rotated.
+For translation, a ray from the camera through the cursor is projected onto the axis line. The accumulated offset is `newWorld[3] += axis × worldDist`, applied directly to the translation column. `glm::translate` would apply the offset in local space instead, which gives wrong results when the object is rotated.
 
-**Rotate** — A ray-plane intersection gives the cursor's hit point on the plane perpendicular to the rotation axis. An angle is read as `atan2(cross · axis, dot)` relative to a reference vector frozen at drag start, so the handle tracks the cursor continuously rather than snapping to an absolute angle.
+For rotation, a ray-plane intersection gives the hit point of the cursor on the plane perpendicular to the rotation axis. The angle is `atan2(cross · axis, dot)` relative to a reference vector frozen at drag start, so the handle follows the cursor continuously and does not snap to an absolute angle.
 
-**Scale** — Pivot preservation is handled analytically: after scaling the matrix, the translation column is corrected with `newWorld[3] = pivot − newWorld × localCenter`, where `localCenter` is the AABB center in local space frozen at drag start. This keeps the pivot stationary while the mesh grows. The center knob performs uniform scaling and is tested first in the hit list so it always takes priority over the axis handles.
+For scaling, the pivot is kept in place analytically: after scaling the matrix, the translation column is corrected with `newWorld[3] = pivot − newWorld × localCenter`, where `localCenter` is the AABB center in local space frozen at drag start. That way the pivot stays where it is while the mesh grows. The center knob scales uniformly and is tested first in the hit list, so it always takes priority over the axis handles.
 
-**Undo/redo** — Every drag end emits a `CmdSetTransform` command pushed onto a 50-deep deque-based command stack. The command stores the before/after **local** matrices directly (no conversion needed at apply time). Hierarchy drag-and-drop emits a `CmdReparent` command that adjusts `parentIndex`, `childIndices`, and the local matrix to preserve world position. Ctrl+Z/Y walk the stack; Ctrl+D emits a `CmdAddNode` to duplicate the selected node as a sibling.
+For undo/redo, every drag end pushes a `CmdSetTransform` command onto a 50-deep deque-based command stack. The command stores the before and after local matrices directly, so nothing has to be converted when it is applied. Drag-and-drop in the hierarchy emits a `CmdReparent` command that adjusts `parentIndex`, `childIndices` and the local matrix to keep the world position. Ctrl+Z/Y walk the stack, and Ctrl+D emits a `CmdAddNode` that duplicates the selected node as a sibling.
 
 </details>
 
-## Dual Backend: OpenGL & Vulkan
+## Dual backend: OpenGL & Vulkan
 
-One of the more unusual design decisions is supporting two graphics APIs, selected at compile time via a CMake flag. All GPU concepts — shaders, framebuffers, meshes, textures — sit behind a common interface; the application layer never calls any GL or VK functions directly. This forced me to think carefully about where abstraction boundaries belong, and made every feature run twice — a surprisingly effective way to catch design mistakes early.
+VexEngine supports two graphics APIs, selected at compile time with a CMake flag. All GPU concepts (shaders, framebuffers, meshes, textures) sit behind a common interface, and the application layer never calls GL or VK functions directly. This forced me to think carefully about where the abstraction boundaries belong. It also means every feature has to run twice, which is a good way to catch design mistakes early.
 
-OpenGL is the simpler backend and makes iteration fast: shader hot-reload works at the press of F5, and the driver handles a lot of state implicitly. Vulkan is far more explicit — render passes, descriptor sets, pipeline layouts, synchronization barriers — everything has to be declared. That verbosity is the price of admission for hardware ray tracing via `VK_KHR_ray_tracing_pipeline`, which wouldn't have been possible on the OpenGL side. [vk-bootstrap](https://github.com/charles-lunarg/vk-bootstrap) handles instance and device setup, and [VMA](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator) manages GPU memory allocation — both reduce boilerplate without hiding anything important.
+OpenGL is the simpler backend and makes iteration fast: shader hot reload works with F5 and the driver handles a lot of state implicitly. In Vulkan everything has to be declared explicitly: render passes, descriptor sets, pipeline layouts, synchronization barriers. In return it gives me hardware ray tracing through `VK_KHR_ray_tracing_pipeline`, which would not have been possible with OpenGL. [vk-bootstrap](https://github.com/charles-lunarg/vk-bootstrap) handles instance and device setup and [VMA](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator) manages GPU memory allocation. Both cut boilerplate without hiding anything important.
 
 <div style="margin:1.5rem auto; width:100%">
   <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
@@ -262,11 +266,11 @@ OpenGL is the simpler backend and makes iteration fast: shader hot-reload works 
   Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)</div>
 </div>
 
-## Rasterization & Debug Views
+## Rasterization & debug views
 
-Both backends support standard rasterization for fast interactive preview — the default mode for navigating the scene and placing objects before running a more expensive path trace. The rasterized image is rendered into an HDR intermediate framebuffer and then passed through a fullscreen tone-map pass that applies **ACES tone mapping** and **exposure / gamma correction** before display.
+Both backends have a standard rasterizer for fast interactive preview. It is the default mode for moving around the scene and placing objects before starting a more expensive path trace. The rasterized image goes into an HDR intermediate framebuffer and then through a fullscreen tone-map pass that applies ACES tone mapping and exposure / gamma correction before display.
 
-On top of the standard shaded view, several **debug visualization modes** can be toggled at any time from the viewport:
+On top of the shaded view there are several debug visualization modes that can be switched on at any time from the viewport:
 
 <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:0.5rem; margin:1.5rem 0">
     <figure style="margin:0">
@@ -297,16 +301,16 @@ On top of the standard shaded view, several **debug visualization modes** can be
     <div style="grid-column:1/-1; text-align:center; color:#888; font-size:0.85em;">Scene: [Vintage Video Camera](https://polyhaven.com/a/vintage_video_camera) (CC0)</div>
   </div>
 
-- **Wireframe** — Triangle mesh overlay for inspecting topology and geometry density.
-- **Normals** — Surface normals as RGB, useful for checking mesh quality and normal map correctness.
-- **Albedo / Emission / Material ID** — Passes that isolate specific shading components for quick inspection.
-- **UVs** — Texture coordinates as colors, good for spotting seams and mapping problems.
-- **Depth** — Grayscale depth buffer, helpful for verifying near/far plane settings.
-- **Roughness / Metallic / AO** — PBR channel isolation; reads the correct channel from ARM-packed textures (G/B/R respectively) or the scalar fallback.
+- Wireframe, for checking topology and geometry density
+- Normals as RGB, for checking mesh quality and normal maps
+- Albedo, emission and material ID, which isolate single shading components
+- UVs as colors, good for spotting seams and mapping problems
+- Depth in grayscale, for checking the near and far plane settings
+- Roughness, metallic and AO, read from the correct channel of ARM-packed textures (G/B/R) or from the scalar fallback
 
-## Shadow Mapping
+## Shadow mapping
 
-The rasterizer supports directional (sun) shadow mapping on both backends. A depth-only pass renders the scene from the sun's point of view into a 4096×4096 shadow map, which the main shading pass samples to determine whether each surface point is lit or in shadow. Soft shadows are produced by a PCF 3×3 kernel, and the shadow frustum is fitted tightly to the scene geometry so no texel resolution is wasted. Getting the bias right is the main challenge — the engine uses a combination of three complementary techniques that together eliminate both acne and peter-panning across a wide range of sun angles. A Normal Bias slider and an inline shadow map debug view are exposed directly in the Sun inspector.
+The rasterizer supports shadow mapping for the directional (sun) light on both backends. A depth-only pass renders the scene from the sun into a 4096×4096 shadow map, and the main shading pass samples it to decide whether a surface point is lit or in shadow. A PCF 3×3 kernel makes the shadows soft, and the shadow frustum is fitted tightly to the scene geometry so no texel resolution is wasted. The hard part is getting the bias right. I combine three techniques that together remove both acne and peter-panning across a wide range of sun angles. The Sun inspector has a Normal Bias slider and an inline debug view of the shadow map.
 
 <div style="margin:1.5rem auto; width:100%">
   <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
@@ -322,21 +326,21 @@ The rasterizer supports directional (sun) shadow mapping on both backends. A dep
 </div>
 
 <details>
-<summary>Frustum Fitting & Bias</summary>
+<summary>Frustum fitting & bias</summary>
 
-**Frustum fitting** — The orthographic frustum is fitted to the world-space AABB of all scene geometry. All eight AABB corners are projected into light view space and the exact min/max extents are read off directly — no wasted texels regardless of scene size or sun angle. The AABB is computed once at scene load and cached. A 2% scale from the AABB center adds a small margin to prevent PCF samples near the frustum edge from clamping to the border color.
+The orthographic frustum is fitted to the world-space AABB of all scene geometry. All eight corners of the AABB are projected into light view space and the exact min/max extents are read off directly, so no texels are wasted, no matter the scene size or sun angle. The AABB is computed once at scene load and cached. A 2% scale from the AABB center adds a small margin, so PCF samples near the edge of the frustum don't clamp to the border color.
 
-Getting the bias right requires balancing two artifacts: too little causes self-shadowing acne, too much causes peter-panning (the shadow detaches from its caster). The engine uses three complementary techniques, matching the approach used by Unity and Godot:
+For the bias there are two artifacts to balance: too little causes self-shadowing acne and too much causes peter-panning (the shadow detaches from its caster). I use three techniques together, which is the same approach Unity and Godot use:
 
-- **Normal offset bias** — Instead of biasing the depth value, the shadow lookup point is shifted along the surface normal by `sin(θ) × normalBias` before projection. `sin(θ) = sqrt(1 − NdotL²)` is zero when the surface directly faces the light and maximum at grazing angles. The offset is expressed in shadow-map texel units and pre-multiplied by the world-space texel size on the CPU, so it scales automatically with frustum and scene size.
-- **Receiver plane depth bias (RPDB)** — The PCF 3×3 kernel samples at ±1 texel offsets. On a sloped receiver surface the correct reference depth differs at each tap. Using the same center depth for all nine samples causes acne on moderately-lit faces. RPDB computes `dZ/dU` and `dZ/dV` via screen-space derivatives (`dFdx`/`dFdy`) and adjusts each tap's reference depth to match the receiver slope analytically.
-- **Hardware constant depth bias** — A small constant bias (`glPolygonOffset` / `vkCmdSetDepthBias`) applied during shadow map rendering handles the residual case where `NdotL ≈ 1` and the normal offset is near zero. The slope-scale component is intentionally zero — at grazing angles it diverges and recreates the peter-panning that normal offset is designed to avoid.
+- Normal offset bias moves the shadow lookup point along the surface normal by `sin(θ) × normalBias` before projection, instead of biasing the depth value. `sin(θ) = sqrt(1 − NdotL²)` is zero when the surface faces the light directly and largest at grazing angles. The offset is given in shadow-map texels and pre-multiplied by the world-space texel size on the CPU, so it scales with frustum and scene size automatically.
+- Receiver plane depth bias (RPDB) is for the PCF kernel. The 3×3 kernel samples at ±1 texel offsets, and on a sloped receiver surface the correct reference depth is different for each tap. Using the same center depth for all nine samples causes acne on moderately lit faces. RPDB computes `dZ/dU` and `dZ/dV` from screen-space derivatives (`dFdx`/`dFdy`) and adjusts the reference depth of each tap to the receiver slope analytically.
+- A small hardware constant depth bias (`glPolygonOffset` / `vkCmdSetDepthBias`) during shadow map rendering covers the rest, where `NdotL ≈ 1` and the normal offset is close to zero. The slope-scale component is zero on purpose: at grazing angles it diverges and brings back the peter-panning that the normal offset is supposed to avoid.
 
 </details>
 
-## Path Tracing
+## Path tracing
 
-The engine's main rendering mode is a **progressive path tracer** displayed in the viewport via a fullscreen quad. It accumulates samples silently in the background — the longer the scene sits still, the cleaner the image gets. Any change to the camera, geometry, or settings immediately resets the accumulation and starts fresh.
+The main rendering mode is a progressive path tracer, shown in the viewport on a fullscreen quad. It keeps accumulating samples in the background, so the longer the scene stays still, the cleaner the image gets. Any change to the camera, the geometry or the settings resets the accumulation and starts over.
 
 <div style="margin:1.5rem 0">
   <div style="display:flex">
@@ -354,67 +358,70 @@ The engine's main rendering mode is a **progressive path tracer** displayed in t
   <div style="text-align:center; color:#888; font-size:0.85em; padding:0.3rem 0">Scene: Nvidia <a href="https://developer.nvidia.com/orca/amazon-lumberyard-bistro" target="_blank" rel="noopener">Amazon Lumberyard Bistro</a> (CC-BY 4.0)</div>
 </div>
 
-Ray-scene intersection is accelerated by a **BVH** built with binned SAH. The path tracer supports four light types — emissive geometry, emissive textures, point/directional lights, and an environment map — all sampled with **Next Event Estimation (NEE)** and **Multiple Importance Sampling (MIS)** to keep variance low. Path depth is managed by **Russian Roulette**, the specular lobe uses **VNDF sampling** [(Heitz 2018)](https://jcgt.org/published/0007/04/01/paper.pdf), and **depth of field** is modelled with a thin-lens camera. Anti-aliasing comes for free via jittered primary rays, and firefly clamping suppresses extreme outliers during early convergence.
+Ray-scene intersection uses a BVH built with binned SAH. The path tracer supports four kinds of light (emissive geometry, emissive textures, point/directional lights and an environment map), and Next Event Estimation (NEE) and Multiple Importance Sampling (MIS) keep the variance low. Russian Roulette decides the path depth, the specular lobe uses VNDF sampling [(Heitz 2018)](https://jcgt.org/published/0007/04/01/paper.pdf) and depth of field comes from a thin-lens camera. Anti-aliasing comes for free with jittered primary rays, and firefly clamping cuts extreme outliers during early convergence.
 
 <details>
-<summary>BVH Acceleration</summary>
+<summary>BVH acceleration</summary>
 
-The BVH is built with **binned Surface Area Heuristic (SAH)**. The builder evaluates split candidates across binned intervals to produce a tree that minimises expected traversal cost. At query time, traversal is **ordered** — the closer child is visited first, improving early termination and reducing the number of intersection tests significantly.
+The BVH is built with a binned Surface Area Heuristic (SAH). The builder evaluates split candidates over binned intervals and produces a tree that minimises the expected traversal cost. Traversal is ordered: the closer child is visited first, which helps early termination and reduces the number of intersection tests significantly.
 
 </details>
 
 <details>
-<summary>Ray-Triangle Intersection Precision</summary>
+<summary>Ray-triangle intersection precision</summary>
 
-The three software path tracers use **Möller-Trumbore** (MT) for ray-triangle intersection. MT computes the determinant `a = dot(edge1, cross(dir, edge2))`, which equals `−dot(dir, geoNormal) × 2 × area`. Two choices in the formulation directly affect numerical robustness at grazing angles.
+The three software path tracers use Möller-Trumbore (MT) for ray-triangle intersection. MT computes the determinant `a = dot(edge1, cross(dir, edge2))`, which equals `−dot(dir, geoNormal) × 2 × area`. Two choices in that formulation decide how robust it is at grazing angles.
 
-**Near-parallel epsilon** — `a` approaching zero means the ray is nearly coplanar with the triangle. A naive absolute threshold rejects valid near-grazing intersections on small triangles because `|a| = sin(θ) × 2 × area`, so the effective minimum angle scales inversely with triangle size. The engine uses `1e-9`, well below the range where floating-point division becomes unstable but permissive enough for genuinely shallow hits. The t-threshold (self-intersection guard) is kept separate at `1e-7` since it operates in world-space distance rather than determinant scale.
+The first is the epsilon for near-parallel rays. When `a` approaches zero, the ray is nearly coplanar with the triangle. A naive absolute threshold rejects valid near-grazing hits on small triangles, because `|a| = sin(θ) × 2 × area`, so the smallest accepted angle grows as triangles get smaller. I use `1e-9`, which is well below the range where the floating-point division becomes unstable but still lets genuinely shallow hits through. The t-threshold (the self-intersection guard) is a separate `1e-7`, since it works in world-space distance and not in determinant scale.
 
-**Barycentric bounds tolerance** — Once `a` passes the epsilon check, `f = 1/a` can still be large at shallow angles, amplifying rounding error in the subsequent dot products for `u` and `v`. A ray landing exactly on a triangle edge can compute slightly outside `[0, 1]`. Rather than a strict simplex test, the engine allows `1e-5` of outward slack on all three edges. This is not clamped before use: the interpolated attributes (normals, UVs, tangents) are computed with the raw coordinates, since a `1e-5` extrapolation past an edge is imperceptible and adjacent triangles share the same vertex data at their boundary anyway.
+The second is a tolerance on the barycentric bounds. Even when `a` passes the epsilon check, `f = 1/a` can be large at shallow angles and amplify the rounding error in the dot products for `u` and `v`. A ray that lands exactly on a triangle edge can then compute slightly outside `[0, 1]`. So instead of a strict simplex test I allow `1e-5` of outward slack on all three edges. The coordinates are not clamped before use: normals, UVs and tangents are interpolated with the raw values, because a `1e-5` extrapolation past an edge is imperceptible and adjacent triangles share the same vertex data at their boundary anyway.
 
-**Limitations** — Both tolerances are absolute rather than relative to triangle size. On large triangles the `1e-9` epsilon still rejects extreme grazing angles; on very small triangles the `1e-5` UV slack is a proportionally larger fraction of the triangle and could admit a hit in a gap at a non-manifold edge or T-junction.
-
-</details>
-
-<details>
-<summary>Light Sources & Sampling</summary>
-
-- **Emissive geometry** — Triangles with a solid emissive color (`Ke`) are treated as area lights. They are collected into a CDF weighted by surface area, allowing NEE to directly sample points on their surface each bounce. When a path ray hits one of these emitters it terminates — the surface is a pure light source. MIS balances NEE and BSDF sampling to reduce variance.
-- **Emissive textures** — Materials with `map_Ke` are handled differently. Because emission varies per-texel they are excluded from the light CDF and cannot be NEE-sampled. They contribute only when a ray happens to hit them, and unlike solid emitters they continue scattering via their base material — they are glowing surfaces, not light sources.
-- **Point and directional lights** — Sampled by dedicated NEE paths. Point lights use inverse-square falloff. The directional (sun) light has a configurable angular radius — shadow rays are jittered within a cone to produce soft shadows.
-- **Environment lighting** — An HDR environment map provides image-based lighting. A 2D CDF (conditional + marginal) is precomputed so NEE preferentially samples bright sky regions. MIS balances environment and BSDF sampling.
-
-All four NEE strategies fire independently each bounce. The emissive material contribution can be toggled off to isolate explicit light sources.
+Both tolerances have a limit: they are absolute and not relative to the triangle size. On large triangles the `1e-9` epsilon still rejects extreme grazing angles, and on very small triangles the `1e-5` UV slack is a proportionally larger fraction of the triangle and could admit a hit in a gap at a non-manifold edge or T-junction.
 
 </details>
 
 <details>
-<summary>Russian Roulette Path Termination</summary>
+<summary>Light sources & sampling</summary>
 
-After the first two bounces, each subsequent bounce computes a survival probability equal to the luminance of the current path throughput, capped at 0.95. The path terminates with probability `1 − p`; if it survives, the throughput is divided by `p` to keep the estimator unbiased. Paths through dark surfaces lose energy quickly and self-terminate early; bright paths continue. Raising the maximum depth has little practical cost — most paths terminate long before the cap.
+Triangles with a solid emissive color (`Ke`) are area lights. They are collected into a CDF weighted by surface area, so NEE can sample points on their surface directly at every bounce. A path ray that hits one of these emitters terminates there, since the surface is a pure light source. MIS balances NEE and BSDF sampling to reduce variance.
+
+Materials with `map_Ke` work differently. Their emission varies per texel, so they are left out of the light CDF and can't be NEE-sampled. They only contribute when a ray happens to hit them, and unlike solid emitters they keep scattering through their base material (they are glowing surfaces and not light sources).
+
+Point and directional lights have their own NEE paths. Point lights use inverse-square falloff. The sun has a configurable angular radius, and shadow rays are jittered inside that cone to get soft shadows.
+
+For environment lighting an HDR environment map provides image-based lighting. A 2D CDF (conditional + marginal) is precomputed so NEE samples the bright regions of the sky more often, and MIS balances environment and BSDF sampling.
+
+All four NEE strategies run independently at every bounce. The emissive material contribution can be switched off to isolate the explicit light sources.
 
 </details>
 
 <details>
-<summary>VNDF Specular Sampling</summary>
+<summary>Russian Roulette path termination</summary>
 
-The specular lobe uses **VNDF sampling** ([Heitz 2018](https://jcgt.org/published/0007/04/01/)) instead of plain NDF sampling. NDF sampling draws half-vectors without regard to the view direction, frequently producing reflected directions below the surface at grazing angles — wasting the sample and losing energy. VNDF restricts half-vectors to those visible from the current view direction, eliminating most invalid samples.
+After the first two bounces, every bounce computes a survival probability equal to the luminance of the current path throughput, capped at 0.95. The path terminates with probability `1 − p`, and if it survives, the throughput is divided by `p` so the estimator stays unbiased. Paths through dark surfaces lose energy quickly and end early, bright paths keep going. That makes a higher maximum depth cheap in practice, since most paths end long before the cap.
 
 </details>
 
 <details>
-<summary>Depth of Field</summary>
+<summary>VNDF specular sampling</summary>
 
-Depth of field uses a **thin-lens camera model**. Instead of firing all rays from a single point (pinhole), each primary ray originates from a random position on a disk of configurable radius (the aperture), aimed at a focal plane at a configurable distance. Objects at the focal plane are perfectly sharp; objects nearer or farther accumulate a circle of confusion that grows with distance. Concentric disk mapping keeps the sample distribution uniform across the lens. Setting aperture to zero falls back to exact pinhole behaviour with no overhead. Both CPU and GPU path tracers share the same model.
+The specular lobe uses VNDF sampling ([Heitz 2018](https://jcgt.org/published/0007/04/01/)) instead of plain NDF sampling. NDF sampling draws half-vectors without looking at the view direction, so at grazing angles it often produces reflected directions below the surface, which wastes the sample and loses energy. VNDF only draws half-vectors that are visible from the current view direction, which removes most of these invalid samples.
 
 </details>
 
-The algorithm is the same across all four backends — the difference is where it runs:
+<details>
+<summary>Depth of field</summary>
 
-- **CPU** — The original implementation, running on the host. Slow, but every ray can be stepped through in a debugger, which was invaluable when building out the lighting and sampling logic.
-- **GPU (OpenGL compute)** — The same algorithm ported to a **GLSL compute shader**. Runs massively parallel with a significant speedup, and supports **live shader reload** (F5) for fast iteration.
-- **GPU (Vulkan compute)** — Algorithmically identical to the OpenGL compute path, ported to Vulkan. Uses a CPU-built BVH uploaded as an SSBO and a single `pathtracer.comp` compute shader dispatched in 8×8 workgroups. Works on any Vulkan device regardless of hardware RT support.
-- **GPU (Vulkan HW RT)** — Uses **hardware ray tracing** (`VK_KHR_ray_tracing_pipeline`) with dedicated RT cores for BVH traversal and ray-triangle intersection. The algorithm spans five shader stages (rgen, rmiss, shadow rmiss, rchit, rahit) with an iterative loop in the ray generation shader to stay within a recursion depth of one.
+Depth of field uses a thin-lens camera model. Instead of firing all rays from a single point (pinhole), each primary ray starts at a random position on a disk with configurable radius (the aperture) and is aimed at a focal plane at a configurable distance. Objects on the focal plane are perfectly sharp, and nearer or farther objects get a circle of confusion that grows with distance. Concentric disk mapping keeps the sample distribution uniform across the lens. An aperture of zero falls back to exact pinhole behaviour without overhead. The CPU and GPU path tracers share the same model.
+
+</details>
+
+The algorithm is the same in all four backends. They only differ in where it runs:
+
+- CPU: the original implementation, running on the host. It is slow, but I can step through every ray in a debugger, which helped a lot while I was building the lighting and sampling logic.
+- GPU (OpenGL compute): the same algorithm ported to a GLSL compute shader. It runs in parallel on the GPU and is much faster, and it supports live shader reload (F5) for fast iteration.
+- GPU (Vulkan compute): algorithmically identical to the OpenGL compute path, ported to Vulkan. It uploads a CPU-built BVH as an SSBO and dispatches a single `pathtracer.comp` compute shader in 8×8 workgroups. This one works on any Vulkan device, with or without hardware RT support.
+- GPU (Vulkan HW RT): uses hardware ray tracing (`VK_KHR_ray_tracing_pipeline`), so the RT cores do the BVH traversal and ray-triangle intersection. The algorithm is split over five shader stages (rgen, rmiss, shadow rmiss, rchit, rahit), with an iterative loop in the ray generation shader to stay within a recursion depth of one.
 
 <div style="text-align:center; color:#888; font-size:0.85em;">
       <img class="lb" src="{% thumb '/images/Engine/Engine_010.png', 1100 %}" alt="Full editor layout" style="max-width:100%" loading="lazy">
@@ -422,13 +429,13 @@ The algorithm is the same across all four backends — the difference is where i
       Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)
 </div>
 
-## Volumetric Participating Media
+## Volumetric participating media
 
-The path tracer supports **physically-based participating media** — fog, haze, light shafts, and colored smoke — as first-class scene objects. Volumes are axis-aligned bounding boxes placed anywhere in the scene, or set to infinite mode for global atmospheric effects. Each volume has three parameters: **density** (σt, the extinction coefficient), **scatter color** (per-channel scattering albedo, so volumes can be tinted), and **anisotropy** (the Henyey-Greenstein *g* parameter, controlling whether light scatters forward, backward, or isotropically).
+The path tracer supports physically based participating media (fog, haze, light shafts and colored smoke) as regular scene objects. A volume is an axis-aligned box that can be placed anywhere in the scene, or set to infinite mode for global atmospheric effects. Each volume has three parameters: density (σt, the extinction coefficient), scatter color (per-channel scattering albedo, so volumes can be tinted) and anisotropy (the Henyey-Greenstein *g* parameter, which controls whether light scatters forward, backward or isotropically).
 
-The implementation is fully analytical — no additional geometry, BVH nodes, or TLAS instances. Every path tracing bounce intersects each volume against the ray using a slab test. If the ray enters a volume, a free-flight distance is drawn by exponential importance sampling. If that distance falls before the surface hit, a **scatter event** occurs: the throughput is weighted by the scattering albedo, a new direction is drawn from the Henyey-Greenstein distribution, and NEE fires toward all active lights using the phase function as the directional weight. If no scatter occurs within the slab, Beer-Lambert transmittance attenuates the throughput by `exp(−σt × path length)` before the ray continues to the surface.
+Everything is analytical, so the volumes need no extra geometry, BVH nodes or TLAS instances. At every path tracing bounce each volume is intersected with the ray using a slab test. If the ray enters a volume, a free-flight distance is drawn with exponential importance sampling. If that distance is shorter than the distance to the surface hit, a scatter event happens: the throughput is weighted by the scattering albedo, a new direction is drawn from the Henyey-Greenstein distribution and NEE samples all active lights with the phase function as the directional weight. If nothing scatters inside the slab, Beer-Lambert transmittance attenuates the throughput by `exp(−σt × path length)` and the ray continues to the surface.
 
-Anisotropy (*g*) shapes the scattering lobe: *g* = 0 gives isotropic fog, *g* → +1 concentrates scattering forward and produces glowing halos around lights visible through haze, and *g* < 0 scatters back toward the source.
+Anisotropy (*g*) shapes the scattering lobe: *g* = 0 gives isotropic fog, *g* → +1 pushes the scattering forward and gives glowing halos around lights seen through haze, and *g* < 0 scatters light back toward the source.
 
 <div style="text-align:center; color:#888; font-size:0.85em;">
       <img class="lb" src="{% thumb '/images/Engine/Engine_Bistro_Fog.png', 1100 %}" alt="Volumetric fog in the Bistro scene" style="max-width:100%" loading="lazy">
@@ -438,13 +445,13 @@ Anisotropy (*g*) shapes the scattering lobe: *g* = 0 gives isotropic fog, *g* �
 
 ## Denoising
 
-Even a well-optimised path tracer needs many samples before the image looks clean — at 1 SPP the noise is severe, and reaching a perceptually converged result can take hundreds of passes. Rather than waiting, the engine integrates [Intel Open Image Denoise (OIDN)](https://www.openimagedenoise.org/) as a one-click post-process that runs on the CPU and produces a clean result in a fraction of a second.
+Even a well-optimised path tracer needs many samples before the image looks clean. At 1 SPP the noise is severe, and a result that looks converged can take hundreds of passes. So instead of waiting, I integrated [Intel Open Image Denoise (OIDN)](https://www.openimagedenoise.org/) as a one-click post-process that runs on the CPU and gives a clean result in a fraction of a second.
 
-The integration works entirely on the CPU side and is backend-agnostic. A "Denoise" button appears in the Settings panel whenever samples have been accumulated; pressing it reads back the current accumulation buffer as **linear HDR float RGB** — before any tone mapping — feeds it into OIDN's RT filter, then applies the same exposure, ACES tone mapping and gamma correction as the live display. The result replaces the viewport image and accumulation is frozen. Moving the camera or changing any scene parameter immediately clears the denoised result and restarts accumulation from zero.
+The integration runs entirely on the CPU side and does not depend on the backend. When samples have been accumulated, a "Denoise" button shows up in the Settings panel. Pressing it reads back the current accumulation buffer as linear HDR float RGB (before any tone mapping), runs OIDN's RT filter on it and then applies the same exposure, ACES tone mapping and gamma correction as the live display. The result replaces the viewport image and accumulation is frozen. Moving the camera or changing any scene parameter clears the denoised result and restarts accumulation from zero.
 
-For both Vulkan GPU path tracers (HW RT and compute) the readback copies the RGBA32F accumulation image from device memory to a CPU-side staging buffer via an immediate-submit command, divides out the per-pixel sample counter stored in the alpha channel, and passes the resulting linear HDR data directly to OIDN. For the CPU path tracer the accumulation buffer is already on the host, so no copy is needed.
+For the two Vulkan GPU path tracers (HW RT and compute) the readback copies the RGBA32F accumulation image from device memory into a CPU-side staging buffer with an immediate-submit command, divides out the per-pixel sample counter stored in the alpha channel and passes the linear HDR data directly to OIDN. The CPU path tracer already has its accumulation buffer on the host, so there is nothing to copy.
 
-A second **Denoise+** mode feeds OIDN two additional *feature buffers* — **first-hit albedo** and **first-hit world-space normal** — alongside the noisy colour input. OIDN's RT filter uses these to separate lighting noise from surface texture and to respect geometric edges, dramatically improving denoising quality at very low sample counts where colour-only denoising struggles. Each backend captures the data at the primary ray hit: the GPU path tracers write it to dedicated `rgba32f` storage images at depth 0 in the shader; the CPU path tracer stores it in per-pixel auxiliary buffers filled on the first bounce. Both buffers are constant across samples (first-hit data is deterministic), so writing every frame incurs no overhead. The comparison below was captured at **1 SPP** — a single sample per pixel.
+A second mode, Denoise+, gives OIDN two extra feature buffers next to the noisy color input: first-hit albedo and first-hit world-space normal. OIDN's RT filter uses them to separate lighting noise from surface texture and to respect geometric edges, which improves the result a lot at very low sample counts where color-only denoising struggles. Each backend captures the data at the primary ray hit. The GPU path tracers write it to dedicated `rgba32f` storage images at depth 0 in the shader, and the CPU path tracer stores it in per-pixel auxiliary buffers that are filled on the first bounce. Both buffers are the same for every sample (first-hit data is deterministic), so writing them every frame costs nothing. The comparison below is at 1 SPP, so a single sample per pixel.
 
 <div style="margin:1.5rem auto; width:100%">
   <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
@@ -459,19 +466,19 @@ A second **Denoise+** mode feeds OIDN two additional *feature buffers* — **fir
   Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)</div>
 </div>
 
-## Post-Processing
+## Post-processing
 
-The post-processing stack sits between the HDR render and the final display output. Every render path — rasterizer and path tracer, OpenGL and Vulkan — shares the same pipeline: **bloom** composited in linear HDR space, then **ACES tone mapping** and **exposure / gamma correction** in a single fullscreen pass.
+The post-processing stack sits between the HDR render and the final display output. Every render path (rasterizer and path tracer, OpenGL and Vulkan) shares the same pipeline: bloom composited in linear HDR space, then ACES tone mapping and exposure / gamma correction in a single fullscreen pass.
 
-**Bloom** runs as a three-stage pipeline on a half-resolution offscreen framebuffer:
+Bloom runs in three stages on a half-resolution offscreen framebuffer:
 
-1. **Threshold** — A fragment shader reads the HDR source, converts each pixel to luminance, and applies a soft ramp: pixels below the threshold contribute nothing, pixels above it contribute proportionally to how far they exceed it. Only bright surfaces — emissive materials, specular highlights, direct light hits — pass through.
+1. Threshold: a fragment shader reads the HDR source, converts each pixel to luminance and applies a soft ramp. Pixels below the threshold contribute nothing, and pixels above it contribute in proportion to how far they exceed it. Only bright surfaces like emissive materials, specular highlights and direct light hits get through.
 
-2. **Separable Gaussian blur** — A pair of ping-pong framebuffers alternate horizontal and vertical 9-tap Gaussian passes (σ ≈ 1.5). Running the blur multiple times spreads the glow further without a wider kernel.
+2. Separable Gaussian blur: two ping-pong framebuffers alternate horizontal and vertical 9-tap Gaussian passes (σ ≈ 1.5). Running the blur several times spreads the glow further without a wider kernel.
 
-3. **Composite** — The blurred bloom map is additively mixed onto the HDR image at a configurable intensity, before tone mapping is applied. Compositing in HDR space means the glow from an overexposed surface stays bright through the tone mapper rather than getting clipped to a flat white halo.
+3. Composite: the blurred bloom map is added onto the HDR image with a configurable intensity, before tone mapping. Because this happens in HDR space, the glow of an overexposed surface stays bright through the tone mapper and does not get clipped to a flat white halo.
 
-One complication arises with the GPU path tracers: the accumulation buffer stores a running sum across N samples, not a normalised average. The threshold shader divides by the sample count before extracting bright pixels — without this, the bloom contribution would grow linearly with N and blow the image out to white after enough samples.
+The GPU path tracers needed one extra step. Their accumulation buffer stores a running sum over N samples and not a normalised average, so the threshold shader divides by the sample count before it extracts bright pixels. Without that, the bloom contribution would grow linearly with N and blow the image out to white after enough samples.
 
 <div style="margin:1.5rem auto; width:100%">
   <div class="img-compare" onmousemove="var x=event.offsetX,w=this.offsetWidth,l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(w-x)+'px 0 0)';d.style.left=x+'px'" ontouchmove="var r=this.getBoundingClientRect(),x=Math.max(0,Math.min(event.touches[0].clientX-r.left,r.width)),l=this.querySelector('.ic-left'),d=this.querySelector('.ic-line');l.style.clipPath='inset(0 '+(r.width-x)+'px 0 0)';d.style.left=x+'px';event.preventDefault()">
@@ -486,18 +493,18 @@ One complication arises with the GPU path tracers: the accumulation buffer store
   Scene: Nvidia [Amazon Lumberyard Bistro](https://developer.nvidia.com/orca/amazon-lumberyard-bistro) (CC-BY 4.0)</div>
 </div>
 
-## Materials and Textures
+## Materials and textures
 
-The engine supports a full **PBR material pipeline** built on the **Cook-Torrance [microfacet model](https://pbr-book.org/3ed-2018/Reflection_Models/Microfacet_Models)** with a **GGX normal distribution**. Three material types are supported — **Microfacet** for the general case, **Mirror** for perfect specular surfaces, and **Dielectric** for glass and other transmissive materials. All are loaded automatically from OBJ/MTL files and can be overridden per-object in the Inspector.
+The materials use a PBR pipeline built on the Cook-Torrance [microfacet model](https://pbr-book.org/3ed-2018/Reflection_Models/Microfacet_Models) with a GGX normal distribution. There are three material types: Microfacet for the general case, Mirror for perfect specular surfaces and Dielectric for glass and other transmissive materials. They are loaded from OBJ/MTL files automatically and can be overridden per object in the inspector.
 
-Textures can drive any surface property spatially: **base color**, **normal**, **emissive**, **roughness**, **metallic**, and **ambient occlusion** maps are all supported. OBJ/MTL files use separate per-channel greyscale maps; glTF files typically pack roughness, metallic, and AO into a single **ARM texture** (R=AO, G=Roughness, B=Metallic). The engine handles both formats uniformly — ARM maps are deduped at the `shared_ptr` level so all three slots reference the same GPU texture object. When no texture is present, the scalar material value is used as fallback.
+Textures can drive base color, normal, emission, roughness, metallic and ambient occlusion. OBJ/MTL files use separate greyscale maps per channel, while glTF files typically pack roughness, metallic and AO into a single ARM texture (R=AO, G=Roughness, B=Metallic). The engine handles both formats the same way: ARM maps are deduped at the `shared_ptr` level, so all three slots reference the same GPU texture object. Without a texture, the scalar material value is used as fallback.
 
-Every material property is **live-editable in the Inspector** without reloading the scene. A **base color tint** multiplies on top of the vertex or texture color — useful for quick color variations. An **emissive strength** multiplier scales the emissive contribution independently of the map, so you can dial a glowing surface from off to extremely bright at any time. **Alpha clip** can be toggled per-submesh. For Dielectric materials, an IOR preset popup offers one-click values for common materials (water, glass, crystal, diamond). Each texture slot shows a small inline thumbnail in the inspector, and hovering over one shows a proportionally-scaled preview — making it easy to verify which map is loaded without opening a file browser.
+Every material property can be edited live in the inspector without reloading the scene. A base color tint multiplies on top of the vertex or texture color for quick color variations. An emissive strength multiplier scales the emission independently of the map, so a glowing surface can go from off to extremely bright at any time. Alpha clip can be toggled per submesh, and for Dielectric materials an IOR preset popup has one-click values for common materials (water, glass, crystal, diamond).
 
 <details>
-<summary>Material Types (from OBJ/MTL illum)</summary>
+<summary>Material types (from OBJ/MTL illum)</summary>
 
-The engine maps OBJ/MTL fields to three internal material types. They can also be set manually in the Inspector.
+The engine maps OBJ/MTL fields to three internal material types, which can also be set by hand in the inspector.
 
 | MTL condition | Type | materialType | BRDF |
 |---|---|---|---|
@@ -506,30 +513,30 @@ The engine maps OBJ/MTL fields to three internal material types. They can also b
 | illum 4, 6, 7 | Dielectric | 2 | Fresnel reflect/refract (delta) |
 | `d < 1` without alpha-clip texture | Dielectric | 2 | Fresnel reflect/refract (delta) |
 
-The dispatch also treats Microfacet materials with `metallic > 0.99` and `roughness < 0.01` as a perfect mirror shortcut via MirrorBSDF, avoiding numerical issues at near-zero GGX alpha.
+The dispatch also treats Microfacet materials with `metallic > 0.99` and `roughness < 0.01` as a perfect mirror and sends them to MirrorBSDF, which avoids numerical issues at near-zero GGX alpha.
 
 </details>
 
 <details>
-<summary>PBR Parameter Mapping</summary>
+<summary>PBR parameter mapping</summary>
 
 | MTL property | PBR parameter | Notes |
 |---|---|---|
-| Pr | roughness | PBR scalar (0–1); used directly when present |
-| Ns (shininess) | roughness | Fallback: `clamp(1 - sqrt(max(Ns,0) / 1000), 0, 1)` — inverts Blender's export formula `Ns = (1−r)²×1000` |
-| map_Pr | roughness texture | Preferred; expected in 0–1 PBR range |
+| Pr | roughness | PBR scalar (0-1), used directly when present |
+| Ns (shininess) | roughness | Fallback: `clamp(1 - sqrt(max(Ns,0) / 1000), 0, 1)`, inverts Blender's export formula `Ns = (1−r)²×1000` |
+| map_Pr | roughness texture | Preferred, expected in 0-1 PBR range |
 | map_Ns | roughness texture | Fallback if map_Pr absent |
-| Pm | metallic | PBR scalar (0–1); used directly when present |
+| Pm | metallic | PBR scalar (0-1), used directly when present |
 | illum 3/5 | metallic | 1.0 (overrides Pm for mirror materials) |
 | map_Pm | metallic texture | R channel sampled directly (0=dielectric, 1=metal) |
 | Ni (IOR) | ior | Used directly for Dielectric (default 1.5) |
-| Kd | baseColor | Vertex color (Ks for mirror; ignored for dielectrics — refraction is always clear) |
+| Kd | baseColor | Vertex color (Ks for mirror, ignored for dielectrics since refraction is always clear) |
 | d / Tr | materialType | `d < 1` without alpha-clip texture → Dielectric (type 2) |
 
 </details>
 
 <details>
-<summary>Roughness Range Examples</summary>
+<summary>Roughness range examples</summary>
 
 | Ns | Roughness | Appearance |
 |---|---|---|
@@ -543,11 +550,11 @@ The dispatch also treats Microfacet materials with `metallic > 0.99` and `roughn
 </details>
 
 <details>
-<summary>Where Cook-Torrance is NOT Used</summary>
+<summary>Where Cook-Torrance is not used</summary>
 
-- **Mirror (type 1)** — Always dispatches to the delta MirrorBSDF (set by illum 3/5 in MTL or manually in the Inspector). Roughness and metallic are ignored. The surface albedo tints the reflection.
-- **Perfect mirror shortcut** — Microfacet materials with `metallic > 0.99` and `roughness < 0.01` also dispatch to MirrorBSDF to avoid numerical issues at near-zero GGX alpha.
-- **Dielectric (type 2)** — Uses delta Fresnel reflect/refract (Snell's law). Refraction transmits with full throughput — the surface has no absorption, giving perfectly clear glass. Tinted glass would require Beer-Lambert attenuation over distance, which is left to the volumetric system. Rough dielectrics would need microfacet transmission — a separate feature.
+- Mirror (type 1) always dispatches to the delta MirrorBSDF (set by illum 3/5 in the MTL or by hand in the inspector). Roughness and metallic are ignored, and the surface albedo tints the reflection.
+- Microfacet materials with `metallic > 0.99` and `roughness < 0.01` also go to MirrorBSDF (the perfect mirror shortcut from the material types).
+- Dielectric (type 2) uses delta Fresnel reflect/refract (Snell's law). Refraction transmits with full throughput and the surface has no absorption, so the glass is perfectly clear. Tinted glass would need Beer-Lambert attenuation over distance, which is left to the volumetric system. Rough dielectrics would need microfacet transmission, which is a separate feature.
 
 </details>
 <br>
@@ -561,27 +568,18 @@ The dispatch also treats Microfacet materials with `metallic > 0.99` and `roughn
 
 Some of the resources that influenced this project the most:
 
-**Foundations**
-- [PBRT](https://www.pbr-book.org/) — The reference book on physically based rendering; covers BVH, microfacet theory, MIS, participating media, and more in full mathematical depth
-- [Ray Tracing in One Weekend](https://raytracing.github.io/) — The classic starting point for writing a path tracer
-- [Scratchapixel](https://www.scratchapixel.com/) — From-scratch derivations of ray tracing, Monte Carlo integration, and volume rendering math
+- [PBRT](https://www.pbr-book.org/): the reference book on physically based rendering. It covers BVH, microfacet theory, MIS, participating media and more in full mathematical depth
+- [Ray Tracing in One Weekend](https://raytracing.github.io/): the classic starting point for writing a path tracer
+- [Scratchapixel](https://www.scratchapixel.com/): derivations from scratch for ray tracing, Monte Carlo integration and the math of volume rendering
+- [How to Build a BVH (Jacco Bikker)](https://jacco.ompf2.com/2022/04/13/how-to-build-a-bvh-part-1-basics/): a hands-on series in several parts about binned SAH construction and ordered traversal
+- [Understanding the Masking-Shadowing Function in Microfacet-Based BRDFs (Heitz 2014)](https://jcgt.org/published/0003/02/03/): the math behind the GGX distribution and the Cook-Torrance BSDF
+- [Sampling the GGX Distribution of Visible Normals (Heitz 2018)](https://jcgt.org/published/0007/04/01/paper.pdf): the VNDF sampling paper I use for the specular lobe
+- [vkguide.dev](https://vkguide.dev/): a practical, modern Vulkan tutorial
+- [Nvidia Vulkan Ray Tracing Tutorial](https://nvpro-samples.github.io/vk_raytracing_tutorial_KHR/): a step-by-step guide to `VK_KHR_ray_tracing_pipeline`, rgen/rmiss/rchit shaders and the TLAS/BLAS setup
+- [LearnOpenGL](https://learnopengl.com/): comprehensive OpenGL tutorials
+- [Ray Tracing Gems I & II](https://www.realtimerendering.com/raytracinggems/): free books with in-depth chapters on sampling, denoising, participating media and hardware ray tracing
 
-**BVH & Acceleration**
-- [How to Build a BVH — Jacco Bikker](https://jacco.ompf2.com/2022/04/13/how-to-build-a-bvh-part-1-basics/) — Hands-on multi-part series covering binned SAH construction and ordered traversal
-
-**Microfacet Theory & Sampling**
-- [Understanding the Masking-Shadowing Function in Microfacet-Based BRDFs — Heitz 2014](https://jcgt.org/published/0003/02/03/) — The mathematical foundation behind the GGX distribution and Cook-Torrance BSDF
-- [Sampling the GGX Distribution of Visible Normals — Heitz 2018](https://jcgt.org/published/0007/04/01/paper.pdf) — The VNDF sampling paper used for the specular lobe
-
-**Vulkan & Hardware Ray Tracing**
-- [vkguide.dev](https://vkguide.dev/) — Practical, modern Vulkan tutorial
-- [Nvidia Vulkan Ray Tracing Tutorial](https://nvpro-samples.github.io/vk_raytracing_tutorial_KHR/) — Step-by-step guide to `VK_KHR_ray_tracing_pipeline`, rgen/rmiss/rchit shaders, and TLAS/BLAS setup
-- [LearnOpenGL](https://learnopengl.com/) — Comprehensive OpenGL tutorials
-
-**Advanced Ray Tracing**
-- [Ray Tracing Gems I & II](https://www.realtimerendering.com/raytracinggems/) — Free books with in-depth chapters on sampling, denoising, participating media, and hardware ray tracing
-
-This engine is an ongoing project — the roadmap above shows where it is headed. It covers the full stack from low-level GPU API work and acceleration structures to physically based shading and editor tooling, with every component built and understood by me.
+VexEngine is an ongoing project, and the checklist at the top shows what I am planning to work on next. It goes from low-level GPU API work and acceleration structures to physically based shading and editor tooling, and I built every part of it myself.
 
 <div class="lightbox" id="lightbox"><img id="lightbox-img"></div>
 
