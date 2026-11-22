@@ -381,14 +381,47 @@ function start() {
   const water = makeMonolith({ w: WATER_W, h: WATER_H, pos: new Vector3(9.5, 2.1, -9), rotY: -0.45 });
   water.station = [2];
   monos.push(water);
-  const video = document.createElement('video');
-  Object.assign(video, { muted: true, loop: true, playsInline: true, preload: 'auto', crossOrigin: 'anonymous' });
-  video.src = waterEl.dataset.video;
-  loadTex(waterEl.dataset.tex).then(t => { if (t) { setTextures(water, t); revealMonolith(water); } });
-  const videoTex = new VideoTexture(video);
-  videoTex.colorSpace = SRGBColorSpace;
-  let videoLive = false;
-  video.addEventListener('playing', () => { if (!videoLive) { videoLive = true; setTextures(water, videoTex); } });
+  // Clips play in sequence and crossfade into each other. Each clip only
+  // starts loading once the one before it is playing.
+  const clips = waterEl.dataset.video.split('|');
+  const CLIP_FADE = 1.2;
+  const waterMix = [water.face.material.uniforms.uMix, water.refl.material.uniforms.uMix];
+  const players = [0, 1].map(() => {
+    const v = document.createElement('video');
+    Object.assign(v, { muted: true, loop: clips.length === 1, playsInline: true, preload: 'auto', crossOrigin: 'anonymous' });
+    const tex = new VideoTexture(v);
+    tex.colorSpace = SRGBColorSpace;
+    return { v, tex };
+  });
+  let curPlayer = 0, clip = 0, clipFading = false, videoLive = false, posterTex = null;
+  players[0].v.src = clips[0];
+  const queueClip = () => { if (clips.length > 1) players[1 - curPlayer].v.src = clips[(clip + 1) % clips.length]; };
+  function fadeWater(from, to, onDone) {
+    setTextures(water, from, to);
+    waterMix.forEach(u => { u.value = 0; });
+    gsap.to(waterMix, { value: 1, duration: reduce ? 0 : CLIP_FADE, ease: 'power1.inOut', onComplete: () => {
+      setTextures(water, to);
+      waterMix.forEach(u => { u.value = 0; });
+      onDone?.();
+    } });
+  }
+  function nextClip() {
+    const prev = players[curPlayer];
+    curPlayer = 1 - curPlayer;
+    clip = (clip + 1) % clips.length;
+    const next = players[curPlayer];
+    next.v.currentTime = 0;
+    next.v.play().catch(() => {});
+    clipFading = true;
+    fadeWater(prev.tex, next.tex, () => { prev.v.pause(); clipFading = false; queueClip(); });
+  }
+  loadTex(waterEl.dataset.tex).then(t => { if (t) { posterTex = t; if (!videoLive) setTextures(water, t); revealMonolith(water); } });
+  players[0].v.addEventListener('playing', () => {
+    if (videoLive) return;
+    videoLive = true;
+    if (posterTex) fadeWater(posterTex, players[0].tex); else setTextures(water, players[0].tex);
+    queueClip();
+  });
 
   const puzzleEl = document.getElementById('room-puzzle');
   const phones = [];
@@ -554,8 +587,12 @@ function start() {
     }
 
     const wantVideo = water.lit > 0.25;
-    if (wantVideo && video.paused) video.play().catch(() => {});
-    else if (!wantVideo && !video.paused) video.pause();
+    const active = players[curPlayer].v;
+    if (wantVideo) {
+      const queued = players[1 - curPlayer].v;
+      if (!clipFading && clips.length > 1 && active.duration && active.currentTime > active.duration - CLIP_FADE && queued.readyState >= 3) nextClip();
+      else if (active.paused) active.play().catch(() => {});
+    } else players.forEach(p => { if (!p.v.paused) p.v.pause(); });
 
     const room = Math.round(s);
     streamLinks.forEach((a, i) => a.classList.toggle('is-current', room === i + 1));

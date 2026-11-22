@@ -36,7 +36,7 @@ The sea still uses a sum of Gerstner waves, like v1. New is that the same wave s
 At the beach the water runs up the sand and back again. That swash is analytic, so there is no simulation behind it. The ground has its own shader that knows how long ago the water was at each spot, which means the sand stays dark and wet for a while and then dries. The foam rides on the front of the water that just arrived and thins out with age.
 
 <video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:16/9; margin:1.5rem 0; border-radius:4px; display:block;">
-  <source src="/images/URP_Water2/Water2_shore.mp4" type="video/mp4">
+  <source src="/images/URP_Water2/Water2_dawn.mp4" type="video/mp4">
 </video>
 
 ## One water map for sea, lake and river
@@ -64,6 +64,10 @@ I first thought about stamping ring sprites into a texture, but stamps do not sp
 In real water long waves are faster than short ones, and that is what gives a ship its V-shaped wake at a fixed angle. The wave equation does not do that, which surprised me at first. All waves run at the same speed and you only get a V when the thing that moves is faster than the waves. The half angle of the V is then `asin(wave speed / speed)`.
 
 With my first settings the waves ran at about 2.1 m/s and the character walks at 2 m/s. That meant there was no V at all while walking, only a blob of small ripples that ran ahead of the character. I slowed the waves down to about 1.5 m/s. Now walking already draws a wide V and sprinting gives a narrow one that is close to the angle of a real wake.
+
+<video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:16/9; margin:1.5rem 0; border-radius:4px; display:block;">
+  <source src="/images/URP_Water2/Water2_wade.mp4" type="video/mp4">
+</video>
 
 ## One noise for all foam
 
@@ -142,10 +146,22 @@ Rain and night share one weather setup, so a rainy night works too. In the rain 
   <source src="/images/URP_Water2/Water2_rain.mp4" type="video/mp4">
 </video>
 
+Night is one hour of a day cycle. Sun and moon share one orbit, and the light, the sky, the haze and the color grading blend between four moods for dawn, day, dusk and night. This is dusk:
+
+<video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:16/9; margin:1.5rem 0; border-radius:4px; display:block;">
+  <source src="/images/URP_Water2/Water2_dusk.mp4" type="video/mp4">
+</video>
+
 At night there are fireflies over the water. Their reflection was a small problem of its own. The object reflections in the water are screen space and a firefly is much thinner than one step of the ray, so it never showed up. I solved that by letting each firefly draw its own mirror image on the surface.
 
 <video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:16/9; margin:1.5rem 0; border-radius:4px; display:block;">
   <source src="/images/URP_Water2/Water2_night.mp4" type="video/mp4">
+</video>
+
+And the crater lake at night, with the moon on the waterfall.
+
+<video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:16/9; margin:1.5rem 0; border-radius:4px; display:block;">
+  <source src="/images/URP_Water2/Water2_lake_night.mp4" type="video/mp4">
 </video>
 
 ## What is next
