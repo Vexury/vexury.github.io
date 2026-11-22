@@ -10,7 +10,7 @@ bodyClass: home-void
     <p class="hero-role">Graphics programmer · rendering, shaders, VFX</p>
     <p class="hero-bio">I build rendering systems: VexEngine, my own Vulkan and C++ path tracer, plus shaders, lighting and VFX for games. Until April 2026 I researched ray tracing and taught computer graphics at KIT.</p>
     <div class="hero-actions">
-      <a class="vbtn vbtn-primary" href="#room-vexengine">view my work</a>
+      <a class="vbtn vbtn-primary" href="#room-vexengine">projects</a>
       <a class="vbtn" href="/cv/">cv</a>
     </div>
     <p class="hero-links">
@@ -40,7 +40,7 @@ bodyClass: home-void
   </aside>
 
   <nav class="stream" aria-label="Selected work">
-    <p class="stream-label">Work stream</p>
+    <p class="stream-label">Latest</p>
     <ol class="stream-list">
       <li><a href="#room-vexengine"><img src="{% thumb '/images/Engine/Engine_Hero.png', 400 %}" alt="" width="64" height="36"><span class="s-name">VexEngine</span><span class="s-meta"><span class="s-year">2026</span> · rendering engine</span></a></li>
       <li><a href="#room-water"><img src="{% thumb '/images/URP_Water2/Water2_lagoon.jpg', 400 %}" alt="" width="64" height="36"><span class="s-name">Stylized Water</span><span class="s-meta"><span class="s-year">2026</span> · Unity URP shaders</span></a></li>
@@ -56,9 +56,9 @@ bodyClass: home-void
     <h2 id="h-vexengine">VexEngine</h2>
     <p class="room-meta">C++ · Vulkan · OpenGL</p>
     <p class="room-caption"><span data-cap="0">Bistro Interior</span> · <span data-cap="1">Glass spheres, path traced</span></p>
-    <p>My own rendering engine. Progressive path tracing on the CPU and on the GPU with hardware ray tracing, GGX materials, next event estimation with MIS, a binned-SAH BVH, a post-processing stack and a dockable editor.</p>
+    <p>My own rendering engine, with progressive path tracing on the CPU and on the GPU with hardware ray tracing, GGX materials, next event estimation with MIS, a binned-SAH BVH, a post-processing stack and a dockable editor.</p>
     <img class="room-media" src="{% thumb '/images/Engine/Engine_Hero.png', 1100 %}" alt="Bistro interior with glass spheres, path traced in VexEngine" loading="lazy">
-    <p class="room-links"><a class="vbtn vbtn-primary" href="/posts/003_Engine/">how it is built</a><a class="vbtn" href="https://github.com/Vexury/VexEngine">source</a></p>
+    <p class="room-links"><a class="vbtn vbtn-primary" href="/posts/003_Engine/">blog post</a><a class="vbtn" href="https://github.com/Vexury/VexEngine">source</a></p>
   </article>
 </section>
 
@@ -67,9 +67,9 @@ bodyClass: home-void
   <article class="room-panel">
     <h2 id="h-water">Stylized Water</h2>
     <p class="room-meta">Unity URP · HLSL · compute shaders</p>
-    <p>Handwritten HLSL. Sea, lake and river share one shader and a baked water map. A compute ripple simulation draws wakes and rings that reflect at the shore, and a waterfall, an underwater view, rain and night sit on top.</p>
+    <p>Written by hand in HLSL. Sea, lake and river share one shader and a baked water map. A compute ripple simulation draws wakes and rings that reflect at the shore. There is also a waterfall, an underwater view, rain and a night mode.</p>
     <img class="room-media" src="{% thumb '/images/URP_Water2/Water2_lagoon.jpg', 1100 %}" alt="Lagoon with palms and a waterfall in the distance" loading="lazy">
-    <p class="room-links"><a class="vbtn vbtn-primary" href="/posts/013_URPWaterV2/">read the breakdown</a><a class="vbtn" href="/projects/shadergraph/?file=StylizedGerstnerWater">v1 shader graph</a></p>
+    <p class="room-links"><a class="vbtn vbtn-primary" href="/posts/013_URPWaterV2/">blog post</a><a class="vbtn" href="/projects/shadergraph/?file=StylizedGerstnerWater">v1 shader graph</a></p>
   </article>
 </section>
 
@@ -106,7 +106,7 @@ bodyClass: home-void
       <h3>Life</h3>
       <ol class="log-list">
         <li><span class="l-role">Product Development &amp; Delivery</span><span class="l-meta">mitarbyte GmbH · Oct 2026 – present</span></li>
-        <li><span class="l-role">Independent Game Developer</span><span class="l-meta">Self-directed · May 2026 – present</span></li>
+        <li><span class="l-role">Independent Game Developer</span><span class="l-meta">Vexury · May 2026 – present</span></li>
         <li><span class="l-role">Freelance AI Coach</span><span class="l-meta">Freelance · May 2026 – Sep 2026</span></li>
         <li><span class="l-role">Computer Graphics Researcher</span><span class="l-meta">KIT · Feb 2022 – Apr 2026</span></li>
         <li><span class="l-role">M.Sc. Informatics</span><span class="l-meta">KIT · 2018 – 2021 · exchange at Chalmers</span></li>
@@ -145,7 +145,7 @@ bodyClass: home-void
     </div>
     <div class="log-panel log-contact">
       <h3>Contact</h3>
-      <p>Always happy to chat about graphics, research or game dev. In my spare time I make and play games; off the keyboard, sports and guitar.</p>
+      <p>Always happy to chat about graphics, research or game dev. In my spare time I make and play games. Off the keyboard: sports and guitar.</p>
       <p class="room-links"><a class="vbtn vbtn-primary" href="mailto:vexury.dev@gmail.com">vexury.dev@gmail.com</a></p>
     </div>
   </div>
