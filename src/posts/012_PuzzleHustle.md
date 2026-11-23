@@ -1,7 +1,7 @@
 ---
 title: "🧩 Puzzle Hustle Is Out: Daily Logic Puzzles Without a Server"
 date: 2026-10-26
-summary: "Puzzle Hustle is out on Google Play and the App Store, with every puzzle generated on the phone, the same dailies for everyone without a server and difficulty tuned from real play times"
+summary: "My puzzle app Puzzle Hustle is out on Google Play and the App Store, and this is how it generates every puzzle on the phone, gives everyone the same dailies without a server and tunes the difficulty with real play times."
 preview_image: /images/PuzzleHustle/PuzzleHustle_Feature.png
 ---
 
@@ -14,11 +14,13 @@ preview_image: /images/PuzzleHustle/PuzzleHustle_Feature.png
 <a href="/projects/puzzle-hustle/" class="link-btn">Play in the Browser <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-0.1em"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/></svg></a>
 </div>
 
-Puzzle Hustle has been on Google Play and the App Store since October 23. It is built around my wife's favourite puzzles and now has ten puzzle types, a new set every day, a harder Weekly, a big Monthly and an endless mode called Hustle. It is a solo project under Vexury, written in TypeScript with React and Capacitor, and the web version runs at [puzzles.vexury.dev](https://puzzles.vexury.dev/).
+Puzzle Hustle has been on Google Play and the App Store since October 23.
+I built it around my wife's favourite puzzles, and it now has ten puzzle types, a new set every day, a harder Weekly, a big Monthly and an endless mode called Hustle.
+It is a solo project under Vexury, written in TypeScript with React and Capacitor. The web version runs at [puzzles.vexury.dev](https://puzzles.vexury.dev/).
 
-Below are the technical parts that took the most work: generating the puzzles on the phone, dailies that need no server, and tuning the difficulty with measured play times.
+In this post I go through the technical parts that took the most work: generating the puzzles on the phone, dailies that need no server and tuning the difficulty with measured play times.
 
-<video autoplay loop muted playsinline preload="metadata" poster="/images/PuzzleHustle/PuzzleHustle_Trailer_Poster.jpg" style="width:100%; max-width:420px; margin:1.5rem auto; border-radius:8px; display:block;">
+<video class="lazy-video" loop muted playsinline preload="none" poster="/images/PuzzleHustle/PuzzleHustle_Trailer_Poster.jpg" style="width:100%; max-width:420px; aspect-ratio:1/1; margin:1.5rem auto; border-radius:8px; display:block;">
   <source src="/images/PuzzleHustle/PuzzleHustle_Trailer.mp4" type="video/mp4">
 </video>
 
@@ -46,9 +48,11 @@ Below are the technical parts that took the most work: generating the puzzles on
 
 ## One seed, exactly one solution
 
-Nothing in the app is downloaded. Every board, including the daily, is generated on the device from a seed, and a solver checks it before you see it. The rule is the same for all ten types: exactly one solution, and you can get there without guessing.
+Nothing in the app is downloaded.
+Every board (including the daily) is generated on the device from a seed, and a solver checks it before you see it.
+The rule is the same for all ten types: exactly one solution, and you can reach it without guessing.
 
-For the scheduled puzzles the seed comes from a string hash of type, period, date and an attempt counter. The first seed whose board passes `accepts` wins:
+For the scheduled puzzles, the seed comes from a string hash of type, period, date and an attempt counter. The first seed whose board passes `accepts` wins:
 
 ```ts
 for (let attempt = 0; attempt < PERIOD_ATTEMPTS; attempt++) {
@@ -57,7 +61,10 @@ for (let attempt = 0; attempt < PERIOD_ATTEMPTS; attempt++) {
 }
 ```
 
-`hashString` is a 53-bit hash in the style of cyrb53, and the generators draw from a mulberry32 RNG. The catch is that `accepts` has to give the same answer on an old Android phone and on a new iPhone. So the solvers count search nodes and stop at a fixed budget (3,000,000 nodes for Shapes, 500,000 for Cats and Hearts), which is the same on every device. The budget only decides whether a generator gives up, never what it returns.
+`hashString` is a 53-bit hash in the style of cyrb53, and the generators draw from a mulberry32 RNG.
+The tricky part is that `accepts` has to give the same answer on an old Android phone and on a new iPhone.
+So the solvers count search nodes and stop at a fixed budget (3,000,000 nodes for Shapes, 500,000 for Cats and Hearts), which is the same on every device.
+The budget only decides whether a generator gives up. It has no influence on the board it returns.
 
 Each type gets to a unique board in its own way:
 
@@ -66,7 +73,9 @@ Each type gets to a unique board in its own way:
 - Sudoku and Sumdoku: an exact bitmask solver for uniqueness and a logic solver with named techniques for difficulty. Easy has 38 givens and needs only singles, Genius has 25 and can need an X-Wing.
 - Cats and Hearts: a valid placement first, regions grown from it, then hill climbing on the region borders until the exact solver counts one solution.
 
-The last one is easy to show, so here is a small version of it running in your browser. It uses the same hash and RNG as the app and the same idea (place the cats, grow the regions, move border cells until one solution is left), just on a 7×7 board with a much simpler solver. Pick a date and every device builds the same board.
+The last one is easy to show, so here is a small version of it running in your browser.
+It uses the same hash and RNG as the app and the same idea (place the cats, grow the regions, move border cells until one solution is left), just on a 7×7 board with a much simpler solver.
+If you pick a date, every device builds the same board for it.
 
 <div class="ph-demo" id="ph-seed">
   <div class="ph-demo-bar">
@@ -79,13 +88,18 @@ The last one is easy to show, so here is a small version of it running in your b
   </div>
 </div>
 
-Every generator also carries a version number. Share links encode type, difficulty and seed, so changing a generator without bumping its version would quietly turn old links into different puzzles. Saved games store the version as well and are dropped when it changes.
+Every generator also has a version number.
+Share links encode type, difficulty and seed, so if I changed a generator without bumping its version, old links would quietly turn into different puzzles.
+Saved games store the version too and are dropped when it changes.
 
 ## Dailies without a server
 
-Daily, Weekly and Monthly are seeded from the date, so every phone computes the same puzzles on its own. The server only receives times from players who signed in.
+Daily, Weekly and Monthly are seeded from the date, so every phone computes the same puzzles on its own.
+The server only receives times from players who signed in.
 
-Until October 25 the date was Berlin's, which meant New York got the new daily at 18:00 and Tokyo at 08:00. Now a period turns at the device's own midnight. From the server's point of view a day then lasts a lot longer than 24 hours: the API accepts a day from its start in UTC+14 to its end in UTC−12, so one daily is open for 50 hours, and solves are still accepted for 48 hours after that.
+Until October 25 the date was Berlin's, so New York got the new daily at 18:00 and Tokyo at 08:00.
+Now a period turns at the device's own midnight.
+For the server, a day then lasts a lot longer than 24 hours: the API accepts a day from its start in UTC+14 to its end in UTC−12, so one daily is open for 50 hours, and solves are still accepted for 48 hours after that.
 
 <div class="ph-demo" id="ph-tz">
   <div class="ph-demo-bar">
@@ -96,29 +110,48 @@ Until October 25 the date was Berlin's, which meant New York got the new daily a
   <div class="ph-tz-legend"><span class="ph-sw ph-sw-before"></span>still on Oct 25 <span class="ph-sw ph-sw-open"></span>playing the Oct 26 daily <span class="ph-sw ph-sw-after"></span>already on Oct 27</div>
 </div>
 
-Someone who sets their phone to Kiritimati can play up to 13 hours before Berlin. That is a known trade-off. Times are measured on the client and the generator is public, so a global top list would never be credible anyway, and there is none. Signed-in players compare times in private groups with friends and family, and the server only checks plausibility (at least one second, at most ten moves per second, the first submission per puzzle counts).
+Someone who sets their phone to Kiritimati can play up to 13 hours before Berlin. I accepted that.
+Times are measured on the client and the generator is public, so a global top list would never be credible anyway (and there is none).
+Signed-in players compare times in private groups with friends and family, and the server only checks plausibility (at least one second, at most ten moves per second, the first submission per puzzle counts).
 
-The seed search costs time at startup. On a Galaxy S23 it took about 0.6 s of the 1.4 s until the first frame, Zip alone 320 ms. The app now caches the seeds of the current period and hands them to the core before the first render, which brings the start down to 0.8 s. Only the first launch of a day still searches. A cache entry is only used while the generator version still matches, otherwise a phone with an old cache would play a different daily than everyone else.
+The seed search costs time at startup.
+On a Galaxy S23 it took about 0.6 s of the 1.4 s until the first frame (Zip alone took 320 ms).
+The app now caches the seeds of the current period and hands them to the core before the first render, which brings the start down to 0.8 s. Only the first launch of a day still has to search.
+A cache entry is only used while the generator version still matches. Otherwise a phone with an old cache would play a different daily than everyone else.
 
 ## Offline first
 
-Everything except ads and the purchase works without a connection. If no ad can be loaded, you get the hint anyway. Solved period puzzles go into a local queue and are sent once the network is back, so nothing in solving ever waits for it.
+Everything except ads and the purchase works without a connection.
+If no ad can be loaded, you get the hint anyway.
+Solved period puzzles go into a local queue and are sent once the network is back, so solving never has to wait for the network.
 
-Not every board can be generated on the phone in reasonable time though. Zip Genius took up to three minutes on a throttled phone build. So the level packs (30 levels per type and difficulty) ship as prebuilt boards inside the app, and the random modes of the slowest types draw from prebuilt pools. Everything else is generated in a Web Worker behind a short "Building puzzle…".
+Not every board can be generated on the phone in reasonable time, though. Zip Genius took up to three minutes on a throttled phone build.
+So the level packs (30 levels per type and difficulty) ship as prebuilt boards inside the app, and the random modes of the slowest types draw from prebuilt pools.
+Everything else is generated in a Web Worker behind a short "Building puzzle…".
 
-Sign-in is optional and only needed for groups and for syncing progress between Android, iOS and the web. Sync merges both sides: period puzzles keep their first run (that is the leaderboard run), other puzzles keep the better run, achievements are the union of both. The merge is commutative, so it does not matter which device syncs first.
+Sign-in is optional. You only need it for groups and for syncing progress between Android, iOS and the web.
+Sync merges both sides: period puzzles keep their first run (that is the leaderboard run), other puzzles keep the better run, and achievements are the union of both.
+The merge is commutative, so it does not matter which device syncs first.
 
 ## Statistics without a device ID
 
-I wanted to know which puzzles people actually play and where they give up, without a consent dialog. Under § 25 TDDDG that rules out a device identifier, and with it Firebase. So each event only carries the day, the platform, the build hash and the install age as a bucket (0, 1, 2, 3, 7, 8, 14, 30, 31, 60, 90 or 180 days). There is no ID, no time of day and no IP address in it. Next-day return is still measurable from the age bucket.
+I wanted to know which puzzles people actually play and where they give up, and I did not want a consent dialog for that.
+Under § 25 TDDDG that rules out a device identifier, and with it Firebase.
+So each event only carries the day, the platform, the build hash and the install age as a bucket (0, 1, 2, 3, 7, 8, 14, 30, 31, 60, 90 or 180 days).
+It contains no ID, no time of day and no IP address. Next-day return can still be measured from the age bucket.
 
-The events go to their own D1 database, so they never queue up in front of leaderboard and sync writes. A cron job rolls the last seven days into summary tables, raw rows are deleted after 90 days, and you can switch it off under Profile > Account.
+The events go into their own D1 database, so they never queue up in front of leaderboard and sync writes.
+A cron job rolls the last seven days into summary tables, raw rows are deleted after 90 days, and you can switch it off under Profile > Account.
 
 ## Calibrating with play times
 
-Every generator computes a difficulty score, but a score is only comparable within one type, and even there it can be misleading. The Nonogram medians for Medium and Hard were 53 and 54, so the two difficulties were basically the same puzzle. Since September 30 the difficulty is calibrated from measured play times instead, with one target time band per difficulty.
+Every generator computes a difficulty score, but a score is only comparable within one type, and even there it can be misleading.
+The Nonogram medians for Medium and Hard were 53 and 54, so the two difficulties were basically the same puzzle.
+Since September 30, the difficulty is calibrated from measured play times instead, with one target time band per difficulty.
 
-The attempt events from above make that possible. A report script recomputes the score of every played board from the core and puts it next to the measured solve time. For Hearts the two lined up almost perfectly:
+The attempt events from above make that possible.
+A report script recomputes the score of every played board from the core and puts it next to the measured solve time.
+For Hearts, the two lined up almost perfectly:
 
 | Hearts score | Median solve time |
 |---|---|
@@ -127,17 +160,20 @@ The attempt events from above make that possible. A report script recomputes the
 | 68.8 | 4:13 |
 | 69.3 | 5:23 |
 
-So the daily Hearts is now capped at a score of 63. The same data showed the opposite problem for Tracks: its daily median was 34 s while Nonogram was at 2:27, so Tracks got a notch harder and now aims for 1:30 to 3:00. Nonogram ended up at score medians of 53, 70 and 85.
+So the daily Hearts is now capped at a score of 63.
+The same data showed the opposite problem for Tracks: its daily median was 34 s while Nonogram was at 2:27. So Tracks got a notch harder and now aims for 1:30 to 3:00.
+Nonogram ended up at score medians of 53, 70 and 85.
 
 ## Things that broke
 
-A few bugs that I would not have guessed beforehand:
+A few bugs I would not have guessed beforehand:
 
-1. Pulling down the notification shade on Android does not stop the Activity. 13 seconds with the shade open were 13 seconds on the puzzle clock. Only `onWindowFocusChanged` catches it.
-2. Android WebView 151 started snapshotting View Transitions in device pixels. On the S23 (3× density) the circle of the theme switch landed at a third of its coordinates. My code had not changed, the WebView update alone broke it.
-3. The rewarded video's own back handler swallows the back button. 37 back presses across four videos ended none of them.
+1. Pulling down the notification shade on Android does not stop the Activity, so 13 seconds with the shade open were 13 seconds on the puzzle clock. Only `onWindowFocusChanged` catches it.
+2. Android WebView 151 started snapshotting View Transitions in device pixels. On the S23 (3× density), the circle of the theme switch landed at a third of its coordinates. My code had not changed, the WebView update alone broke it.
+3. The rewarded video's own back handler swallows the back button. 37 back presses across four videos did not end a single one of them.
 
-Puzzle Hustle is free with ads and has no subscription. A one-time purchase for 3.99 € removes the ads and makes hints free. If a puzzle ever needs a guess, that is a bug, so please send me the share link (it contains the seed) at vexury.dev@gmail.com.
+Puzzle Hustle is free with ads and has no subscription. A one-time purchase for 3.99 € removes the ads and makes hints free.
+If a puzzle ever needs a guess, that is a bug. Please send me the share link (it contains the seed) at vexury.dev@gmail.com.
 
 <div class="lightbox" id="lightbox"><img id="lightbox-img"></div>
 

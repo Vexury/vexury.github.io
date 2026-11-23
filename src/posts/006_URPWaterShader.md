@@ -1,7 +1,7 @@
 ---
 title: "🌊 Customizable Unity URP Water Shader"
 date: 2026-06-09
-summary: "Building a stylized yet beautiful URP water shader in Unity Shader Graph, with Gerstner waves, depth-based color blending, shoreline foam, and screen-space refraction."
+summary: "How I built a stylized water shader for URP in Shader Graph, with Gerstner waves, depth-based color, shoreline foam and screen-space refraction."
 preview_image: /images/URP_Water/Water_01.png
 ---
 
@@ -14,39 +14,56 @@ preview_image: /images/URP_Water/Water_01.png
 
 <p><em>There is a second version of this water now: <a href="/posts/013_URPWaterV2/">Stylized Water for Unity URP, v2</a>.</em></p>
 
-I wanted a water shader I could drop into any future Unity project and have it look good immediately. Stylized, but with enough physical grounding to feel convincing: real wave geometry, accurate lighting from the displaced surface, and subtle underwater color. Everything built in Shader Graph for URP so it stays editor-friendly and easy to tweak per-scene.
+I wanted a water shader that I can drop into any future Unity project and that looks good right away.
+It should be stylized, but with some physical basis: real wave geometry, lighting that matches the displaced surface and a bit of color under the water.
+I built everything in Shader Graph for URP, so it stays editor-friendly and easy to tweak per scene.
 
-The shader ended up with four main systems, each configurable independently: depth-based color, shoreline foam, Gerstner wave displacement, and screen-space refraction.
+The shader ended up with four main parts that can be configured independently: depth-based color, shoreline foam, Gerstner wave displacement and screen-space refraction.
 
-## Depth-Based Color
+## Depth-based color
 
-Water looks different depending on how deep it is. Shallow areas over sand are bright and warm; open water at depth turns dark and saturated. Getting this right requires knowing how far below the water surface the terrain sits at any given pixel.
+Water looks different depending on how deep it is. Shallow areas over sand are bright and warm, open water at depth gets dark and saturated.
+For that I need to know how far below the water surface the terrain is at each pixel.
 
-I wrapped this logic in a reusable `DepthFadeRobust` subgraph. It samples the scene depth in Eye mode (true linear depth), subtracts the world-space Y of the water surface, divides by a configurable distance, and saturates the result. The reason for the custom subgraph is that Unity's built-in `Depth Fade` node only works correctly for perspective cameras — it produces wrong results with orthographic cameras. By using the `Scene Depth` node in Eye mode, which returns correct linear depth for both projection types, the water works in orthographic views as well, which matters for top-down games or editor tooling.
+I put this logic into a reusable `DepthFadeRobust` subgraph. It samples the scene depth in Eye mode (true linear depth), subtracts the world-space Y of the water surface, divides by a configurable distance and saturates the result.
+I made my own subgraph because Unity's built-in `Depth Fade` node only works correctly for perspective cameras and gives wrong results with orthographic cameras.
+The `Scene Depth` node in Eye mode returns correct linear depth for both projection types, so the water also works in orthographic views (which matters for top-down games or editor tooling).
 
-The 0–1 value from the subgraph feeds a lerp between `ShallowColor` and `DeepColor`, with `WaterDepth` controlling how many world units the transition spans. Getting a convincing result is mostly color-picking: shallow should be noticeably lighter and slightly desaturated relative to deep. The depth value is also reused by the foam and refraction systems, so it is the single most shared signal in the shader.
+The 0–1 value from the subgraph feeds a lerp between `ShallowColor` and `DeepColor`, and `WaterDepth` sets how many world units the transition spans.
+After that it is mostly color-picking: shallow should be noticeably lighter and slightly desaturated compared to deep.
+The foam and the refraction reuse the same depth value, so it is the most shared signal in the shader.
 
 <video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:1280/658; margin:1.5rem 0; border-radius:4px; display:block;">
   <source src="/images/URP_Water/Water_Color.mp4" type="video/mp4">
 </video>
 
-## Shoreline Foam
+## Shoreline foam
 
-Foam collects where waves break against geometry: at the shoreline, around rocks, and wherever shallow water churns. The same depth value from `DepthFadeRobust` drives it, thresholded at a configurable distance.
+Foam collects where waves break against geometry: at the shoreline, around rocks and wherever shallow water churns.
+It is driven by the same depth value from `DepthFadeRobust`, thresholded at a configurable distance.
 
-Two separate noise layers produce the foam texture: a Gradient Noise layer and a Simple Noise layer, each scrolled over time via the `UVScroll` subgraph at different scales. Multiplying them together breaks the tiling pattern without needing an actual texture asset. The `FoamNoiseScale` parameter controls how large the individual foam patches appear.
+The foam texture comes from two noise layers, a Gradient Noise and a Simple Noise. Each one is scrolled over time with the `UVScroll` subgraph at a different scale.
+Multiplying them breaks up the tiling without needing an actual texture asset. `FoamNoiseScale` controls how large the single foam patches are.
 
-Three parameters shape the final foam mask. `FoamCutoff` sets how deep from the shoreline foam extends. `FoamFade` controls how sharply the foam edge falls off — a Remap node maps the raw depth value to a 0–1 mask with a soft falloff at the outer edge. `FoamAmount` multiplies the final result to boost or soften the overall foam intensity. A `FoamColor` tint and a `FoamSpeed` scroll rate round out the controls.
+Three parameters shape the final foam mask:
+- `FoamCutoff` sets how far from the shoreline the foam extends.
+- `FoamFade` sets how sharp the foam edge falls off. A Remap node maps the raw depth value to a 0–1 mask with a soft falloff at the outer edge.
+- `FoamAmount` multiplies the final result to make the foam stronger or softer overall.
+
+On top of that there is a `FoamColor` tint and a `FoamSpeed` scroll rate.
 
 <video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:1280/654; margin:1.5rem 0; border-radius:4px; display:block;">
   <source src="/images/URP_Water/Water_Foam.mp4" type="video/mp4">
 </video>
 
-## Gerstner Waves
+## Gerstner waves
 
-Most water shaders displace vertices along the Y axis with a sine wave. It works but the result looks like a floating sheet. Gerstner waves are the physically correct alternative: each wave also shifts vertices horizontally, toward the crest, which produces the characteristic peaked crests and broad troughs of real water.
+Most water shaders displace the vertices along the Y axis with a sine wave. That works, but it looks like a floating sheet.
+Gerstner waves are the physically correct alternative. Each wave also moves the vertices horizontally toward the crest, which gives the peaked crests and broad troughs of real water.
 
-The shader has a `RadialWaves` toggle that switches between two modes via a Branch node. In directional mode, all waves travel along a single `WaveDirection` vector. In radial mode, the direction is derived from the vertex's XZ position relative to the origin, so waves spread outward in concentric rings — useful for a pond or water surface disturbed at a point.
+The shader has a `RadialWaves` toggle that switches between two modes with a Branch node.
+In directional mode all waves travel along one `WaveDirection` vector.
+In radial mode the direction comes from the vertex's XZ position relative to the origin, so the waves spread outward in concentric rings (useful for a pond or a surface that gets disturbed at one point).
 
 <details>
 <summary>Wave Displacement Formula</summary>
@@ -63,17 +80,18 @@ z += (Q * A) * D.z * cos(f)
 |---|---|
 | `D` | Wave direction (normalized XZ) |
 | `A` | Amplitude |
-| `w` | Angular frequency — `2π / wavelength` |
+| `w` | Angular frequency: `2π / wavelength` |
 | `phi` | Phase speed |
-| `Q` | Steepness — controls horizontal bunching toward crests |
+| `Q` | Steepness, controls horizontal bunching toward crests |
 
 </details>
 
-### Normals and Tangents
+### Normals and tangents
 
-Vertex displacement alone is not enough. The surface normal must match the displaced geometry or lighting will not agree with the wave shape. With Gerstner waves, both the normal and the tangent can be derived analytically from the same parameters used for displacement — no finite differencing, no extra texture lookups.
+Displacing the vertices is not enough. The surface normal has to match the displaced geometry, otherwise the lighting does not fit the wave shape.
+With Gerstner waves both the normal and the tangent can be derived analytically from the same parameters as the displacement, so there is no finite differencing and no extra texture lookup.
 
-The HLSL computes N and T directly, without going through a binormal cross product. Each wave contributes an additive increment to both vectors, and they are summed across all active waves.
+The HLSL computes N and T directly, without a binormal cross product. Each wave adds an increment to both vectors, summed over all active waves.
 
 <details>
 <summary>Normal and Tangent Derivation</summary>
@@ -90,27 +108,32 @@ T.y =      D.x     * w * A * cos(f)
 T.z =    - D.x*D.z * Q * w * A * sin(f)
 ```
 
-Note that N.x and N.z do not include the steepness `Q` — only N.y does. The tangent T follows the wave surface in the direction of travel. Both are normalized after accumulation.
+N.x and N.z do not include the steepness `Q`, only N.y does. The tangent T follows the wave surface in the direction of travel. Both are normalized after accumulation.
 
-The steepness is also auto-clamped in the HLSL before use: `q = min(Steepness, 1 / (w * A))`. This prevents the surface from ever folding over on itself, so the material property is safe to animate freely without worrying about artifacts.
+The HLSL also clamps the steepness before using it: `q = min(Steepness, 1 / (w * A))`. That way the surface never folds over itself, and the material property can be animated freely without artifacts.
 
 </details>
 
-Getting this right was the most involved part of the whole shader. The analytical normal gives correct lighting across the full steepness range, including at sharp crests where a noise-based normal map would give completely wrong surface orientation.
+This was the most work in the whole shader.
+The analytical normal gives correct lighting over the full steepness range, including sharp crests where a noise-based normal map would give a completely wrong surface orientation.
 
 <video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:1280/660; margin:1.5rem 0; border-radius:4px; display:block;">
   <source src="/images/URP_Water/Water_GerstnerWaves.mp4" type="video/mp4">
 </video>
 
-## Screen-Space Refraction
+## Screen-space refraction
 
-Looking into water from above, the geometry underneath appears distorted. That distortion is refraction: light bends as it crosses the water surface. A physically accurate model would require a separate render target; screen-space refraction fakes it cheaply with UV offset.
+When you look into water from above, the geometry underneath looks distorted. That is refraction: light bends when it crosses the water surface.
+A physically accurate model would need a separate render target. Screen-space refraction fakes it cheaply with a UV offset.
 
-The refraction normal is built from animated gradient noise: a `Gradient Noise` texture is scrolled using `UVScroll` at `RefractionSpeed`, then converted to a normal via `Normal From Height`. That ripple normal is blended with the analytical Gerstner normal using `Normal Blend`, and the blended normal's XZ components are scaled by `RefractionStrength` and added to the screen-space UV before sampling `Scene Color`. The result distorts the underwater geometry in proportion to the surface tilt — steep ripples produce strong distortion, flat areas are clear.
+The refraction normal comes from animated gradient noise. A `Gradient Noise` texture is scrolled with `UVScroll` at `RefractionSpeed` and turned into a normal with `Normal From Height`.
+I blend that ripple normal with the analytical Gerstner normal using `Normal Blend`. The XZ components of the blended normal are scaled by `RefractionStrength` and added to the screen-space UV before sampling `Scene Color`.
+So the underwater geometry gets distorted in proportion to the surface tilt: steep ripples distort a lot, flat areas stay clear.
 
-The `RefractionScale` parameter controls the tiling of the noise (smaller values give larger, calmer ripples; larger values give tight chop), and `RefractionStrength` controls how far the UV actually shifts.
+`RefractionScale` controls the tiling of the noise (smaller values give larger, calmer ripples, larger values give tight chop) and `RefractionStrength` controls how far the UV actually shifts.
 
-One edge case to handle: the refracted UV can land above the water surface and sample the sky. The depth check from `DepthFadeRobust` is used as a mask — refraction only applies where there is actual geometry behind the water, which keeps the edges of water bodies clean.
+There is one edge case: the refracted UV can land above the water surface and sample the sky.
+I use the depth check from `DepthFadeRobust` as a mask, so refraction only applies where there is actual geometry behind the water. That keeps the edges of the water clean.
 
 <video class="lazy-video" loop muted playsinline preload="none" style="width:100%; aspect-ratio:1280/652; margin:1.5rem 0; border-radius:4px; display:block;">
   <source src="/images/URP_Water/Water_Refraction.mp4" type="video/mp4">
@@ -118,9 +141,9 @@ One edge case to handle: the refracted UV can land above the water surface and s
 
 ## Parameters
 
-All controls are exposed as material properties, grouped below by system. The example values are from the configuration shown in the results section.
+All controls are exposed as material properties, grouped by system. The example values are from the configuration shown in the results section.
 
-**Depth and surface**
+Depth and surface:
 
 | Parameter | Description | Example |
 |---|---|---|
@@ -130,7 +153,7 @@ All controls are exposed as material properties, grouped below by system. The ex
 | `Smoothness` | PBR smoothness of the water surface | 1.0 |
 | `NormalStrength` | Blend between Gerstner analytical normal and the detail ripple normal | 10 |
 
-**Waves**
+Waves:
 
 | Parameter | Description | Example |
 |---|---|---|
@@ -141,7 +164,7 @@ All controls are exposed as material properties, grouped below by system. The ex
 | `WaveDirection` | XZ travel direction (ignored in radial mode) | (1, 0) |
 | `RadialWaves` | Toggle between directional and radial wave mode | on |
 
-**Foam**
+Foam:
 
 | Parameter | Description | Example |
 |---|---|---|
@@ -153,7 +176,7 @@ All controls are exposed as material properties, grouped below by system. The ex
 | `FoamNoiseScale` | Scale of individual foam patch noise | 20 |
 | `FoamSpeed` | Foam texture scroll speed | 0.2 |
 
-**Refraction**
+Refraction:
 
 | Parameter | Description | Example |
 |---|---|---|
@@ -163,6 +186,8 @@ All controls are exposed as material properties, grouped below by system. The ex
 
 ## Results
 
-The four systems compose cleanly. Deep open water gets the dark saturated color, a shimmer from the blended ripple normals, and large rolling Gerstner waves. Shallow areas near the shore shift to a brighter tint, gain foam at the waterline, and the refraction reveals the terrain underneath through the ripple distortion.
+All four parts work together.
+Deep open water gets the dark saturated color, a shimmer from the blended ripple normals and large rolling Gerstner waves.
+Shallow areas near the shore get a brighter tint and foam at the waterline, and the refraction shows the terrain underneath through the ripple distortion.
 
-Because everything is parameterized, adapting it per-scene is a matter of dialing values: a calm lake gets low steepness and mild refraction, a stormy sea gets steep waves and heavy foam, a tropical beach gets a warm shallow color and bright white foam at the shoreline.
+Since everything is a parameter, adapting it to a scene means changing values: a calm lake gets low steepness and mild refraction, a stormy sea gets steep waves and a lot of foam, a tropical beach gets a warm shallow color and bright white foam at the shoreline.
