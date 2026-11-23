@@ -69,6 +69,12 @@ git diff HEAD -- 'src/**/*.md' | Select-String "—"
 ```
 Replace any match with a comma, colon, or rewritten sentence.
 
+**No AI phrases**: scan the lines added since the last push (committed or not):
+```powershell
+git diff origin/main -U0 -- src | Select-String '^\+' | Select-String 'read the breakdown|view my work|how it is built|work stream|self-directed|deep dive|dive into|under the hood|seamless|leverag|delve|elevat|cutting.edge|game.changer|empower|tapestry|testament|meticulous|journey'
+```
+A match is a prompt to reread the sentence, not an automatic fail. Rewrite it in plain words (the `humanizer` skill) unless the word is meant literally.
+
 **Post frontmatter** — every new `src/posts/NNN_Name.md` must have:
 - `title` (starts with an emoji)
 - `date` (YYYY-MM-DD)
