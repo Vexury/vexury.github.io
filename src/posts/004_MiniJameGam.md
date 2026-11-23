@@ -41,7 +41,7 @@ Cxbane's art gave the game its look right away: a normal farm with an alien visi
 On my end, the most interesting technical work was the VFX. The traction beam and the space portal took me some time to create with Particle Systems (no Visual Effect Graph sadly, because we needed to make a web build) and Shader Graph.
 
 <div style="text-align: center; margin: 1.5rem 0">
-  <video autoplay loop muted playsinline style="max-width:80%">
+  <video class="lazy-video" loop muted playsinline preload="none" style="width:min(80%, 546px); aspect-ratio:546/530">
     <source src="/images/Necrocure/Necrocure_VFX.mp4" type="video/mp4">
   </video>
 </div>

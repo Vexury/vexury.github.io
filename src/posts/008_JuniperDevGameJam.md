@@ -64,7 +64,7 @@ Big Tony is the humble owner of a mechanical museum who left his life of crime b
 But his past catches up with him and four old rivals show up, one wave at a time. Your weapon is a yoyo, and after each of the 10 waves you spin a wheel and get a buff or a second yoyo.
 
 <div style="text-align:center; margin:1.5rem 0">
-  <video autoplay loop muted playsinline style="max-width:80%">
+  <video class="lazy-video" loop muted playsinline preload="none" style="width:80%; aspect-ratio:16/9">
     <source src="/images/BigTonysEpicWheel/BigTonysEpicWheel_Intro.mp4" type="video/mp4">
   </video>
 </div>

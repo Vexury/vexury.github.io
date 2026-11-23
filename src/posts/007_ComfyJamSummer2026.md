@@ -36,7 +36,7 @@ Together with the beach visuals and the camera angle, it looks like you are roll
 The game logic does not change at all. Obstacles still spawn at a fixed Z distance, move towards Z = 0 at a fixed speed and get despawned once they are behind the player.
 All the bending happens in the vertex stage and the actual world coordinates stay flat, so collisions and movement work without any correction.
 
-<video autoplay loop muted playsinline style="max-width:100%">
+<video class="lazy-video" loop muted playsinline preload="none" style="width:min(100%, 1064px); aspect-ratio:1064/678">
   <source src="/images/ShrimpAway/ShrimpAway_WorldBend.mp4" type="video/mp4">
 </video>
 

@@ -81,7 +81,7 @@ It also paid off twice. When the anti-rat staff went into the tech tree and need
 So one effect that I built early covers the lighting of the whole shop and a gameplay VFX we did not even know we needed yet.
 
 <div style="text-align:center; margin:1.5rem 0">
-  <video autoplay loop muted playsinline style="max-width:80%">
+  <video class="lazy-video" loop muted playsinline preload="none" style="width:min(80%, 532px); aspect-ratio:532/484">
     <source src="/images/Scaleton/Scaleton_VFX.mp4" type="video/mp4">
   </video>
 </div>
