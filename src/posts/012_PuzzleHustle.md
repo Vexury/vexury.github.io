@@ -170,7 +170,7 @@ A few bugs I would not have guessed beforehand:
 
 1. Pulling down the notification shade on Android does not stop the Activity, so 13 seconds with the shade open were 13 seconds on the puzzle clock. Only `onWindowFocusChanged` catches it.
 2. Android WebView 151 started snapshotting View Transitions in device pixels. On the S23 (3× density), the circle of the theme switch landed at a third of its coordinates. My code had not changed, the WebView update alone broke it.
-3. The rewarded video's own back handler swallows the back button. 37 back presses across four videos did not end a single one of them.
+3. The rewarded video's own back handler swallows the back button. I pressed back 37 times across four videos and not one of them closed.
 
 Puzzle Hustle is free with ads and has no subscription. A one-time purchase for 3.99 € removes the ads and makes hints free.
 If a puzzle ever needs a guess, that is a bug. Please send me the share link (it contains the seed) at vexury.dev@gmail.com.

@@ -11,7 +11,7 @@ preview_image: /images/Gamescom2026/booth.jpg
 
 I have been to Gamescom a few times as a visitor (which mostly means queueing).
 This year I had an exhibitor badge.
-I went to Cologne with the Midain Studios team to show Scarlet O'Beetle and the Unseen World, the game I do shader and rendering work on as a contractor.
+I went to Cologne with the Midain Studios team to show Scarlet O'Beetle and the Unseen World. I'm the lead programmer on it, although nobody on the team really has a title, since it all runs on a loose rev-share basis.
 We had a small booth in the Romanian pavilion, and I did not know what to expect from the other side of the counter.
 
 <div style="text-align: center; margin: 1.5rem 0">
