@@ -1,4 +1,5 @@
-// Generates export/CV_light.pdf and export/CV_dark.pdf from the built site.
+// Generates export/CV_light.pdf and export/CV_dark.pdf from the built site,
+// and copies the light one to src/files/ as the download on /cv/.
 // Run: npm run export-cv  (builds first, then exports)
 // Requires: npm install  (installs puppeteer)
 
@@ -9,10 +10,11 @@ const path      = require('path');
 
 const SITE_DIR = path.join(__dirname, '../_site');
 const OUT_DIR  = path.join(__dirname, '../export');
+const DOWNLOAD = path.join(__dirname, '../src/files/Moritz_Grauer_CV.pdf');
 const PORT     = 4243;
 
 const HIDE_CHROME = `
-  .site-header, .site-footer, .back-to-top, .void-canvas {
+  .site-header, .site-footer, .back-to-top, .void-canvas, .cvp-download {
     display: none !important;
   }
   html, body { padding: 0 !important; margin: 0 !important; }
@@ -130,6 +132,8 @@ async function main() {
   try {
     await exportPDF(browser, path.join(OUT_DIR, 'CV_light.pdf'), false);
     await exportPDF(browser, path.join(OUT_DIR, 'CV_dark.pdf'),  true);
+    fs.copyFileSync(path.join(OUT_DIR, 'CV_light.pdf'), DOWNLOAD);
+    console.log(`  Copied light PDF to ${DOWNLOAD}`);
   } finally {
     await browser.close();
     server.close();

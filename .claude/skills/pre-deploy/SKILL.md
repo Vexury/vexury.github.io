@@ -91,7 +91,7 @@ If `src/cv.html` or CV-related CSS was changed:
 npm run export-cv
 ```
 
-This generates `src/files/CV_Vexury_light.pdf` and `src/files/CV_Vexury_dark.pdf`. Commit those PDFs if the output changed.
+This writes `export/CV_light.pdf` and `export/CV_dark.pdf` (gitignored) and copies the light one to `src/files/Moritz_Grauer_CV.pdf`, the download on /cv/. Commit that PDF if the output changed.
 
 ---
 

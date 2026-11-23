@@ -2336,12 +2336,15 @@ p.seal {
 .cvp-header {
   display: flex;
   align-items: flex-start;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 1rem;
   padding-bottom: 1.25rem;
   margin-bottom: 1.75rem;
   border-bottom: 1px solid var(--hair-strong);
 }
+
+.cvp-download { white-space: nowrap; }
 
 .cvp-name {
   font-size: clamp(2.2rem, 4.6vw, 3.4rem);
