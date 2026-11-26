@@ -44,6 +44,7 @@ bodyClass: home-void
     <ol class="stream-list">
       <li><a href="#room-vexengine"><img src="{% thumb '/images/Engine/Engine_Hero.png', 400 %}" alt="" width="64" height="36"><span class="s-name">VexEngine</span><span class="s-meta"><span class="s-year">2026</span> · rendering engine</span></a></li>
       <li><a href="#room-water"><img src="{% thumb '/images/URP_Water2/Water2_lagoon.jpg', 400 %}" alt="" width="64" height="36"><span class="s-name">Stylized Water</span><span class="s-meta"><span class="s-year">2026</span> · Unity URP shaders</span></a></li>
+      <li><a href="#room-clouds"><img src="{% thumb '/images/Clouds/clouds_lookout_day.jpg', 400 %}" alt="" width="64" height="36"><span class="s-name">Cumulus Clouds</span><span class="s-meta"><span class="s-year">2026</span> · Unity URP raymarching</span></a></li>
       <li><a href="#room-puzzle"><img src="{% thumb '/images/PuzzleHustle/PuzzleHustle_Feature.png', 400 %}" alt="" width="64" height="36"><span class="s-name">Puzzle Hustle</span><span class="s-meta"><span class="s-year">2026</span> · mobile app</span></a></li>
     </ol>
   </nav>
@@ -63,7 +64,7 @@ bodyClass: home-void
 </section>
 
 <section class="void-room room-right" id="room-water" aria-labelledby="h-water" data-station="2"
-  data-video="/images/URP_Water2/home/dawn.mp4|/images/URP_Water2/home/day.mp4|/images/URP_Water2/home/dusk.mp4|/images/URP_Water2/home/night.mp4"data-tex="{% thumb '/images/URP_Water2/Water2_lagoon.jpg', 1100 %}">
+  data-video="/images/URP_Water2/home/dawn.mp4|/images/URP_Water2/home/day.mp4|/images/URP_Water2/home/dusk.mp4|/images/URP_Water2/home/night.mp4" data-tex="{% thumb '/images/URP_Water2/Water2_lagoon.jpg', 1100 %}">
   <article class="room-panel">
     <h2 id="h-water">Stylized Water</h2>
     <p class="room-meta">Unity URP · HLSL · compute shaders</p>
@@ -73,7 +74,18 @@ bodyClass: home-void
   </article>
 </section>
 
-<section class="void-room room-left" id="room-puzzle" aria-labelledby="h-puzzle" data-station="3"
+<section class="void-room room-left" id="room-clouds" aria-labelledby="h-clouds" data-station="3"
+  data-video="/images/Clouds/home/dawn.mp4|/images/Clouds/home/day.mp4|/images/Clouds/home/dusk.mp4|/images/Clouds/home/night.mp4" data-tex="{% thumb '/images/Clouds/clouds_lookout_day.jpg', 1100 %}">
+  <article class="room-panel">
+    <h2 id="h-clouds">Cumulus Clouds</h2>
+    <p class="room-meta">Unity URP · HLSL · renderer feature</p>
+    <p>Raymarched cumulus heaps for my water scene. Each heap is a distance field of merged spheres, shaped by Worley noise and lit with multiple scattering. They drift with the wind, reflect in the water and follow the day cycle.</p>
+    <img class="room-media" src="{% thumb '/images/Clouds/clouds_lookout_day.jpg', 1100 %}" alt="Cumulus clouds over a lake, seen from a hill with pines and a waterfall" loading="lazy">
+    <p class="room-links"><a class="vbtn vbtn-primary" href="/posts/014_URPClouds/">blog post</a></p>
+  </article>
+</section>
+
+<section class="void-room room-left" id="room-puzzle" aria-labelledby="h-puzzle" data-station="4"
   data-phones="{% thumb '/images/PuzzleHustle/PuzzleHustle_Shot_01-daily.png', 400 %}|{% thumb '/images/PuzzleHustle/PuzzleHustle_Shot_02-nonogram.png', 400 %}|{% thumb '/images/PuzzleHustle/PuzzleHustle_Shot_07-hustle.png', 400 %}">
   <article class="room-panel">
     <h2 id="h-puzzle">Puzzle Hustle</h2>
@@ -84,7 +96,7 @@ bodyClass: home-void
   </article>
 </section>
 
-<section class="void-room room-wide" id="room-more" aria-labelledby="h-more" data-station="4">
+<section class="void-room room-wide" id="room-more" aria-labelledby="h-more" data-station="5">
   <article class="room-panel">
     <h2 id="h-more">More work</h2>
     <ul class="more-list">
@@ -99,7 +111,7 @@ bodyClass: home-void
   </article>
 </section>
 
-<section class="void-log" id="background" aria-labelledby="h-background" data-station="5">
+<section class="void-log" id="background" aria-labelledby="h-background" data-station="6">
   <h2 id="h-background">Background</h2>
   <div class="log-grid">
     <div class="log-panel">

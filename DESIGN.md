@@ -263,7 +263,7 @@ Quiet glass slabs with tracked uppercase labels; the primary one is lit.
 - **Mobile / touch:** sub-links become an inline row; on home at phone width the header scrolls away with the first screen.
 
 ### Work Stream (signature)
-The home bottom bar: three glass tiles, each a 64px thumbnail, a tracked project name and a dim meta line with a mono year. Hovering a tile or reaching its station turns its edge amber; clicking glides the camera to that station.
+The home bottom bar: four glass tiles, each a 64px thumbnail, a tracked project name and a dim meta line with a mono year. Hovering a tile or reaching its station turns its edge amber; clicking glides the camera to that station.
 
 ### Ambient Field (signature)
 A fixed full-viewport canvas behind every page. Home runs the three.js scene (glass monoliths with project art, fog floor, motes, scroll-scrubbed camera, pointer parallax). Other pages run a raw WebGL2 fog-floor grid with dust that fades in over 1.2s, glides forward on scroll, pauses when the tab is hidden and draws one static frame under reduced motion.
